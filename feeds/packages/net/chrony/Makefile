@@ -8,18 +8,18 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=chrony
-PKG_VERSION:=2.4.1
-PKG_RELEASE:=1
+PKG_VERSION:=3.3
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://download.tuxfamily.org/chrony/
-PKG_MD5SUM:=d08dd5a7d79a89891d119adcccb4397d
+PKG_HASH:=0d1fb2d5875032f2d5a86f3770374c87ee4c941916f64171e81f7684f2a73128
 
 PKG_MAINTAINER:=Miroslav Lichvar <mlichvar0@gmail.com>
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
 
-PKG_BUILD_DEPENDS:=+pps-tools
+PKG_BUILD_DEPENDS:=pps-tools
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -27,7 +27,7 @@ define Package/chrony
   SUBMENU:=Time Synchronization
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+libcap
+  DEPENDS:=+libcap +libpthread
   USERID:=chrony=323:chrony=323
   TITLE:=A versatile NTP client and server
   URL:=http://chrony.tuxfamily.org/
@@ -50,10 +50,10 @@ CONFIGURE_ARGS+= \
 	--host-system=Linux \
 	--sysconfdir=/etc/chrony \
 	--prefix=/usr \
-	--chronysockdir=/var/run/chrony \
+	--chronyrundir=/var/run/chrony \
 	--disable-readline \
 	--disable-rtc \
-	--disable-asyncdns \
+	--disable-sechash \
 	--with-user=chrony
 
 CONFIGURE_VARS+=CPPFLAGS=-DNDEBUG

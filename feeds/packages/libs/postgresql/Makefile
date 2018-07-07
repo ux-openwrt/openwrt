@@ -1,6 +1,3 @@
-#
-# Copyright (C) 2006-2014 OpenWrt.org
-#
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
@@ -8,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=9.5.4
-PKG_RELEASE:=4
+PKG_VERSION:=9.6.8
+PKG_RELEASE:=1
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
 PKG_LICENSE:=PostgreSQL
 
@@ -18,12 +15,14 @@ PKG_SOURCE_URL:=\
 	https://ftp.postgresql.org/pub/source/v$(PKG_VERSION) \
 	http://ftp.postgresql.org/pub/source/v$(PKG_VERSION) \
 	ftp://ftp.postgresql.org/pub/source/v$(PKG_VERSION)
-PKG_MD5SUM:=cf5e571164ad66028ecd7dd8819e3765470d45bcd440d258b686be7e69c76ed0
-PKG_BUILD_PARALLEL:=1
+
+PKG_HASH:=eafdb3b912e9ec34bdd28b651d00226a6253ba65036cb9a41cad2d9e82e3eb70
+
 PKG_USE_MIPS16:=0
 PKG_FIXUP:=autoreconf
 PKG_MACRO_PATHS:=config
-PKG_BUILD_DEPENDS += postgresql/host
+PKG_BUILD_DEPENDS += readline/host postgresql/host
+PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -31,7 +30,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/libpq
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+zlib +libreadline +libpthread +libncursesw
+  DEPENDS:=+libpthread
   TITLE:=PostgreSQL client library
   URL:=http://www.postgresql.org/
   SUBMENU:=database
@@ -44,7 +43,7 @@ endef
 define Package/pgsql-cli
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpq +librt
+  DEPENDS:=+libncursesw +libpq +libreadline +librt +zlib
   TITLE:=Command Line Interface (CLI) to PostgreSQL databases
   URL:=http://www.postgresql.org/
   SUBMENU:=database
@@ -57,7 +56,7 @@ endef
 define Package/pgsql-cli-extra
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpq +librt
+  DEPENDS:=+libncursesw +libpq +libreadline +librt +zlib
   TITLE:=Command Line extras for PostgreSQL databases
   URL:=http://www.postgresql.org/
   SUBMENU:=database
@@ -70,7 +69,7 @@ endef
 define Package/pgsql-server
   SECTION:=utils
   CATEGORY:=Utilities
-  DEPENDS:=+libpq +librt +pgsql-cli
+  DEPENDS:=+pgsql-cli
   TITLE:=PostgreSQL databases Server
   URL:=http://www.postgresql.org/
   SUBMENU:=database
@@ -80,6 +79,24 @@ endef
 define Package/pgsql-server/description
 PostgreSQL databases Server.
 endef
+
+PGSQL_SERVER_BIN := \
+	pg_archivecleanup \
+	pg_basebackup \
+	pg_controldata \
+	pg_ctl \
+	pg_dump \
+	pg_dumpall \
+	pg_isready \
+	pg_receivexlog \
+	pg_recvlogical \
+	pg_resetxlog \
+	pg_restore \
+	pg_standby \
+	pg_upgrade \
+	pg_xlogdump \
+	postgres \
+	initdb
 
 PGSQL_CLI_EXTRA_BIN := \
 	clusterdb	\
@@ -109,7 +126,7 @@ endif
 TARGET_CONFIGURE_OPTS+=$(PGSQL_CONFIG_VARS)
 
 HOST_CONFIGURE_ARGS += \
-			$(DISABLE_NLS) \
+			--disable-nls \
 			--disable-rpath \
 			--without-bonjour \
 			--without-gssapi \
@@ -124,6 +141,7 @@ HOST_CONFIGURE_ARGS += \
 			--enable-depend
 
 CONFIGURE_ARGS += \
+			$(DISABLE_NLS) \
 			--disable-rpath \
 			--without-bonjour \
 			--without-gssapi \
@@ -135,41 +153,32 @@ CONFIGURE_ARGS += \
 			--without-tcl \
 			--with-zlib="yes" \
 			--enable-depend \
-			$(if $(CONFIG_TARGET_avr32),--disable-spinlocks)
+			$(if $(CONFIG_arc),--disable-spinlocks)
 
-# Need a native ecpg ,pg_config, and zic for build
+# Need a native ecpg, pg_config and zic for build
 define Host/Compile
+	$(MAKE) -C $(HOST_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)"
 	$(MAKE) -C $(HOST_BUILD_DIR)/src/interfaces/ecpg/preproc CC="$(HOSTCC)"
 	$(MAKE) -C $(HOST_BUILD_DIR)/src/timezone CC="$(HOSTCC)"
-	$(MAKE) -C $(HOST_BUILD_DIR)/src/bin/pg_config CC="$(HOSTCC)"
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR)/usr/bin/
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/bin/pg_config/pg_config $(STAGING_DIR)/usr/bin/
-	$(INSTALL_DIR) $(STAGING_DIR)/host/bin/
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg $(STAGING_DIR)/host/bin/
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/timezone/zic $(STAGING_DIR)/host/bin/
+	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/lib/
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/common/libpgcommon.a $(STAGING_DIR_HOSTPKG)/lib/
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/port/libpgport.a $(STAGING_DIR_HOSTPKG)/lib/
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/bin/pg_config/pg_config $(STAGING_DIR_HOSTPKG)/lib/
+	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/bin/
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/interfaces/ecpg/preproc/ecpg $(STAGING_DIR_HOSTPKG)/bin/
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/src/timezone/zic $(STAGING_DIR_HOSTPKG)/bin/
 endef
 
 define Build/Configure
 	$(Build/Configure/Default)
-	$(SED) 's@ECPG = ../../preproc/ecpg@ECPG = $(STAGING_DIR)/host/bin/ecpg@' $(PKG_BUILD_DIR)/src/interfaces/ecpg/test/Makefile.regress
+	$(SED) 's@ECPG = ../../preproc/ecpg@ECPG = $(STAGING_DIR_HOSTPKG)/bin/ecpg@' $(PKG_BUILD_DIR)/src/interfaces/ecpg/test/Makefile.regress
 endef
-
-TARGET_CFLAGS += $(FPIC) -lpthread
 
 # because PROFILE means something else in the project Makefile
 unexport PROFILE
-
-define Build/Compile
-	+$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all
-	+$(MAKE) $(PKG_JOBS) -C "$(PKG_BUILD_DIR)" \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
-endef
 
 define Package/libpq/install
 	$(INSTALL_DIR) $(1)/usr/lib
@@ -188,8 +197,8 @@ endef
 
 define Package/pgsql-server/install
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/pg_* $(PKG_INSTALL_DIR)/usr/bin/postgres \
-			$(PKG_INSTALL_DIR)/usr/bin/initdb $(1)/usr/bin/
+	$(INSTALL_BIN) $(foreach bin,$(PGSQL_SERVER_BIN),$(PKG_INSTALL_DIR)/usr/bin/$(bin)) $(1)/usr/bin/
+
 	ln -sf postgres $(1)/usr/bin/postmaster
 
 	$(INSTALL_DIR) $(1)/usr/share/postgresql
@@ -212,6 +221,9 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(STAGING_DIR_HOSTPKG)/lib/pg_config $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/host/bin/
+	$(LN) $(STAGING_DIR)/usr/bin/pg_config $(1)/host/bin
 	$(INSTALL_DIR) $(1)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq $(1)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq-fe.h $(1)/usr/include/
@@ -222,6 +234,8 @@ define Build/InstallDev
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgresql $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpq.{a,so*} $(1)/usr/lib/
+	$(INSTALL_DIR) $(1)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libpq.pc $(1)/usr/lib/pkgconfig/
 endef
 
 $(eval $(call HostBuild))

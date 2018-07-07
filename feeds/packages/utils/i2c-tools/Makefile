@@ -15,7 +15,7 @@ PKG_SOURCE_URL:=http://dl.lm-sensors.org/i2c-tools/releases/ \
                 http://fossies.org/linux/misc/
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_MD5SUM:=7104a1043d11a5e2c7b131614eb1b962
+PKG_HASH:=db5e69f2e2a6e3aa2ecdfe6a5f490b149c504468770f58921c8c5b8a7860a441
 
 PKG_BUILD_PARALLEL:=1
 PKG_BUILD_DEPENDS:=PACKAGE_python-smbus:python
@@ -25,8 +25,8 @@ PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=COPYING
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python-package.mk)
-$(call include_mk, python3-package.mk)
+include ../../lang/python/python-package.mk
+include ../../lang/python/python3-package.mk
 
 define Package/i2c/Default
   URL:=http://lm-sensors.org/wiki/I2CTools

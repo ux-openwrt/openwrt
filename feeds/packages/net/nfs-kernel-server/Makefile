@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nfs-kernel-server
-PKG_VERSION:=1.3.3
-PKG_RELEASE:=3
-PKG_MD5SUM:=9b87d890669eaaec8e97a2b0a35b2665
+PKG_VERSION:=2.3.1
+PKG_RELEASE:=1
+PKG_HASH:=ca92f1ab86b2af4dcd62d7716d46a6cdec268e83fe8d564cd8ff1464cc495989
 
 PKG_SOURCE_URL:=@SF/nfs
 PKG_SOURCE:=nfs-utils-$(PKG_VERSION).tar.bz2
@@ -86,6 +86,7 @@ CONFIGURE_ARGS += \
 
 CONFIGURE_VARS += \
 	libblkid_cv_is_recent=yes \
+	ac_cv_lib_resolv___res_querydomain=yes \
 	CONFIG_SQLITE3_TRUE="\#" \
 	CONFIG_NFSDCLD_TRUE="\#"
 
@@ -93,8 +94,8 @@ MAKE_FLAGS += \
 	OPT="$(TARGET_CFLAGS)" \
 	INSTALLSUID="install -m 4755" \
 	DESTDIR="$(PKG_INSTALL_DIR)" \
-	RPCGEN_PATH=$(STAGING_DIR)/host/bin/rpcgen \
-	RPCGEN=$(STAGING_DIR)/host/bin/rpcgen
+	RPCGEN_PATH=$(STAGING_DIR_HOSTPKG)/bin/rpcgen \
+	RPCGEN=$(STAGING_DIR_HOSTPKG)/bin/rpcgen
 
 HOST_CFLAGS += -Dlinux
 
@@ -125,8 +126,8 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR)/host/bin
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/rpcgen/rpcgen $(STAGING_DIR)/host/bin/rpcgen
+	$(INSTALL_DIR) $(STAGING_DIR_HOSTPKG)/bin
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/tools/rpcgen/rpcgen $(STAGING_DIR_HOSTPKG)/bin/rpcgen
 endef
 
 define Package/nfs-kernel-server/install

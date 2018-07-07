@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcsc-lite
-PKG_VERSION:=1.8.18
+PKG_VERSION:=1.8.23
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://alioth.debian.org/frs/download.php/file/4179
-PKG_MD5SUM:=b22d32b018f6a1016adba91abfcc63876cca999daa472dd86e953ddd41d00905
+PKG_SOURCE_URL:=https://pcsclite.apdu.fr/files/
+PKG_HASH:=5a27262586eff39cfd5c19aadc8891dd71c0818d3d629539bd631b958be689c9
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=COPYING
@@ -24,8 +24,8 @@ PKG_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 
 define Package/pcsc-lite/Default
-  TITLE:=Middleware to access a smart card using SCard API (PC/SC).
-  URL:=http://pcsclite.alioth.debian.org/
+  TITLE:=Access a smart card using SCard API (PC/SC)
+  URL:=https://pcsclite.apdu.fr/
 endef
 
 define Package/pcsc-lite/Default/description
@@ -67,6 +67,7 @@ TARGET_LDFLAGS += -lpthread
 
 CONFIGURE_ARGS += \
 	--disable-libudev \
+	--disable-libsystemd \
 	--enable-libusb \
 	--enable-static \
 	--enable-usbdropdir=/usr/lib/pcsc/drivers

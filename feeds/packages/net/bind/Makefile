@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2006-2012 OpenWrt.org
-#               2014-2016 Noah Meyerhans <frodo@morgul.net>
+#               2014-2017 Noah Meyerhans <frodo@morgul.net>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,8 +9,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bind
-PKG_VERSION:=9.10.4-P4
-PKG_RELEASE:=2
+PKG_VERSION:=9.11.2-P1
+PKG_RELEASE:=1
 USERID:=bind=57:bind=57
 
 PKG_MAINTAINER:=Noah Meyerhans <frodo@morgul.net>
@@ -18,9 +18,9 @@ PKG_LICENSE := BSD-3-Clause
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
-	ftp://ftp.isc.org/isc/bind9/$(PKG_VERSION) \
-	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION)
-PKG_MD5SUM:=e110904a1d54f83f01d4be8bcd842927
+	http://www.mirrorservice.org/sites/ftp.isc.org/isc/bind9/$(PKG_VERSION) \
+	http://ftp.isc.org/isc/bind9/$(PKG_VERSION)
+PKG_HASH:=cec31548832fca3f85d95178d4019b7d702039e8595d4c93914feba337df1212
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 libtool.m4
@@ -29,15 +29,23 @@ PKG_INSTALL:=1
 PKG_USE_MIPS16:=0
 
 PKG_CONFIG_DEPENDS := \
-	CONFIG_OPENSSL_WITH_EC \
-	CONFIG_BIND_ENABLE_FILTER_AAAA
+	CONFIG_BIND_ENABLE_FILTER_AAAA \
+	CONFIG_BIND_LIBJSON \
+	CONFIG_BIND_LIBXML2
+
+ifdef CONFIG_BIND_LIBXML2
+  PKG_BUILD_DEPENDS += libxml2
+endif
+ifdef CONFIG_BIND_LIBJSON
+  PKG_BUILD_DEPENDS += libjson-c
+endif
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/bind/Default
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+bind-libs
+  DEPENDS:=+bind-libs +@OPENSSL_WITH_EC
   TITLE:=bind
   URL:=https://www.isc.org/software/bind
   SUBMENU:=IP Addresses and Names
@@ -46,14 +54,21 @@ endef
 define Package/bind-libs
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libopenssl
+  DEPENDS:=+libopenssl +zlib
   TITLE:=bind shared libraries
   URL:=https://www.isc.org/software/bind
+ifdef CONFIG_BIND_LIBJSON
+  DEPENDS+= +libjson-c
+endif
+ifdef CONFIG_BIND_LIBXML2
+  DEPENDS+= +libxml2
+endif
 endef
 
 define Package/bind-server
   $(call Package/bind/Default)
   TITLE+= DNS server
+  DEPENDS+= +@OPENSSL_WITH_DEPRECATED
 endef
 
 define Package/bind-server/config
@@ -82,7 +97,7 @@ endef
 
 define Package/bind-dnssec
   $(call Package/bind/Default)
-  TITLE+= administration tools (dnssec-keygen and dnssec-signzone only)
+  TITLE+= administration tools (dnssec-keygen, dnssec-settime and dnssec-signzone only)
 endef
 
 define Package/bind-host
@@ -105,7 +120,7 @@ CONFIGURE_ARGS += \
 	--disable-linux-caps \
 	--with-openssl="$(STAGING_DIR)/usr" \
 	--with-libtool \
-	--with-libxml2=no \
+	--without-lmdb \
 	--enable-epoll=yes \
 	--with-gost=no \
 	--with-gssapi=no \
@@ -116,6 +131,22 @@ CONFIGURE_ARGS += \
 ifdef CONFIG_BIND_ENABLE_FILTER_AAAA
 	CONFIGURE_ARGS += \
 		--enable-filter-aaaa
+endif
+
+ifdef CONFIG_BIND_LIBJSON
+	CONFIGURE_ARGS += \
+		--with-libjson="$(STAGING_DIR)/usr"
+else
+	CONFIGURE_ARGS += \
+		--with-libjson=no
+endif
+
+ifdef CONFIG_BIND_LIBXML2
+	CONFIGURE_ARGS += \
+		--with-libxml2="$(STAGING_DIR)/usr"
+else
+	CONFIGURE_ARGS += \
+		--with-libxml2=no
 endif
 
 CONFIGURE_VARS += \
@@ -173,6 +204,7 @@ define Package/bind-tools/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/host $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-keygen $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-settime $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-signzone $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/named-checkconf $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/named-checkzone $(1)/usr/sbin/
@@ -195,6 +227,7 @@ endef
 define Package/bind-dnssec/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-keygen $(1)/usr/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-settime $(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/dnssec-signzone $(1)/usr/sbin/
 endef
 

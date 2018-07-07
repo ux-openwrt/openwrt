@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2007-2016 OpenWrt.org
+# Copyright (C) 2017 Daniel Engberg <daniel.engberg.lists@pyret.net>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=poco
-PKG_VERSION:=1.7.5
+PKG_VERSION:=1.8.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://pocoproject.org/releases/poco-1.7.5
-PKG_MD5SUM:=baafda4833c4dd95993398d9f237c96c
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://pocoproject.org/releases/$(PKG_NAME)-$(PKG_VERSION)
+PKG_HASH:=2e4c07ac73174ee06c7e2c7cf2b7642a5b3aea81d0203e1c069b32ac4a8ecfbc
 
 PKG_LICENSE:=BSL-1.0
 PKG_LICENSE_FILES:=LICENSE

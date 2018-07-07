@@ -7,8 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tgt
-PKG_VERSION:=1.0.65
-PKG_REV:=c8f86393d2ea3f37b64963f66af240f17d88b43d
+PKG_VERSION:=1.0.73
+PKG_REV:=013223dc886a03719ca02db52162056249d99448
+PKG_MIRROR_HASH:=649bd012ab0944644ff83cc2974e7a5c374d568e0f4328d9f8d352d4b59f73bb
 PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
@@ -30,7 +31,7 @@ define Package/tgt
   CATEGORY:=Network
   URL:=http://stgt.sourceforge.net/
   TITLE:=userspace iSCSI target
-  DEPENDS:=+libpthread +libaio @KERNEL_AIO @KERNEL_DIRECT_IO
+  DEPENDS:=+libpthread +libaio @KERNEL_AIO
 endef
 
 define Package/tgt/description
@@ -41,9 +42,11 @@ Note that if you are interested in only iSCSI (probably you are), you need only 
 endef
 
 define Build/Compile
-	CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS)" $(MAKE) -C $(PKG_BUILD_DIR) \
+	CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LD="$(TARGET_CC)" \
+		LDFLAGS="$(TARGET_LDFLAGS)" \
 		install-programs
 endef
 

@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=3.5.6
+PKG_VERSION:=3.5.16
 PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5
-PKG_MD5SUM:=7a38b23757aae009c3eb5bb12fb0afda
+PKG_SOURCE_URL:=https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5
+PKG_HASH:=0924dec90c37c05f49fec966eba3672dab4d336d879e5c06e06e13325cbfec25
 #PKG_FIXUP:=autoreconf gettext-version
 PKG_MAINTAINER:=Nikos Mavrogiannopoulos <nmav@gnutls.org>
 PKG_LICENSE:=LGPLv2.1+
@@ -110,8 +110,10 @@ CONFIGURE_ARGS+= \
 	--enable-static \
 	--disable-rpath \
 	--disable-libdane \
+	--with-included-unistring \
 	--disable-guile \
 	--disable-nls \
+	--without-idn \
 	--without-zlib \
 	--enable-local-libopts \
 	--disable-doc \

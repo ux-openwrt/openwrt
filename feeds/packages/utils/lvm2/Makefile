@@ -9,13 +9,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=LVM2
-PKG_VERSION:=2.02.165
+PKG_VERSION:=2.02.177
 PKG_RELEASE:=1
 PKG_LICENSE:=GPL-2.0 LGPL-2.1
 
 PKG_SOURCE:=$(PKG_NAME).$(PKG_VERSION).tgz
-PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/releases
-PKG_MD5SUM:=d459cfe50fd549fe41eeed4ef8fbca3f9833f68012f735adb3462483360e07c7
+PKG_SOURCE_URL:=ftp://sources.redhat.com/pub/lvm2/releases \
+		http://ftp.gwdg.de/pub/linux/sources.redhat.com/lvm2/
+PKG_HASH:=4025a23ec9b15c2cb7486d151c29dc953b75efc4d452cfe9dbbc7c0fac8e80f2
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME).$(PKG_VERSION)
 

@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/uclibc++.mk
 
 PKG_NAME:=smartmontools
-PKG_VERSION:=6.5
+PKG_VERSION:=6.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/smartmontools
-PKG_MD5SUM:=093aeec3f8f39fa9a37593c4012d3156
+PKG_HASH:=51f43d0fb064fccaf823bbe68cf0d317d0895ff895aa353b3339a3b316a53054
 PKG_MAINTAINER:=Maxim Storchak <m.storchak@gmail.com>
 PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=COPYING
@@ -55,13 +55,17 @@ define Package/smartd/description
   ATA and SCSI disks. It is derived from smartsuite.
 endef
 
-# uses GNU configure
+ifeq ($(CONFIG_USE_UCLIBCXX),y)
+  UCXXCFLAGS:=-fno-builtin -fno-rtti -nostdinc++
+  UCXXCPPFLAGS:=-I$(STAGING_DIR)/usr/include/uClibc++
+  UCXXLIBS:=-nodefaultlibs -lc -luClibc++
+endif
 
 CONFIGURE_VARS += \
-	CXXFLAGS="$$$$CXXFLAGS -fno-builtin -fno-rtti -nostdinc++" \
-	CPPFLAGS="$$$$CPPFLAGS -I$(STAGING_DIR)/usr/include/uClibc++ -I$(LINUX_DIR)/include" \
+	CXXFLAGS="$$$$CXXFLAGS $(UCXXCFLAGS)" \
+	CPPFLAGS="$$$$CPPFLAGS $(UCXXCPPFLAGS) -I$(LINUX_DIR)/include" \
 	LDFLAGS="$$$$LDFLAGS" \
-	LIBS="-nodefaultlibs -lc -luClibc++ -lm $(LIBGCC_S) -lc" \
+	LIBS="$(UCXXLIBS) -lm $(LIBGCC_S) -lc" \
 
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR) \

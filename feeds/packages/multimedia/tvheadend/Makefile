@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tvheadend
-PKG_VERSION:=4.0.9
+PKG_VERSION:=4.0.10
 PKG_RELEASE:=1
 
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)
 PKG_SOURCE_VERSION:=v$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.xz
+PKG_MIRROR_HASH:=afe42bcf683e8576ca8ccd4755ea308f79195e92f7c30fc5961973e238f49105
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/tvheadend/tvheadend.git
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
@@ -74,6 +75,8 @@ CONFIGURE_ARGS += \
 	--disable-dbus_1 \
 	--disable-libav \
 	--enable-bundle
+
+TARGET_CFLAGS += -Wno-error=pointer-compare
 
 define Build/Prepare
 	$(call Build/Prepare/Default)

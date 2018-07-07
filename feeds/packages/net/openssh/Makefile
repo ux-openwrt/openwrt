@@ -8,21 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssh
-PKG_VERSION:=7.3p1
-PKG_RELEASE:=3
+PKG_VERSION:=7.7p1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
-		http://ftp.belnet.be/pub/OpenBSD/OpenSSH/portable/
-PKG_MD5SUM:=dfadd9f035d38ce5d58a3bf130b86d08
+PKG_SOURCE_URL:=https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/ \
+		https://ftp.spline.de/pub/OpenBSD/OpenSSH/portable/ \
+		https://anorien.csc.warwick.ac.uk/pub/OpenBSD/OpenSSH/portable/
+PKG_HASH:=d73be7e684e99efcd024be15a30bffcbe41b012b2f7b3c9084aed621775e6b8f
 
 PKG_LICENSE:=BSD ISC
 PKG_LICENSE_FILES:=LICENCE
 
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
-
-PKG_BUILD_DEPENDS:=libopenssl
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -92,6 +91,8 @@ endef
 
 define Package/openssh-server/conffiles
 /etc/ssh/sshd_config
+/etc/ssh/ssh_host_*_key
+/etc/ssh/ssh_host_*_key.pub
 endef
 
 define Package/openssh-server-pam
@@ -174,7 +175,7 @@ CONFIGURE_ARGS += \
 	--without-pam
 endif
 
-ifeq ($(CONFIG_OPENSSL_ENGINE),y)
+ifeq ($(CONFIG_OPENSSL_ENGINE_CRYPTO),y)
 CONFIGURE_ARGS+= \
 	--with-ssl-engine
 endif
@@ -247,6 +248,7 @@ define Package/openssh-server/install
 	$(INSTALL_DIR) $(1)/etc/ssh
 	chmod 0700 $(1)/etc/ssh
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/etc/ssh/sshd_config $(1)/etc/ssh/
+	sed -r -i 's,^#(HostKey /etc/ssh/ssh_host_(rsa|ecdsa|ed25519)_key)$$$$,\1,' $(1)/etc/ssh/sshd_config
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/sshd.init $(1)/etc/init.d/sshd
 	$(INSTALL_DIR) $(1)/usr/sbin

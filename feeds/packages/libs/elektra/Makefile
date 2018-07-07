@@ -13,12 +13,12 @@ PKG_MAINTAINER:=Harald Geyer <harald@ccbib.org>
 
 PKG_NAME:=elektra
 PKG_LICENSE:=BSD-3-Clause
-PKG_LICENSE_FILES:=doc/COPYING
-PKG_VERSION:=0.8.18
+PKG_LICENSE_FILES:=LICENSE.md
+PKG_VERSION:=0.8.21
 PKG_RELEASE:=1
 
 # Use this for official releasees
-PKG_MD5SUM:=62fe0fbf9ee57ffaa58a982f602f596a
+PKG_HASH:=51892570f18d1667d0da4d0908a091e41b41c20db9835765677109a3d150cd26
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.libelektra.org/ftp/elektra/releases
 
@@ -97,9 +97,11 @@ define Package/libelektra-plugins
 endef
 
 define CONTENT_ELEKTRA_PLUGINS_TEXT
-boolean cachefilter ccode conditionals csvstorage enum filecheck glob
-hexcode hidden hosts iconv keytometa line lineendings list mathcheck
-network null path profile shell syslog uname validation
+base64 boolean cachefilter camel ccode conditionals csvstorage
+date directoryvalue enum file filecheck glob hexcode hidden
+hosts iconv ipaddr keytometa line lineendings list mathcheck
+mini network null path profile range shell syslog uname
+validation
 endef
 
 CONTENT_ELEKTRA_PLUGINS = $(strip $(CONTENT_ELEKTRA_PLUGINS_TEXT))
@@ -157,7 +159,7 @@ endef
 define Package/libelektra-curlget
   $(call Package/libelektra/Default)
   TITLE:=Elektra curlget plugin
-  DEPENDS:=+libelektra-core +libcurl
+  DEPENDS:=+libelektra-core +libcurl +libopenssl
 endef
 
 define Package/libelektra-curlget/description
@@ -177,6 +179,21 @@ $(call Package/libelektra/Default-description)
 
 This package contains support for dbus notification on configuration
 changes.
+endef
+
+define Package/libelektra-xerces
+  $(call Package/libelektra/Default)
+  TITLE:=Elektra xerces based xml plugin
+  DEPENDS:=+libelektra-core +libstdcpp +libxerces-c
+endef
+
+define Package/libelektra-xerces/description
+$(call Package/libelektra/Default-description)
+
+The xerces plugin supplants the xmltool plugin
+and allows us to use XML files not following a specific schemata.
+Attributes are mapped to Elektra's metadata, multiple keys with the
+same names are mapped to arrays.
 endef
 
 define Package/libelektra-xml
@@ -202,6 +219,19 @@ $(call Package/libelektra/Default-description)
 
 This package contains support for storing the key database as json files.
 endef
+
+define Package/libelektra-yamlcpp
+  $(call Package/libelektra/Default)
+  TITLE:=Elektra yaml plugin
+  DEPENDS:=+libelektra-core +libyaml-cpp
+endef
+
+define Package/libelektra-yamlcpp/description
+$(call Package/libelektra/Default-description)
+
+This package contains support for storing the key database as yaml files.
+endef
+
 
 define Package/libelektra-python2
   $(call Package/libelektra/Default)
@@ -242,12 +272,13 @@ endef
 define Package/libelektra-extra
   $(call Package/libelektra/Default)
   TITLE:=Additional elektra plugins
-  DEPENDS:=+libelektra-core
+  DEPENDS:=+libelektra-core +libstdcpp
 endef
 
 define CONTENT_EXTRA_PLUGINS_TEXT
-blockresolver constants counter desktop dpkg error fstab logchange
-mozprefs passwd rename timeofday tracer
+blockresolver c constants counter desktop dini dpkg error
+fcrypt fstab logchange mozprefs passwd rename required
+simplespeclang timeofday tracer
 endef
 
 CONTENT_ELEKTRA_EXTRA:=$(strip $(CONTENT_EXTRA_PLUGINS_TEXT))
@@ -256,8 +287,8 @@ define Package/libelektra-extra/description
 $(call Package/libelektra/Default-description)
 
 This package contains extra plugins that are only useful for debugging
-or as an example of what can be done. Also most experimental plugins are
-included in this package. Currently this includes:
+or as an example of what can be done. Also most experimental plugins
+are included in this package. Currently this includes:
 $(CONTENT_EXTRA_PLUGINS_TEXT)
 endef
 
@@ -271,7 +302,7 @@ CMAKE_OPTIONS = \
 	-DKDB_DEFAULT_RESOLVER=resolver_fm_pb_b \
 	-DKDB_DEFAULT_STORAGE=ini \
 	-DENABLE_OPTIMIZATIONS=OFF \
-	-DPLUGINS="ALL"
+	-DPLUGINS="ALL;-multifile"
 
 CMAKE_HOST_OPTIONS = \
 	-DCMAKE_SKIP_RPATH=FALSE \
@@ -291,11 +322,15 @@ define Package/libelektra-core/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-core.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-ease.so* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-invoke.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-kdb.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-meta.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-plugin.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-proposal.so* $(1)/usr/lib/
+	#The next is only supported with glibc, so skip it.
+	#$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektraintercept-* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-resolver_fm_pb_b.so $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-utility.so* $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-ni.so $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-ini.so $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-sync.so $(1)/usr/lib/
@@ -349,6 +384,11 @@ define Package/libelektra-dbus/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-dbus.so $(1)/usr/lib/
 endef
 
+define Package/libelektra-xerces/install
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-xerces.so $(1)/usr/lib/
+endef
+
 define Package/libelektra-xml/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-xmltool.so $(1)/usr/lib/
@@ -357,6 +397,11 @@ endef
 define Package/libelektra-yajl/install
 	$(INSTALL_DIR) $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-yajl.so $(1)/usr/lib/
+endef
+
+define Package/libelektra-yamlcpp/install
+	$(INSTALL_DIR) $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelektra-yamlcpp.so $(1)/usr/lib/
 endef
 
 define Package/libelektra-python2/install
@@ -397,6 +442,8 @@ $(eval $(call BuildPackage,libelektra-cpp))
 $(eval $(call BuildPackage,libelektra-curlget))
 $(eval $(call BuildPackage,libelektra-crypto))
 $(eval $(call BuildPackage,libelektra-dbus))
+$(eval $(call BuildPackage,libelektra-xerces))
+$(eval $(call BuildPackage,libelektra-yamlcpp))
 $(eval $(call BuildPackage,libelektra-xml))
 $(eval $(call BuildPackage,libelektra-yajl))
 $(eval $(call BuildPackage,libelektra-python2))

@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bcp38
 PKG_VERSION:=5
-PKG_RELEASE:=1
+PKG_RELEASE:=4
 PKG_LICENCE:=GPL-3.0+
 
 include $(INCLUDE_DIR)/package.mk
@@ -23,7 +23,11 @@ define Package/bcp38
 endef
 
 define Package/bcp38/description
- bcp38 implements IETF BCP38 for home routers. See https://tools.ietf.org/html/bcp38.
+ bcp38 implements IETF BCP38 for home routers.
+ See https://tools.ietf.org/html/bcp38.
+
+ This package provides BCP38 for IPv4 only - IPv6 uses source 
+ specific default routes, so no firewall configuration is needed.
 endef
 
 define Package/bcp38/conffiles
@@ -46,6 +50,8 @@ define Package/bcp38/install
 	$(INSTALL_BIN) ./files/run.sh $(1)/usr/lib/bcp38/run.sh
 	$(INSTALL_DIR) $(1)/etc/uci-defaults
 	$(INSTALL_BIN) ./files/bcp38.defaults $(1)/etc/uci-defaults/bcp38
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/bcp38.init $(1)/etc/init.d/bcp38
 endef
 
 define Package/bcp38/postinst

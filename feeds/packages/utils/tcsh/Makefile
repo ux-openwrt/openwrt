@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011-2016 OpenWrt.org
+# Copyright (C) 2011-2017 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,14 +7,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tcsh
-PKG_VERSION:=6.19.01
-PKG_RELEASE:=$(PKG_SOURCE_VERSION)
+PKG_VERSION:=6.20.00
+PKG_RELEASE:=2
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://github.com/tcsh-org/tcsh
-PKG_SOURCE_VERSION:=8c5c7ed707534a7fe0c41aef43420f2d64cb0607
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:= \
+	http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/ \
+	http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/old/ \
+	ftp://ftp.astron.com/pub/tcsh/ \
+	ftp://ftp.astron.com/pub/tcsh/old
+PKG_HASH:=b89de7064ab54dac454a266cfe5d8bf66940cb5ed048d0c30674ea62e7ecef9d
 
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=Copyright

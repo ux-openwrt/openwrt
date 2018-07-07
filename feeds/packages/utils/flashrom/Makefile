@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2016 OpenWrt.org
+# Copyright (C) 2010-2017 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=flashrom
-PKG_VERSION:=0.9.9
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.9.1
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://download.flashrom.org/releases
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_MD5SUM:=aab9c98925d9cfb5ffb28b67a6112530
+PKG_HASH:=0e145a5b9b18c98752acf0f8329a9a260ddf030abf687416daab9f05a0f508d0
 PKG_MAINTAINER:=Álvaro Fernández Rojas <noltari@gmail.com>
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_SOURCE_SUBDIR)

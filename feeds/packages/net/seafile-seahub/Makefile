@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2016 OpenWrt.org
+# Copyright (C) 2007-2017 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,18 +8,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=seafile-seahub
-PKG_VERSION:=5.1.4
+PKG_VERSION:=6.2.2
 PKG_RELEASE=$(PKG_SOURCE_VERSION)-1
 PKG_LICENSE:=Apache-2.0
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/haiwen/seahub.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=1e1c02aa4f2a0256ffa29a28224aad2d678f43a0
+PKG_SOURCE_VERSION:=120e7a299e77968f1af48ea2dcf4bd9b909c426f
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_MIRROR_HASH:=511500c40dd7b1009f77109c6df810df1cf2c17a84a8f6841d592a9e05d22064
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python-package.mk)
+include ../../lang/python/python-package.mk
 
 define Package/seafile-seahub
     SECTION:=net

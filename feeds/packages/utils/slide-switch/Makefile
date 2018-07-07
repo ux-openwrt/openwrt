@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2016 OpenWrt.org
+# Copyright (C) 2016, 2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=slide-switch
-PKG_VERSION:=0.9.0
+PKG_VERSION:=0.9.1
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/jefferyto/openwrt-slide-switch.git
-PKG_SOURCE_VERSION:=9171c2ea9cc9cbfb6f27b7bc25a535c8c35ee534
+PKG_SOURCE_VERSION:=d70b5a09f457050e7e3b45fe03787945aa8880a0
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_MIRROR_HASH:=78227e0cdc36f105b4fc5657620e41d6bb429eeef76419ce2cd53d2b6700ce31
 
 PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
@@ -31,7 +32,7 @@ define Package/slide-switch
 	SECTION:=utils
 	CATEGORY:=Utilities
 	DEPENDS:=+jshn +jsonfilter
-	TITLE:=Translate switch position changes into normal button presses
+	TITLE:=Translate switch position change to button press
 	URL:=https://github.com/jefferyto/openwrt-slide-switch
 endef
 

@@ -8,16 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=check
-PKG_VERSION:=0.9.14
-PKG_RELEASE:=2
+PKG_VERSION:=0.12.0
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=@SF/check
-PKG_MD5SUM:=38263d115d784c17aa3b959ce94be8b8
+PKG_SOURCE_URL:=https://github.com/libcheck/check/releases/download/$(PKG_VERSION)
+PKG_HASH:=464201098bee00e90f5c4bdfa94a5d3ead8d641f9025b560a27755a83b824234
 
 PKG_LICENSE:=LGPL-2.1+
 PKG_LICENSE_FILES:=COPYING.LESSER
-PKG_MAINTAINER:=Nicolas Thill <nico@openwrt.org>
+PKG_MAINTAINER:=Eduardo Abinader <eduardoabinader@gmail.com>
 
 PKG_INSTALL:=1
 
@@ -27,7 +27,7 @@ define Package/check
   SECTION:=libs
   CATEGORY:=Libraries
   TITLE:=Unit testing framework for C
-  URL:=http://check.sourceforge.net/
+  URL:=https://libcheck.github.io/check/
   DEPENDS:= +libpthread +librt
 endef
 

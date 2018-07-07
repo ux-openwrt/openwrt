@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libunistring
-PKG_VERSION:=0.9.6
+PKG_VERSION:=0.9.8
 PKG_RELEASE:=1
-PKG_MD5SUM:=dfae4ff5583649ed24d8f368f1d0543b
+PKG_HASH:=b792f2bd05d0fa7b339e39e353da7232b2e514e0db2cf5ed95beeff3feb53cf5
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/libunistring

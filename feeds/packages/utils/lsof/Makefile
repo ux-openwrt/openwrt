@@ -10,11 +10,11 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=lsof
 PKG_VERSION:=4.89
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/ ftp://sunsite.ualberta.ca/pub/Mirror/lsof/ ftp://ftp.fu-berlin.de/pub/unix/tools/lsof
-PKG_MD5SUM:=1b9cd34f3fb86856a125abbf2be3a386
+PKG_HASH:=81ac2fc5fdc944793baf41a14002b6deb5a29096b387744e28f8c30a360a3718
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_VERSION)
 PKG_MAINTAINER:=Maxim Storchak <m.storchak@gmail.com>
 PKG_LICENSE:=Unique
@@ -57,6 +57,10 @@ define Build/Configure
 endef
 
 define Build/Compile	
+	LSOF_HOST="none" \
+	LSOF_LOGNAME="none" \
+	LSOF_SYSINFO="none" \
+	LSOF_USER="none" \
 	$(MAKE) -C $(PKG_BUILD_DIR)
 endef
 
