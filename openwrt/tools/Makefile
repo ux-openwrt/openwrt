@@ -25,6 +25,7 @@ ifneq ($(CONFIG_TARGET_ar71xx),)
 tools-y += lzma-old squashfs
 endif
 tools-y += lzma squashfs4
+tools-y += b43-tools
 
 ifneq ($(CONFIG_PACKAGE_firmwarehotplug),)
 tools-y += sdcc
@@ -64,6 +65,7 @@ $(curdir)/missing-macros/compile := $(curdir)/automake/install
 $(curdir)/e2fsprogs/compile := $(curdir)/automake/install
 $(curdir)/libelf/compile := $(curdir)/automake/install
 $(curdir)/sdcc/compile := $(curdir)/bison/install
+$(curdir)/b43-tools/compile := $(curdir)/bison/install
 
 ifneq ($(CONFIG_CCACHE),)
 $(foreach tool, $(tools-y), $(eval $(curdir)/$(tool)/compile += $(curdir)/ccache/install))
