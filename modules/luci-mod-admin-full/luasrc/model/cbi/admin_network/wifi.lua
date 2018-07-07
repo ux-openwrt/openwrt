@@ -17,6 +17,7 @@ m = Map("wireless", "",
 
 m:chain("network")
 m:chain("firewall")
+m.redirect = luci.dispatcher.build_url("admin/network/wireless")
 
 local ifsection
 
@@ -142,7 +143,7 @@ local found_sta = nil
 local _, net
 if wnet:mode() ~= "sta" then
 	for _, net in ipairs(wdev:get_wifinets()) do
-		if net:mode() == "sta" then
+		if net:mode() == "sta" and net:get("disabled") ~= "1" then
 			if not found_sta then
 				found_sta = {}
 				found_sta.channel = net:channel()
