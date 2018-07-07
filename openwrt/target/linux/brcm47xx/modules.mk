@@ -13,31 +13,20 @@ define KernelPackage/usb-brcm47xx
   	CONFIG_USB_HCD_BCMA \
   	CONFIG_USB_HCD_SSB
   FILES:= \
-  	$(LINUX_DIR)/drivers/usb/host/bcma-hcd.ko \
-  	$(LINUX_DIR)/drivers/usb/host/ssb-hcd.ko
-  AUTOLOAD:=$(call AutoLoad,19,bcma-hcd ssb-hcd,1)
+	$(if $(CONFIG_USB_HCD_BCMA),$(LINUX_DIR)/drivers/usb/host/bcma-hcd.ko) \
+	$(if $(CONFIG_USB_HCD_SSB),$(LINUX_DIR)/drivers/usb/host/ssb-hcd.ko)
+  AUTOLOAD:=$(call AutoLoad,19, \
+	$(if $(CONFIG_USB_HCD_BCMA),bcma-hcd) \
+	$(if $(CONFIG_USB_HCD_SSB),ssb-hcd),1)
   $(call AddDepends/usb)
 endef
 
 $(eval $(call KernelPackage,usb-brcm47xx))
 
-define KernelPackage/ssb-gige
-  TITLE:=Broadcom SSB Gigabit Ethernet
-  KCONFIG:=CONFIG_SSB_DRIVER_GIGE=y
-  DEPENDS:=@TARGET_brcm47xx +kmod-tg3
-  SUBMENU:=$(NETWORK_DEVICES_MENU)
-endef
-
-define KernelPackage/ssb-gige/description
- Kernel modules for Broadcom SSB Gigabit Ethernet adapters.
-endef
-
-$(eval $(call KernelPackage,ssb-gige))
-
 
 define KernelPackage/ocf-ubsec-ssb
   TITLE:=BCM5365P IPSec Core driver
-  DEPENDS:=@TARGET_brcm47xx +kmod-crypto-ocf
+  DEPENDS:=@TARGET_brcm47xx @!TARGET_brcm47xx_mips74k +kmod-crypto-ocf
   KCONFIG:=CONFIG_OCF_UBSEC_SSB
   FILES:=$(LINUX_DIR)/crypto/ocf/ubsec_ssb/ubsec_ssb.ko
   AUTOLOAD:=$(call AutoLoad,10,ubsec_ssb)
@@ -49,3 +38,18 @@ define KernelPackage/ocf-ubsec-ssb/description
 endef
 
 $(eval $(call KernelPackage,ocf-ubsec-ssb))
+
+define KernelPackage/bgmac
+  TITLE:=Broadcom bgmac driver
+  KCONFIG:=CONFIG_BGMAC
+  DEPENDS:=@TARGET_brcm47xx @!TARGET_brcm47xx_legacy
+  SUBMENU:=$(NETWORK_DEVICES_MENU)
+  FILES:=$(LINUX_DIR)/drivers/net/ethernet/broadcom/bgmac.ko
+  AUTOLOAD:=$(call AutoLoad,19,bgmac,1)
+endef
+
+define KernelPackage/bgmac/description
+ Kernel modules for Broadcom bgmac Ethernet adapters.
+endef
+
+$(eval $(call KernelPackage,bgmac))

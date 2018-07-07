@@ -113,18 +113,6 @@ static struct platform_device dir825b1_rtl8366s_device = {
 	}
 };
 
-static void dir825b1_read_ascii_mac(u8 *dest, u8 *src)
-{
-	int ret;
-
-	ret = sscanf(src, "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx",
-		     &dest[0], &dest[1], &dest[2],
-		     &dest[3], &dest[4], &dest[5]);
-
-	if (ret != ETH_ALEN)
-		memset(dest, 0, ETH_ALEN);
-}
-
 static bool __init dir825b1_is_caldata_valid(u8 *p)
 {
 	u16 *magic0, *magic1;
@@ -138,7 +126,8 @@ static bool __init dir825b1_is_caldata_valid(u8 *p)
 static void __init dir825b1_wlan_init(void)
 {
 	u8 *caldata;
-	u8 mac1[ETH_ALEN], mac2[ETH_ALEN];
+	u8 mac0[ETH_ALEN], mac1[ETH_ALEN];
+	u8 wmac0[ETH_ALEN], wmac1[ETH_ALEN];
 
 	caldata = (u8 *) KSEG1ADDR(DIR825B1_CAL_LOCATION_0);
 	if (!dir825b1_is_caldata_valid(caldata)) {
@@ -149,17 +138,19 @@ static void __init dir825b1_wlan_init(void)
 		}
 	}
 
-	dir825b1_read_ascii_mac(mac1, caldata + DIR825B1_MAC0_OFFSET);
-	dir825b1_read_ascii_mac(mac2, caldata + DIR825B1_MAC1_OFFSET);
+	ath79_parse_ascii_mac(caldata + DIR825B1_MAC0_OFFSET, mac0);
+	ath79_parse_ascii_mac(caldata + DIR825B1_MAC1_OFFSET, mac1);
 
-	ath79_init_mac(ath79_eth0_data.mac_addr, mac1, 2);
-	ath79_init_mac(ath79_eth1_data.mac_addr, mac1, 3);
+	ath79_init_mac(ath79_eth0_data.mac_addr, mac0, 0);
+	ath79_init_mac(ath79_eth1_data.mac_addr, mac1, 0);
+	ath79_init_mac(wmac0, mac0, 0);
+	ath79_init_mac(wmac1, mac1, 1);
 
 	ap9x_pci_setup_wmac_led_pin(0, 5);
 	ap9x_pci_setup_wmac_led_pin(1, 5);
 
-	ap94_pci_init(caldata + DIR825B1_CAL0_OFFSET, mac1,
-		      caldata + DIR825B1_CAL1_OFFSET, mac2);
+	ap94_pci_init(caldata + DIR825B1_CAL0_OFFSET, wmac0,
+		      caldata + DIR825B1_CAL1_OFFSET, wmac1);
 }
 
 static void __init dir825b1_setup(void)
