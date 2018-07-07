@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2015 OpenWrt.org
+# Copyright (C) 2007-2017 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fftw3
-PKG_VERSION:=3.3.4
+PKG_VERSION:=3.3.7
 PKG_RELEASE:=1
 PKG_LICENSE:=GPL-2.0+
 
 PKG_SOURCE:=fftw-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.fftw.org
-PKG_MD5SUM:=2edab8c06b24feeb3b82bbb3ebf3e7b3
+PKG_HASH:=3b609b7feba5230e8f6dd8d245ddbefac324c5a6ae4186947670d9ac2cd25573
 
 PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/fftw-$(PKG_VERSION)
 PKG_FIXUP:=autoreconf
@@ -73,10 +73,12 @@ CONFIGURE_ARGS += \
 	--enable-threads \
 	--enable-type-prefix \
 	--disable-debug \
-	--disable-fortran
+	--disable-fortran \
+	--disable-doc
 
 ifeq ($(BUILD_VARIANT), single)
 CONFIGURE_ARGS += \
+	$(if $(findstring neon,$(CONFIG_TARGET_OPTIMIZATION)),--enable-neon) \
 	--enable-single
 endif
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2015-2016 OpenWrt.org
+# Copyright (C) 2015-2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -16,15 +16,15 @@ include $(INCLUDE_DIR)/nls.mk
 include $(INCLUDE_DIR)/target.mk 
 
 PKG_NAME:=boost
-PKG_VERSION:=1.62.0
-PKG_SOURCE_VERSION:=1_62_0
-PKG_RELEASE:=5
+PKG_VERSION:=1.67.0
+PKG_SOURCE_VERSION:=1_67_0
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_SOURCE_VERSION).tar.bz2
-PKG_SOURCE_URL:=https://sourceforge.net/projects/boost/files/boost/$(PKG_VERSION)
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)/$(PKG_NAME)/$(PKG_VERSION) https://dl.bintray.com/boostorg/release/$(PKG_VERSION)/source/
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_$(PKG_SOURCE_VERSION)
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)_$(PKG_SOURCE_VERSION)
-PKG_MD5SUM:=36c96b0f6155c98404091d8ceb48319a28279ca0333fba1ad8611eb90afb2ca0
+PKG_HASH:=2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba
 PKG_LICENSE:=Boost Software License <http://www.boost.org/users/license.html>
 PKG_MAINTAINER:=Carlos M. Ferreira <carlosmf.pt@gmail.com>
 
@@ -44,7 +44,7 @@ define Package/boost/Default
 endef
 
 define Package/boost/description
-This package provides the Boost v1.62 libraries.
+This package provides the Boost v1.67.0 libraries.
 Boost is a set of free, peer-reviewed, portable C++ source libraries.
 
 -----------------------------------------------------------------------------
@@ -54,8 +54,8 @@ Boost is a set of free, peer-reviewed, portable C++ source libraries.
 | compile the kernel with Full Language Support.                            |
 | Without these requirerements, the following libs will not be available:   |
 | - Boost.Locale                                                            |
-| - Boost.Coroutine2                                                        |
-| - Boost.Fiber                                                             |
+| - Boost.Coroutine2 (header-only library - requires C++11)                 |
+| - Boost.Fiber (requires C++14)                                            |
 -----------------------------------------------------------------------------
 
 This package provides the following run-time libraries:
@@ -63,12 +63,13 @@ This package provides the following run-time libraries:
  - chrono
  - container
  - context
+ - contract (new in 1.67.0)
  - coroutine (Deprecated - use Coroutine2)
  - - coroutine2 (Requires GCC v5 and up)
  - date_time
  - exception
  - filesystem
- - fiber (Requires GCC v5 and up) - BROKEN
+ - fiber (Requires GCC v5 and up)
  - graph
  - - graph-parallel
  - iostreams
@@ -80,15 +81,17 @@ This package provides the following run-time libraries:
  - python3
  - random
  - regex
- - serialization
+ - serialization and wserialization
  - signals
+ - stackstrace
  - system
  - thread
  - timer
+ - type_erasure
  - wave
 
 There are many more header-only libraries supported by Boost.
-See more at http://www.boost.org/doc/libs/1_62_0/
+See more at http://www.boost.org/doc/libs/1_67_0/
 endef
 
 PKG_BUILD_DEPENDS:=boost/host PACKAGE_python:python PACKAGE_python3:python3
@@ -299,13 +302,14 @@ $(eval $(call DefineBoostLibrary,atomic,system,))
 $(eval $(call DefineBoostLibrary,chrono,system,))
 $(eval $(call DefineBoostLibrary,container,,))
 $(eval $(call DefineBoostLibrary,context,chrono system thread,))
+$(eval $(call DefineBoostLibrary,contract,system,))
 $(eval $(call DefineBoostLibrary,coroutine,system chrono context thread,))
 $(eval $(call DefineBoostLibrary,date_time,,))
 #$(eval $(call DefineBoostLibrary,exception,,))
-$(eval $(call DefineBoostLibrary,fiber,coroutine,,))
+$(eval $(call DefineBoostLibrary,fiber,coroutine filesystem,,))
 $(eval $(call DefineBoostLibrary,filesystem,system,))
 $(eval $(call DefineBoostLibrary,graph,regex,))
-$(eval $(call DefineBoostLibrary,iostreams,,+zlib))
+$(eval $(call DefineBoostLibrary,iostreams,,+zlib +liblzma +libbz2))
 $(eval $(call DefineBoostLibrary,locale,system,$(ICONV_DEPENDS),BUILD_NLS))
 $(eval $(call DefineBoostLibrary,log,system chrono date_time thread filesystem regex,))
 $(eval $(call DefineBoostLibrary,math,,))
@@ -316,10 +320,13 @@ $(eval $(call DefineBoostLibrary,python3,,,PACKAGE_python3))
 $(eval $(call DefineBoostLibrary,random,system,))
 $(eval $(call DefineBoostLibrary,regex,,))
 $(eval $(call DefineBoostLibrary,serialization,,))
+$(eval $(call DefineBoostLibrary,wserialization,serialization,))
 $(eval $(call DefineBoostLibrary,signals,,))
+$(eval $(call DefineBoostLibrary,stacktrace,,))
 $(eval $(call DefineBoostLibrary,system,,))
 $(eval $(call DefineBoostLibrary,thread,system chrono atomic,))
 $(eval $(call DefineBoostLibrary,timer,chrono))
+$(eval $(call DefineBoostLibrary,type_erasure,chrono system thread,))
 $(eval $(call DefineBoostLibrary,wave,date_time thread filesystem,))
 
 
@@ -333,8 +340,10 @@ TARGET_LDFLAGS += -pthread -lrt
 
 TARGET_CFLAGS += \
 	$(if $(CONFIG_PACKAGE_boost-python), -I$(STAGING_DIR)/usr/include/python2.7/) \
-	$(if $(CONFIG_PACKAGE_boost-python3), -I$(STAGING_DIR)/usr/include/python3.5/) \
+	$(if $(CONFIG_PACKAGE_boost-python3), -I$(STAGING_DIR)/usr/include/python3.6/) \
 	$(if $(CONFIG_SOFT_FLOAT),-DBOOST_NO_FENV_H) -fPIC
+
+EXTRA_CXXFLAGS += $(if $(CONFIG_GCC_VERSION_4_8),-std=gnu++11,-std=gnu++14)
 
 ifneq ($(findstring mips,$(ARCH)),)
     BOOST_ABI = o32
@@ -354,13 +363,13 @@ comma := ,
 define Build/Compile
 	$(info Selected Boost API $(BOOST_ABI) for architecture $(ARCH) and cpu $(CPU_TYPE) $(CPU_SUBTYPE))
 	( cd $(PKG_BUILD_DIR) ; \
-		echo "using gcc : $(ARCH) : $(GNU_TARGET_NAME)-gcc : <compileflags>\"$(TARGET_CFLAGS)\" <cxxflags>\"$(TARGET_CXXFLAGS) $(if $(CONFIG_boost-coroutine2),-std=c++14,)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > tools/build/src/user-config.jam ; \
+		echo "using gcc : $(ARCH) : $(GNU_TARGET_NAME)-gcc : <compileflags>\"$(TARGET_CFLAGS)\" <cxxflags>\"$(TARGET_CXXFLAGS) $(EXTRA_CXXFLAGS)\" <linkflags>\"$(TARGET_LDFLAGS)\" ;" > tools/build/src/user-config.jam ; \
 		$(if $(CONFIG_PACKAGE_boost-python3), \
-			echo "using python : 3.5 : $(STAGING_DIR_ROOT)/usr/bin/python3 : $(STAGING_DIR)/usr/include/python3.5/ ;" >> \
+			echo "using python : 3.6 : : $(STAGING_DIR)/usr/include/python3.6/ : $(STAGING_DIR)/usr/lib/libpython3.6.so ;" >> \
 				tools/build/src/user-config.jam; \
 		) \
 		$(if $(CONFIG_PACKAGE_boost-python), \
-			echo "using python : 2.7 : $(STAGING_DIR_ROOT)/usr/bin/python :	$(STAGING_DIR)/usr/include/python2.7/ ;" >> \
+			echo "using python : 2.7 : : $(STAGING_DIR)/usr/include/python2.7/ : $(STAGING_DIR)/usr/lib/libpython2.7.so ;" >> \
 				tools/build/src/user-config.jam; \
 		) \
 		b2 \
@@ -382,20 +391,48 @@ define Build/Compile
 			$(if $(CONFIG_boost-single-thread),threading=single,) \
 			threading=multi \
 			--without-mpi \
-			$(if $(CONFIG_boost-coroutine2),,--without-coroutine2) \
 			$(if $(CONFIG_boost-graph-parallel),,--without-graph_parallel) \
 			$(if $(CONFIG_PACKAGE_boost-test),,--without-test) \
 			$(foreach lib,$(BOOST_LIBS), \
 				$(if $(findstring python,$(lib)), \
-					$(if $(or $(CONFIG_PACKAGE_boost-python),$(CONFIG_PACKAGE_boost-python3)),,--without-python), \
-					$(if $(CONFIG_PACKAGE_boost-$(lib)),,--without-$(lib))) \
+					$(if $(CONFIG_PACKAGE_boost-python),python=2.7,--without-python), \
+						$(if $(CONFIG_PACKAGE_boost-$(lib)),, \
+							$(if $(findstring $(lib),wserialization),,--without-$(lib)) \
+						) \
+					) \
 			) \
 			$(if $(CONFIG_PACKAGE_boost-locale),boost.locale.iconv=on -sICONV_PATH=$(ICONV_PREFIX) boost.locale.posix=$(if $(USE_MUSL),on,off), \
 				boost.locale.iconv=off) \
 			\
 			$(if $(CONFIG_PACKAGE_boost-iostreams),-sNO_BZIP2=1 -sZLIB_INCLUDE=$(STAGING_DIR)/usr/include \
 				-sZLIB_LIBPATH=$(STAGING_DIR)/usr/lib) \
-			install \
+			install ;\
+			$(if $(CONFIG_PACKAGE_boost-python3), \
+				b2 \
+					$(CONFIGURE_ARGS) \
+					--ignore-site-config \
+					--toolset=gcc-$(ARCH) abi=$(BOOST_ABI) \
+					--disable-long-double \
+					$(if $(CONFIG_boost-variant-release), variant=release,) \
+					$(if $(CONFIG_boost-variant-debug), variant=debug,) \
+					$(if $(CONFIG_boost-variant-profile), variant=profile,) \
+					$(if $(CONFIG_boost-use-name-tags),--layout=tagged,--layout=system) \
+					$(if $(CONFIG_boost-build-type-complete),--build-type=complete,--build-type=minimal) \
+					$(if $(CONFIG_boost-shared-libs),link=shared,) \
+					$(if $(CONFIG_boost-static-libs),link=static,) \
+					$(if $(CONFIG_boost-static-and-shared-libs),link=static$(comma)shared,) \
+					$(if $(CONFIG_boost-runtime-shared),runtime-link=shared,) \
+					$(if $(CONFIG_boost-runtime-static),runtime-link=static,) \
+					$(if $(CONFIG_boost-runtime-static-and-shared),runtime-link=shared$(comma)static,) \
+					$(if $(CONFIG_boost-single-thread),threading=single,) \
+					threading=multi \
+					$(foreach lib,$(BOOST_LIBS), \
+						$(if $(findstring python,$(lib)), \
+							$(if $(CONFIG_PACKAGE_boost-python3),python=3.6,), \
+						) \
+					) \
+				install ;\
+			,) \
 	)
 endef
 
@@ -415,11 +452,11 @@ endef
 
 define Host/Install
 	$(INSTALL_DIR) \
-		$(STAGING_DIR)/host/bin
+		$(STAGING_DIR_HOSTPKG)/bin
 
 	$(CP) \
 		$(HOST_BUILD_DIR)/tools/build/src/engine/bin.*/b2 \
-		$(STAGING_DIR)/host/bin/
+		$(STAGING_DIR_HOSTPKG)/bin/
 endef
 
 define Package/boost/Default/install
@@ -445,7 +482,7 @@ endef
 
 define BuildBoostLibrary
   define Package/boost-$(1)/install
-    $(call Package/boost/Default/install,$$(1),$(1))
+    $(call Package/boost/Default/install,$$(1),$(1)) 
   endef
 
   $$(eval $$(call BuildPackage,boost-$(1)))

@@ -1,11 +1,12 @@
-From: Joe Orton <jorton@redhat.com>
-Date: Sun, 18 Oct 2015 02:15:17 +0200
-Subject: Add support for use of the system timezone database
+# License: MIT
+# http://opensource.org/licenses/MIT
 
 Add support for use of the system timezone database, rather
 than embedding a copy.  Discussed upstream but was not desired.
 
 History:
+r15: adapt for timelib 2017.05beta7 (in 7.2.0RC1)
+r14: improve check for valid tz file
 r13: adapt for upstream changes to use PHP allocator
 r12: adapt for upstream changes for new zic
 r11: use canonical names to avoid more case sensitivity issues
@@ -24,18 +25,13 @@ r4: added "System/Localtime" tzname which uses /etc/localtime
 r3: fix a crash if /usr/share/zoneinfo doesn't exist (Raphael Geissert)
 r2: add filesystem trawl to set up name alias index
 r1: initial revision
----
- ext/date/lib/parse_tz.c | 549 +++++++++++++++++++++++++++++++++++++++++++++++-
- ext/date/lib/timelib.m4 |  14 ++
- 2 files changed, 552 insertions(+), 11 deletions(-)
 
-diff --git a/ext/date/lib/parse_tz.c b/ext/date/lib/parse_tz.c
-index 20d7eea..6301dc5 100644
---- a/ext/date/lib/parse_tz.c
-+++ b/ext/date/lib/parse_tz.c
-@@ -24,6 +24,16 @@
- 
+diff -up ./ext/date/lib/parse_tz.c.systzdata ./ext/date/lib/parse_tz.c
+--- ./ext/date/lib/parse_tz.c.systzdata	2017-08-22 09:40:38.000000000 +0200
++++ ./ext/date/lib/parse_tz.c	2017-08-22 12:16:00.370298079 +0200
+@@ -25,8 +25,21 @@
  #include "timelib.h"
+ #include "timelib_private.h"
  
 +#ifdef HAVE_SYSTEM_TZDATA
 +#include <sys/mman.h>
@@ -45,16 +41,8 @@ index 20d7eea..6301dc5 100644
 +#include <unistd.h>
 +
 +#include "php_scandir.h"
-+#endif
 +
- #include <stdio.h>
- 
- #ifdef HAVE_LOCALE_H
-@@ -36,8 +46,12 @@
- #include <strings.h>
- #endif
- 
-+#ifndef HAVE_SYSTEM_TZDATA
++#else
  #define TIMELIB_SUPPORTS_V2DATA
  #include "timezonedb.h"
 +#endif
@@ -63,7 +51,7 @@ index 20d7eea..6301dc5 100644
  
  #if (defined(__APPLE__) || defined(__APPLE_CC__)) && (defined(__BIG_ENDIAN__) || defined(__LITTLE_ENDIAN__))
  # if defined(__LITTLE_ENDIAN__)
-@@ -59,6 +73,11 @@ static int read_preamble(const unsigned char **tzf, timelib_tzinfo *tz)
+@@ -67,6 +80,11 @@ static int read_php_preamble(const unsig
  {
  	uint32_t version;
  
@@ -75,7 +63,7 @@ index 20d7eea..6301dc5 100644
  	/* read ID */
  	version = (*tzf)[3] - '0';
  	*tzf += 4;
-@@ -302,7 +321,418 @@ void timelib_dump_tzinfo(timelib_tzinfo *tz)
+@@ -374,7 +392,429 @@ void timelib_dump_tzinfo(timelib_tzinfo
  	}
  }
  
@@ -294,6 +282,7 @@ index 20d7eea..6301dc5 100644
 +		&& strcmp(ent->d_name, "posix") != 0
 +		&& strcmp(ent->d_name, "posixrules") != 0
 +		&& strcmp(ent->d_name, "right") != 0
++		&& strstr(ent->d_name, ".list") == NULL
 +		&& strstr(ent->d_name, ".tab") == NULL;
 +}
 +
@@ -434,8 +423,18 @@ index 20d7eea..6301dc5 100644
 +
 +/* Returns true if the passed-in stat structure describes a
 + * probably-valid timezone file. */
-+static int is_valid_tzfile(const struct stat *st)
++static int is_valid_tzfile(const struct stat *st, int fd)
 +{
++	if (fd) {
++		char buf[20];
++		if (read(fd, buf, 20)!=20) {
++			return 0;
++		}
++		lseek(fd, SEEK_SET, 0);
++		if (memcmp(buf, "TZif", 4)) {
++			return 0;
++		}
++	}
 +	return S_ISREG(st->st_mode) && st->st_size > 20;
 +}
 +
@@ -473,11 +472,11 @@ index 20d7eea..6301dc5 100644
 +	}
 +
 +	snprintf(fname, sizeof fname, ZONEINFO_PREFIX "/%s", canonical_tzname(timezone));
-+	
++
 +	fd = open(fname, O_RDONLY);
 +	if (fd == -1) {
 +		return NULL;
-+	} else if (fstat(fd, &st) != 0 || !is_valid_tzfile(&st)) {
++	} else if (fstat(fd, &st) != 0 || !is_valid_tzfile(&st, fd)) {
 +		close(fd);
 +		return NULL;
 +	}
@@ -495,7 +494,7 @@ index 20d7eea..6301dc5 100644
  {
  	int left = 0, right = tzdb->index_size - 1;
  #ifdef HAVE_SETLOCALE
-@@ -341,21 +771,88 @@ static int seek_to_tz_position(const unsigned char **tzf, char *timezone, const
+@@ -419,9 +859,48 @@ static int seek_to_tz_position(const uns
  	return 0;
  }
  
@@ -543,17 +542,8 @@ index 20d7eea..6301dc5 100644
 +#endif
  }
  
- const timelib_tzdb_index_entry *timelib_timezone_builtin_identifiers_list(int *count)
- {
-+#ifdef HAVE_SYSTEM_TZDATA
-+	*count = timezonedb_system->index_size;
-+	return timezonedb_system->index;
-+#else
- 	*count = sizeof(timezonedb_idx_builtin) / sizeof(*timezonedb_idx_builtin);
- 	return timezonedb_idx_builtin;
-+#endif
- }
- 
+ const timelib_tzdb_index_entry *timelib_timezone_identifiers_list(timelib_tzdb *tzdb, int *count)
+@@ -433,7 +912,30 @@ const timelib_tzdb_index_entry *timelib_
  int timelib_timezone_id_is_valid(char *timezone, const timelib_tzdb *tzdb)
  {
  	const unsigned char *tzf;
@@ -577,39 +567,34 @@ index 20d7eea..6301dc5 100644
 +
 +		snprintf(fname, sizeof fname, ZONEINFO_PREFIX "/%s", canonical_tzname(timezone));
 +
-+		return stat(fname, &st) == 0 && is_valid_tzfile(&st);
++		return stat(fname, &st) == 0 && is_valid_tzfile(&st, 0);
 +	}
 +#endif
 +
 +	return (inmem_seek_to_tz_position(&tzf, timezone, tzdb));
  }
  
- static void skip_64bit_preamble(const unsigned char **tzf, timelib_tzinfo *tz)
-@@ -380,24 +877,54 @@ static void read_64bit_header(const unsigned char **tzf, timelib_tzinfo *tz)
- timelib_tzinfo *timelib_parse_tzfile(char *timezone, const timelib_tzdb *tzdb)
+ static int skip_64bit_preamble(const unsigned char **tzf, timelib_tzinfo *tz)
+@@ -475,12 +977,14 @@ static timelib_tzinfo* timelib_tzinfo_ct
+ timelib_tzinfo *timelib_parse_tzfile(char *timezone, const timelib_tzdb *tzdb, int *error_code)
  {
  	const unsigned char *tzf;
 +	char *memmap = NULL;
 +	size_t maplen;
  	timelib_tzinfo *tmp;
  	int version;
+ 	int transitions_result, types_result;
+ 	unsigned int type; /* TIMELIB_TZINFO_PHP or TIMELIB_TZINFO_ZONEINFO */
  
 -	if (seek_to_tz_position(&tzf, timezone, tzdb)) {
 +	if (seek_to_tz_position(&tzf, timezone, &memmap, &maplen, tzdb)) {
  		tmp = timelib_tzinfo_ctor(timezone);
  
- 		version = read_preamble(&tzf, tmp);
- 		read_header(&tzf, tmp);
- 		read_transistions(&tzf, tmp);
- 		read_types(&tzf, tmp);
--		if (version == 2) {
--			skip_64bit_preamble(&tzf, tmp);
--			read_64bit_header(&tzf, tmp);
--			skip_64bit_transistions(&tzf, tmp);
--			skip_64bit_types(&tzf, tmp);
--			skip_posix_string(&tzf, tmp);
--		}
--		read_location(&tzf, tmp);
+ 		version = read_preamble(&tzf, tmp, &type);
+@@ -503,6 +1007,29 @@ timelib_tzinfo *timelib_parse_tzfile(cha
+ 			timelib_tzinfo_dtor(tmp);
+ 			return NULL;
+ 		}
 +
 +#ifdef HAVE_SYSTEM_TZDATA
 +		if (memmap) {
@@ -626,37 +611,33 @@ index 20d7eea..6301dc5 100644
 +				tmp->bc = 1;
 +			}
 +			else {
-+				strcpy(tmp->location.country_code, "??");
-+				tmp->bc = 0;
-+				tmp->location.comments = timelib_strdup("");
++				set_default_location_and_comments(&tzf, tmp);
 +			}
 +
 +			/* Now done with the mmap segment - discard it. */
 +			munmap(memmap, maplen);
-+		} else
++		} else {
 +#endif
-+		{
-+			/* PHP-style - use the embedded info. */
-+			if (version == 2) {
-+				skip_64bit_preamble(&tzf, tmp);
-+				read_64bit_header(&tzf, tmp);
-+				skip_64bit_transistions(&tzf, tmp);
-+				skip_64bit_types(&tzf, tmp);
-+				skip_posix_string(&tzf, tmp);
-+			}
-+			read_location(&tzf, tmp);
-+ 		}
+ 		if (version == 2 || version == 3) {
+ 			if (!skip_64bit_preamble(&tzf, tmp)) {
+ 				/* 64 bit preamble is not in place */
+@@ -520,6 +1047,9 @@ timelib_tzinfo *timelib_parse_tzfile(cha
+ 		} else {
+ 			set_default_location_and_comments(&tzf, tmp);
+ 		}
++#ifdef HAVE_SYSTEM_TZDATA
++		}
++#endif
  	} else {
+ 		*error_code = TIMELIB_ERROR_NO_SUCH_TIMEZONE;
  		tmp = NULL;
- 	}
-diff --git a/ext/date/lib/timelib.m4 b/ext/date/lib/timelib.m4
-index c725572..4c837c7 100644
---- a/ext/date/lib/timelib.m4
-+++ b/ext/date/lib/timelib.m4
-@@ -78,3 +78,17 @@ stdlib.h
+diff -up ./ext/date/lib/timelib.m4.systzdata ./ext/date/lib/timelib.m4
+--- ./ext/date/lib/timelib.m4.systzdata	2017-08-22 09:40:38.000000000 +0200
++++ ./ext/date/lib/timelib.m4	2017-08-22 11:32:29.357799927 +0200
+@@ -81,3 +81,16 @@ io.h
  
  dnl Check for strtoll, atoll
- AC_CHECK_FUNCS(strtoll atoll strftime)
+ AC_CHECK_FUNCS(strtoll atoll strftime gettimeofday)
 +
 +PHP_ARG_WITH(system-tzdata, for use of system timezone data,
 +[  --with-system-tzdata[=DIR]      to specify use of system timezone data],
@@ -670,4 +651,3 @@ index c725572..4c837c7 100644
 +                         [Define for location of system timezone data])
 +   fi
 +fi
-+

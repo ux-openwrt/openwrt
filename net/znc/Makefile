@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=znc
-PKG_VERSION:=1.6.3
-PKG_RELEASE:=3
+PKG_VERSION:=1.6.6
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://znc.in/releases \
-		http://znc.in/releases/archive
-PKG_MD5SUM:=0dad0307e2faea26b9e304e308f7ec63
+PKG_SOURCE_URL:=https://znc.in/releases \
+		https://znc.in/releases/archive
+PKG_HASH:=7fb841bc71dc1749b1dc081e9eaf22ceb56ebb03c6b1d8804a4f9eb8bbd59525
 
 PKG_MAINTAINER:=Jonas Gorski <jogo@openwrt.org>
 PKG_LICENSE:=Apache-2.0
@@ -23,14 +23,15 @@ PKG_LICENSE_FILES:=LICENSE
 PKG_USE_MIPS16:=0
 PKG_BUILD_PARALLEL:=1
 
-PKG_CONFIG_DEPENDS := CONFIG_ZNC_ICU
+PKG_CONFIG_DEPENDS:= CONFIG_ZNC_ICU
 
 define Package/znc/default
   SUBMENU:=Instant Messaging
   SECTION:=net
   CATEGORY:=Network
   TITLE:=ZNC
-  URL:=http://en.znc.in/
+  URL:=https://znc.in/
+  USERID:=znc:znc
 endef
 
 define Package/znc
@@ -62,12 +63,11 @@ define Package/znc/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) ./files/znc.conf $(1)/etc/config/znc
 	$(INSTALL_DIR) $(1)/usr/lib/znc/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/modules/droproot.so $(1)/usr/lib/znc/
 endef
 
 
 ZNC_MODULES :=
-ZNC_MODULE_TARGETS := droproot.so
+ZNC_MODULE_TARGETS :=
 
 define module
   define Package/znc-mod-$(strip $(1))
@@ -235,6 +235,9 @@ $(eval $(call module,partyline,Allows ZNC users to join internal channels and \
 	query other ZNC users on the same ZNC.))
 
 $(eval $(call module,perform,Performs commands on connect.))
+
+$(eval $(call module,playback,Avoid repetitive playback buffers on re-connect \
+	with supported clients (e.g. mutter, colluquy)))
 
 $(eval $(call module,q,Auths you with Q (and a little more).))
 

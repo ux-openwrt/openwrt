@@ -8,23 +8,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl
-PKG_VERSION:=5.22.1
-PKG_RELEASE:=3
+PKG_VERSION:=5.26.2
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
-		http://www.cpan.org/src/5.0 \
-		ftp://ftp.mpi-sb.mpg.de/pub/perl/CPAN/src/5.0 \
-		http://ftp.mpi-sb.mpg.de/pub/perl/CPAN/src/5.0 \
-		ftp://ftp.gmd.de/mirrors/CPAN/src/5.0 \
-		http://ftp5.gwdg.de/pub/languages/perl/CPAN/src/ \
-		ftp://ftp.funet.fi/pub/languages/perl/CPAN/src/5.0 \
-		http://ftp.funet.fi/pub/languages/perl/CPAN/src/5.0
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=19295bbb775a3c36123161b9bf4892f1
+PKG_SOURCE_URL:=\
+		https://cpan.metacpan.org/src/5.0 \
+		https://cpan.uib.no/src/5.0 \
+		https://mirrors.rit.edu/CPAN/src/5.0 \
+		https://mirror.transip.net/CPAN/src/5.0 \
+		https://mirrors.sonic.net/cpan/src/5.0 \
+		https://www.cpan.org/src/5.0
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_HASH:=0f8c0fb1b0db4681adb75c3ba0dd77a0472b1b359b9e80efd79fc27b4352132c
 
 PKG_LICENSE:=GPL-1.0+ Artistic-1.0-Perl
 PKG_LICENSE_FILES:=Copying Artistic README
-PKG_MAINTAINER:=Marcel Denia <naoir@gmx.net>
+PKG_MAINTAINER:=Marcel Denia <naoir@gmx.net>, \
+		Philip Prindeville <philipp@redfish-solutions.com>
 
 # Build settings
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/$(PKG_NAME)-$(PKG_VERSION)
@@ -35,7 +35,7 @@ PKG_BUILD_PARALLEL:=1
 HOST_BUILD_PARALLEL:=1
 
 # Variables used during configuration/build
-HOST_PERL_PREFIX:=$(STAGING_DIR)/host/usr
+HOST_PERL_PREFIX:=$(STAGING_DIR_HOSTPKG)/usr
 
 # Filter -g3, it will break Compress-Raw-Zlib
 TARGET_CFLAGS_PERL:=$(patsubst -g3,-g,$(TARGET_CFLAGS))
@@ -96,7 +96,7 @@ define Build/Configure
 	                                -Dowrt:gccversion=$(CONFIG_GCC_VERSION) \
 	                                -Dowrt:target_cross='$(TARGET_CROSS)' \
 	                                -Dowrt:cflags='$(TARGET_CFLAGS_PERL) $(TARGET_CPPFLAGS_PERL)' \
-	                                -Dowrt:ldflags='-rdynamic $(TARGET_LDFLAGS)' \
+	                                -Dowrt:ldflags='$(TARGET_LDFLAGS)' \
 	                                -Dowrt:libc=$(subst uClibc,uclibc,$(CONFIG_LIBC)) \
 	                                -Dowrt:ipv6=$(if $($(CONFIG_IPV6)),define,undef) \
 	                                -Dowrt:threads=$(if $(CONFIG_PERL_THREADS),yes,no) \

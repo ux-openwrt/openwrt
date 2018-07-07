@@ -8,15 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnurl
-PKG_VERSION:=7.48.0
-PKG_RELEASE:=1
+PKG_VERSION:=7.57.0
+PKG_RELEASE:=2
 
-PKG_DIST_VERSION:=$(subst .,_,$(strip $(PKG_VERSION)))
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_DIST_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://gnunet.org/sites/default/files
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_DIST_VERSION)
 
-PKG_MD5SUM:=e0010f49badb55ee144d8c835c0ff265
+PKG_HASH:=2ccd2a641a9815df924b6a79ee47d12a27ee43bd05a3c6ba958108564580d3b7
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=COPYING
@@ -44,7 +42,7 @@ define Package/libgnurl
   $(call Package/gnurl/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS:=+libgnutls +libidn +zlib
+  DEPENDS:=+libgnutls +libidn2 +zlib
   TITLE:=A client-side HTTP/HTTPS transfer library
 endef
 
@@ -100,7 +98,7 @@ endef
 define Build/InstallDev
 	$(INSTALL_DIR) $(2)/bin $(1)/usr/bin $(1)/usr/include/gnurl $(1)/usr/lib $(1)/usr/lib/pkgconfig
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/gnurl-config $(1)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/curl/*.h $(1)/usr/include/gnurl
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/gnurl/*.h $(1)/usr/include/gnurl
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnurl.{a,so*} $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/libgnurl.pc $(1)/usr/lib/pkgconfig/
 	$(SED) 's,-L$$$${exec_prefix}/lib,,g' $(1)/usr/bin/gnurl-config

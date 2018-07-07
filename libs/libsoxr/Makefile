@@ -1,6 +1,4 @@
 #
-# Copyright (C) 2014-2016 OpenWrt.org
-#
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 # updated to work with latest source from abrasive
@@ -9,23 +7,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libsoxr
-PKG_VERSION:=0.1.1
-PKG_RELEASE:=3
+PKG_VERSION:=0.1.3
+PKG_RELEASE:=1
 
-PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL:=git://git.code.sf.net/p/soxr/code
-PKG_SOURCE_VERSION:=$(PKG_VERSION)
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/project/soxr/
+PKG_SOURCE:=soxr-$(PKG_VERSION)-Source.tar.xz
+PKG_HASH:=b111c15fdc8c029989330ff559184198c161100a59312f5dc19ddeb9b5a15889
+PKG_BUILD_DIR:=$(BUILD_DIR)/soxr-$(PKG_VERSION)-Source
 
 PKG_MAINTAINER:=Ted Hess <thess@kitschensync.net>, \
 		Mike Brady <mikebrady@eircom.net>
 
 PKG_LICENSE:=LGPL-2.1
 PKG_LICENSE_FILES:=LICENCE
-
-PKG_FIXUP:=libtool
-PKG_REMOVE_FILES:=autogen.sh
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -48,6 +42,7 @@ endef
 
 CMAKE_OPTIONS:= -DBUILD_TESTS=0 -DBUILD_EXAMPLES=0
 CMAKE_OPTIONS+= -DHAVE_WORDS_BIGENDIAN_EXITCODE=$(if $(CONFIG_BIG_ENDIAN),0,1)
+CMAKE_OPTIONS+= -DWITH_OPENMP=0
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include

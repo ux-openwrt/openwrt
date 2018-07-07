@@ -8,24 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gpsd
-PKG_VERSION:=3.15
-PKG_RELEASE:=2
+PKG_VERSION:=3.17
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://download-mirror.savannah.gnu.org/releases/gpsd/
-PKG_MD5SUM:=afd79b87337fadf38ee2a7c4314dac79
+PKG_SOURCE_URL:=@SAVANNAH/$(PKG_NAME)
+PKG_HASH:=68e0dbecfb5831997f8b3d6ba48aed812eb465d8c0089420ab68f9ce4d85e77a
 
 PKG_MAINTAINER:=Pushpal Sidhu <psidhu.devel@gmail.com>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=COPYING
 
-PKG_BUILD_DEPENDS:=libncurses libusb-1.0
-
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/scons.mk
 
 define Package/gpsd/Default
-  DEPENDS:=+librt +libncurses
+  DEPENDS+= +libusb-1.0
   URL:=http://catb.org/gpsd/
 endef
 
@@ -41,9 +39,8 @@ endef
 
 define Package/gpsd
   $(call Package/gpsd/Default)
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS+= +libgps +libusb-1.0
+  SECTION:=utils
+  CATEGORY:=Utilities
   TITLE:=An interface daemon for GPS receivers
 endef
 
@@ -58,9 +55,9 @@ endef
 
 define Package/gpsd-clients
   $(call Package/gpsd/Default)
-  SECTION:=net
-  CATEGORY:=Network
-  DEPENDS+= +libgps +libncurses +libusb-1.0
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS+= +libncurses
   TITLE:=GPS tools and clients
 endef
 
@@ -74,7 +71,6 @@ define Package/libgps
   $(call Package/gpsd/Default)
   SECTION:=libs
   CATEGORY:=Libraries
-  DEPENDS+= +libcap
   TITLE:=C service library for communicating with the GPS daemon
 endef
 
@@ -104,6 +100,7 @@ SCONS_OPTIONS += \
 	python=no \
 	implicit_link=no \
 	chrpath=no \
+	manbuild=no \
 	target="$(TARGET_CROSS:-=)"
 
 define Build/InstallDev
@@ -122,8 +119,6 @@ define Package/gpsd/install
 	$(INSTALL_CONF) ./files/gpsd.config $(1)/etc/config/gpsd
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/gpsd.init $(1)/etc/init.d/gpsd
-	$(INSTALL_DIR) $(1)/etc/hotplug.d/usb
-	$(INSTALL_DATA) ./files/gpsd.hotplug $(1)/etc/hotplug.d/usb/20-gpsd
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/gpsd $(1)/usr/sbin/
 endef

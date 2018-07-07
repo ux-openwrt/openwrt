@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libp11
-PKG_VERSION:=0.4.1
-PKG_RELEASE:=2
-PKG_MD5SUM:=70489f6dbe0b7fd72aab010c25016fa047723f67ea50ce9ae73bc8d38181b673
+PKG_VERSION:=0.4.7
+PKG_RELEASE:=1
+PKG_HASH:=32e486d4279e09174b63eb263bc840016ebfa80b0b154390c0539b211aec0452
 
 PKG_MAINTAINER:=Daniel Golle <daniel@makrotopia.org>
 PKG_LICENSE:=LGPL-2.1+
@@ -42,7 +42,7 @@ CONFIGURE_ARGS += --with-enginesdir=/usr/lib/engines
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include/
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libp11.h $(1)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(1)/usr/include/
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libp11.{a,so} $(1)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libp11.so* $(1)/usr/lib/

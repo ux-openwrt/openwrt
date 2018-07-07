@@ -9,13 +9,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lm-sensors
 PKG_VERSION:=3.3.5
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/groeck/lm-sensors.git
 PKG_SOURCE_VERSION:=f8cdcc35bff0785aecf49d9a8484a71ce3ebee4f
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
+PKG_MIRROR_HASH:=892e9e2eed78e27fb7a08e8ce78b1164a3d101ba79a9e04f1c1273940d48cf17
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 PKG_LICENSE:=GPL-2.0+ LGPL-2.1+
 
@@ -65,6 +66,7 @@ endef
 
 define Package/lm-sensors/conffiles
 /etc/sensors.conf
+/etc/sensors3.conf
 endef
 
 define Build/Compile
@@ -100,6 +102,8 @@ ifeq ($(ARCH),i386)
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_CONF) ./files/sensors.conf $(1)/etc/sensors.conf
 endif
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/lm-sensors.init $(1)/etc/init.d/lm-sensors
 endef
 
 define Package/lm-sensors-detect/install

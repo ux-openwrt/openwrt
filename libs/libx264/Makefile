@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=x264
-PKG_VERSION:=snapshot-20160815-2245-stable
-PKG_RELEASE:=2
+PKG_VERSION:=snapshot-20180401-2245
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=https://download.videolan.org/x264/snapshots/
 PKG_MAINTAINER:=Adrian Panella <ianchi74@outlook.com>
-PKG_MD5SUM:=93fa596ea1b5513fec73e9de27589dd4
+PKG_HASH:=657a915497a5b0ffed3598988657395358cf4dc961db14aebd918b7ffb7c5364
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
@@ -24,12 +24,19 @@ PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-TARGET_CFLAGS+=-std=gnu99 -fPIC -O3 -ffast-math -I.
+TARGET_CFLAGS:=$(filter-out -O%,$(TARGET_CFLAGS)) -std=gnu99 -fPIC -O3 -ffast-math -I.
 MAKE_FLAGS+= LD="$(TARGET_CC) -o" 
 
 # ARM ASM depends on ARM1156 or later, blacklist earlier or incompatible cores
-CPU_ASM_BLACKLIST:=arm920t arm926ej-s arm1136j-s arm1176jzf-s fa526 mpcore xscale
+# AMD Geode LX and i486 do not have SSE
+CPU_ASM_BLACKLIST:=geode i486 arm920t arm926ej-s arm1136j-s arm1176jzf-s fa526 mpcore xscale \
+		   mips32 24kc 34kc 74kc octeon mips64
 
+ifneq ($(CONFIG_SOFT_FLOAT)$(findstring $(call qstrip,$(CONFIG_CPU_TYPE)),$(CPU_ASM_BLACKLIST)),)
+  CONFIGURE_VARS+= AS= 
+  MAKE_FLAGS+= AS= 
+  CONFIGURE_ARGS += --disable-asm
+else
 ifneq ($(CONFIG_TARGET_x86),)
 ifeq ($(CONFIG_YASM),y)
   CONFIGURE_VARS+= AS=yasm
@@ -40,17 +47,16 @@ else
   CONFIGURE_ARGS += --disable-asm
 endif
 endif
-
-ifneq ($(CONFIG_SOFT_FLOAT)$(findstring $(CONFIG_CPU_TYPE),$(CPU_ASM_BLACKLIST)),)
-CONFIGURE_VARS+= AS= 
-MAKE_FLAGS+= AS= 
-CONFIGURE_ARGS += --disable-asm
 endif
 
 CONFIGURE_ARGS += \
 		--enable-shared \
 		--enable-pic \
-		--disable-cli 
+		--enable-strip \
+		--disable-cli \
+		--disable-avs \
+		--disable-ffms \
+		--disable-lsmash
 
 define Package/libx264
   SECTION:=libs

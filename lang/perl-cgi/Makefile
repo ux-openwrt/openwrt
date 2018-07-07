@@ -8,17 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl-cgi
-PKG_VERSION:=4.28
+PKG_VERSION:=4.38
 PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=http://www.cpan.org/authors/id/L/LE/LEEJO
 PKG_SOURCE:=CGI-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=28efb391377f6e98c19c23292d5fcc8c
+PKG_HASH:=8c58f4a529bb92a914b22b7e64c5e31185c9854a4070a6dfad44fe5cc248e7d4
 
 PKG_LICENSE:=GPL Artistic-2.0
-PKG_MAINTAINER:=Marcel Denia <naoir@gmx.net>
+PKG_MAINTAINER:=Marcel Denia <naoir@gmx.net>, \
+		Philip Prindeville <philipp@redfish-solutions.com>
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/perl/CGI-$(PKG_VERSION)
+
+# don't strip comments because that will mangle this module
+PKG_LEAVE_COMMENTS:=1
 
 include $(INCLUDE_DIR)/package.mk
 include ../perl/perlmod.mk

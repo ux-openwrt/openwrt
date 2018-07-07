@@ -8,16 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=keepalived
-PKG_VERSION:=1.2.16
-PKG_RELEASE:=3
+PKG_VERSION:=1.4.4
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:= http://www.keepalived.org/software
-PKG_MD5SUM:=f834ab2cfc2e7300edf1bafaf4a5d83e
+PKG_SOURCE_URL:=http://www.keepalived.org/software
+PKG_HASH:=147c2b3b782223128551fd0a1564eaa30ed84a94b68c50ec5087747941314704
 
 PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=COPYING
-PKG_MAINTAINER:=Nicolas Thill <nico@openwrt.org>
+PKG_MAINTAINER:=Ben Kelly <ben@benjii.net> \
+		Florian Eckert <fe@dev.tdt.de>
 
 PKG_INSTALL:=1
 
@@ -29,7 +30,13 @@ define Package/keepalived
   CATEGORY:=Network
   TITLE:=Failover and monitoring daemon for LVS clusters
   URL:=http://www.keepalived.org/
-  DEPENDS:=+libnl-genl +libopenssl
+  DEPENDS:= \
+    +PACKAGE_libnl-genl:libnl-genl \
+    +libopenssl \
+    +libip4tc \
+    +IPV6:libip6tc \
+    +libxtables \
+    +kmod-macvlan
 endef
 
 define Package/keepalived/description
@@ -38,17 +45,15 @@ endef
 
 define Package/keepalived/conffiles
 /etc/keepalived/keepalived.conf
+/etc/config/keepalived
+/etc/keepalived.user
 endef
 
 CONFIGURE_ARGS+= \
-	--enable-vrrp \
-	--enable-fwmark \
 	--enable-sha1 \
 	--disable-lvs \
 	--disable-lvs-syncd \
 	--disable-snmp \
-	--disable-debug \
-	--disable-profile \
 	--with-kernel-dir="$(LINUX_DIR)/$(LINUX_UAPI_DIR)"
 
 MAKE_FLAGS += \
@@ -63,6 +68,12 @@ define Package/keepalived/install
 	$(CP) $(PKG_INSTALL_DIR)/etc/keepalived/keepalived.conf $(1)/etc/keepalived/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/keepalived.init $(1)/etc/init.d/keepalived
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_CONF) ./files/keepalived.config $(1)/etc/config/keepalived
+	$(INSTALL_DIR) $(1)/etc
+	$(INSTALL_CONF) ./files/keepalived.user $(1)/etc/keepalived.user
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/keepalived
+	$(INSTALL_DATA) ./files/hotplug-user $(1)/etc/hotplug.d/keepalived/01-user
 endef
 
 $(eval $(call BuildPackage,keepalived))

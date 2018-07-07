@@ -9,15 +9,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=klish
-PKG_VERSION:=2.1.3
+PKG_VERSION:=2.1.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=http://libcode.org/attachments/download/66/
+PKG_SOURCE_URL:=http://libcode.org/attachments/download/70/
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENCE
 PKG_MAINTAINER:=Takashi Umeno <umeno.takashi@gmail.com>
-PKG_MD5SUM:=7dfe46d474c02c86946c1d7a461ae549
+PKG_HASH:=a89dd1027dce713407b6d68e836c8fdead56406dcfc650da84da8e0b92c9b2e5
 
 PKG_INSTALL:=1
 
@@ -50,11 +50,10 @@ define Package/klish/description
  More information about these tools is to be found on the klish web site.
 endef
 
-define Build/Configure
-	$(call Build/Configure/Default, \
-		--with-libxml2 \
-	)
-endef
+TARGET_LDFLAGS += -lxml2 -lz
+TARGET_CFLAGS += -D_XOPEN_SOURCE=500
+
+CONFIGURE_ARGS += --with-libxml2
 
 define Package/klish/install
 	$(INSTALL_DIR) $(1)/usr/bin

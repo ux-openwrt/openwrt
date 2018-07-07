@@ -1,11 +1,5 @@
 #!/bin/sh
 
-[ -x /usr/bin/ip ] || exit 4
-[ -x /usr/sbin/ipset ] || exit 5
-[ -x /usr/sbin/iptables ] || exit 6
-[ -x /usr/sbin/ip6tables ] || exit 7
-[ -x /usr/bin/logger ] || exit 8
-
 . /lib/functions.sh
 . /lib/functions/network.sh
 . /lib/mwan3/mwan3.sh
@@ -42,10 +36,8 @@ ifdown()
 
 	ACTION=ifdown INTERFACE=$1 /sbin/hotplug-call iface
 
-	if [ -e /var/run/mwan3track-$1.pid ] ; then
-		kill $(cat /var/run/mwan3track-$1.pid)
-		rm /var/run/mwan3track-$1.pid
-	fi
+	kill $(pgrep -f "mwan3track $1 $2") &> /dev/null
+	mwan3_track_clean $1
 }
 
 ifup()
@@ -61,6 +53,12 @@ ifup()
 	if [ -n "$2" ]; then
 		echo "Too many arguments. Usage: mwan3 ifup <interface>" && exit 0
 	fi
+
+	config_get_bool enabled globals 'enabled' 0
+	[ ${enabled} -gt 0 ] || {
+		echo "Warning: mwan3 is global disabled. Usage: /etc/init.d/mwan3 start"
+		exit 0
+	}
 
 	config_get enabled "$1" enabled 0
 
@@ -120,20 +118,34 @@ status()
 
 start()
 {
+	local enabled
+
 	config_load mwan3
+	config_get_bool enabled globals 'enabled' 0
+	[ ${enabled} -gt 0 ] || {
+		echo "Warning: mwan3 is global disabled. Usage: /etc/init.d/mwan3 start"
+		exit 0
+	}
+
 	config_foreach ifup interface
 }
 
 stop()
 {
-	local ipset route rule table IP IPT
+	local ipset route rule table IP IPT pid
 
-	killall mwan3track &> /dev/null
-	rm /var/run/mwan3track-* &> /dev/null
+	for pid in $(pgrep -f "mwan3track"); do
+		kill -TERM "$pid" > /dev/null 2>&1
+		sleep 1
+		kill -KILL "$pid" > /dev/null 2>&1
+	done
+
+	config_load mwan3
+	config_foreach mwan3_track_clean interface
 
 	for IP in "$IP4" "$IP6"; do
 
-		for route in $($IP route list table all | sed 's/.*table \([^ ]*\) .*/\1/' |  awk '{print $1}' | awk '{for(i=1;i<=NF;i++) if($i+0>0) if($i+0<255) {print;break}}'); do
+		for route in $(seq 1 $MWAN3_INTERFACE_MAX); do
 			$IP route flush table $route &> /dev/null
 		done
 
@@ -163,6 +175,9 @@ stop()
 	for ipset in $($IPS -n list | grep mwan3 | grep -E '_v4|_v6'); do
 		$IPS -q destroy $ipset
 	done
+
+	mwan3_lock_clean
+	rm -rf $MWAN3_STATUS_DIR $MWAN3TRACK_STATUS_DIR
 }
 
 restart() {
@@ -172,6 +187,7 @@ restart() {
 
 case "$1" in
 	ifup|ifdown|interfaces|policies|connected|rules|status|start|stop|restart)
+		mwan3_init
 		$*
 	;;
 	*)

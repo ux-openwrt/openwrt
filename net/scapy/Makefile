@@ -15,12 +15,10 @@ PKG_LICENSE_FILES:=PKG-INFO
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).zip
 PKG_SOURCE_URL:=https://bitbucket.org/secdev/scapy/downloads/
-PKG_MD5SUM:=a30d828e59801d1d092219b349f1da9e
-
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_HASH:=8972c02e39a826a10c02c2bdd5025f7251dce9589c57befd9bb55c65f02e4934
 
 include $(INCLUDE_DIR)/package.mk
-$(call include_mk, python-package.mk)
+include ../../lang/python/python-package.mk
 
 define Package/scapy
   SECTION:=net

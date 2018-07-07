@@ -9,12 +9,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gammu
-PKG_VERSION:=1.37.4
-PKG_RELEASE:=1
+PKG_VERSION:=1.38.4
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=http://dl.cihar.com/gammu/releases/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_MD5SUM:=38e6f5a48fe05a64b0f0f1dc6787f1f2
+PKG_HASH:=a8ba1dc52ee82562abd57e9546c409f2f887f45187aae012fe43af0b730611ae
 PKG_MAINTAINER:=Vitaly Protsko <villy@sft.ru>
 PKG_LICENCE:=GPL-2.0
 
@@ -31,7 +31,7 @@ define Package/gammu
 	URL:=http://dl.cihar.com/gammu/releases/
 	DEPENDS:=+libpthread +libcurl +glib2 $(ICONV_DEPENDS) $(INTL_DEPENDS)
 	DEPENDS+=+PACKAGE_python:python +PACKAGE_bluez-libs:bluez-libs
-	DEPENDS+=+PACKAGE_libmysqlclient:libmysqlclient +PACKAGE_unixodbc:unixodbc +PACKAGE_libpq:libpq
+	DEPENDS+=+PACKAGE_libmariadbclient:libmariadbclient +PACKAGE_unixodbc:unixodbc +PACKAGE_libpq:libpq
 	DEPENDS+=+PACKAGE_libusb-1.0:libusb-1.0
 endef
 
