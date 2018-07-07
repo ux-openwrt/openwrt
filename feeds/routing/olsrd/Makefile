@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2009-2012 OpenWrt.org
+# Copyright (C) 2009-2016 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=olsrd
-PKG_VERSION:=0.6.8
-PKG_RELEASE:=2
+PKG_VERSION:=0.9.0.3
+PKG_RELEASE=$(PKG_SOURCE_VERSION)
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_URL:=http://www.olsr.org/releases/0.6
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/OLSR/olsrd.git
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_VERSION:=v0.9.0.3
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_MIRROR_MD5SUM:=
 
-PKG_MD5SUM:=feabdd611391dcb30af5795e834cc258
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=BSD-3-Clause
 
