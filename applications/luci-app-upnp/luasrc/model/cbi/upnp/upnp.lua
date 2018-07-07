@@ -12,21 +12,21 @@ s.addremove = false
 s:tab("general",  translate("General Settings"))
 s:tab("advanced", translate("Advanced Settings"))
 
-e = s:taboption("general", Flag, "_init", translate("Start UPnP and NAT-PMP service"))
+e = s:taboption("general", Flag, "enabled", translate("Start UPnP and NAT-PMP service"))
 e.rmempty  = false
 
-function e.cfgvalue(self, section)
-	return luci.sys.init.enabled("miniupnpd") and self.enabled or self.disabled
-end
+--function e.cfgvalue(self, section)
+--	return luci.sys.init.enabled("miniupnpd") and self.enabled or self.disabled
+--end
 
 function e.write(self, section, value)
 	if value == "1" then
-		luci.sys.call("/etc/init.d/miniupnpd enable >/dev/null")
 		luci.sys.call("/etc/init.d/miniupnpd start >/dev/null")
 	else
 		luci.sys.call("/etc/init.d/miniupnpd stop >/dev/null")
-		luci.sys.call("/etc/init.d/miniupnpd disable >/dev/null")
 	end
+
+	return Flag.write(self, section, value)
 end
 
 s:taboption("general", Flag, "enable_upnp", translate("Enable UPnP functionality")).default = "1"
@@ -34,6 +34,9 @@ s:taboption("general", Flag, "enable_natpmp", translate("Enable NAT-PMP function
 
 s:taboption("general", Flag, "secure_mode", translate("Enable secure mode"),
 	translate("Allow adding forwards only to requesting ip addresses")).default = "1"
+
+s:taboption("general", Flag, "igdv1", translate("Enable IGDv1 mode"),
+	translate("Advertise as IGDv1 device instead of IGDv2")).default = "0"
 
 s:taboption("general", Flag, "log_output", translate("Enable additional logging"),
 	translate("Puts extra debugging information into the system log"))
@@ -71,7 +74,7 @@ pu = s:taboption("advanced", Value, "presentation_url", translate("Presentation 
 pu.placeholder = "http://192.168.1.1/"
 
 lf = s:taboption("advanced", Value, "upnp_lease_file", translate("UPnP lease file"))
-lf.placeholder = "/var/log/upnp.leases"
+lf.placeholder = "/var/run/miniupnpd.leases"
 
 
 s2 = m:section(TypedSection, "perm_rule", translate("MiniUPnP ACLs"),

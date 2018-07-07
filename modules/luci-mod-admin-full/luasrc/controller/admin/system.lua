@@ -27,7 +27,8 @@ function index()
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
 	end
 
-	if fs.access("/sys/class/leds") then
+	local nodes, number = fs.glob("/sys/class/leds/*")
+	if number > 0 then
 		entry({"admin", "system", "leds"}, cbi("admin_system/leds"), _("<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"), 60)
 	end
 
@@ -52,6 +53,7 @@ function action_clock_status()
 			luci.sys.call("date -s '%04d-%02d-%02d %02d:%02d:%02d'" %{
 				date.year, date.month, date.day, date.hour, date.min, date.sec
 			})
+			luci.sys.call("/etc/init.d/sysfixtime restart")
 		end
 	end
 
@@ -194,7 +196,7 @@ local function supports_sysupgrade()
 end
 
 local function supports_reset()
-	return (os.execute([[grep -sqE '"rootfs_data"|"ubi"' /proc/mtd]]) == 0)
+	return (os.execute([[grep -sq "^overlayfs:/overlay / overlay " /proc/mounts]]) == 0)
 end
 
 local function storage_size()

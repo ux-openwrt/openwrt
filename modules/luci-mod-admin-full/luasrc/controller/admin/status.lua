@@ -14,7 +14,7 @@ function index()
 	entry({"admin", "status", "routes"}, template("admin_status/routes"), _("Routes"), 3)
 	entry({"admin", "status", "syslog"}, call("action_syslog"), _("System Log"), 4)
 	entry({"admin", "status", "dmesg"}, call("action_dmesg"), _("Kernel Log"), 5)
-	entry({"admin", "status", "processes"}, cbi("admin_status/processes"), _("Processes"), 6)
+	entry({"admin", "status", "processes"}, form("admin_status/processes"), _("Processes"), 6)
 
 	entry({"admin", "status", "realtime"}, alias("admin", "status", "realtime", "load"), _("Realtime Graphs"), 7)
 
@@ -24,8 +24,10 @@ function index()
 	entry({"admin", "status", "realtime", "bandwidth"}, template("admin_status/bandwidth"), _("Traffic"), 2).leaf = true
 	entry({"admin", "status", "realtime", "bandwidth_status"}, call("action_bandwidth")).leaf = true
 
-	entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3).leaf = true
-	entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless")).leaf = true
+	if nixio.fs.access("/etc/config/wireless") then
+		entry({"admin", "status", "realtime", "wireless"}, template("admin_status/wireless"), _("Wireless"), 3).leaf = true
+		entry({"admin", "status", "realtime", "wireless_status"}, call("action_wireless")).leaf = true
+	end
 
 	entry({"admin", "status", "realtime", "connections"}, template("admin_status/connections"), _("Connections"), 4).leaf = true
 	entry({"admin", "status", "realtime", "connections_status"}, call("action_connections")).leaf = true
@@ -60,7 +62,9 @@ end
 function action_bandwidth(iface)
 	luci.http.prepare_content("application/json")
 
-	local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
+	local bwc = io.popen("luci-bwc -i %s 2>/dev/null"
+		% luci.util.shellquote(iface))
+
 	if bwc then
 		luci.http.write("[")
 
@@ -78,7 +82,9 @@ end
 function action_wireless(iface)
 	luci.http.prepare_content("application/json")
 
-	local bwc = io.popen("luci-bwc -r %q 2>/dev/null" % iface)
+	local bwc = io.popen("luci-bwc -r %s 2>/dev/null"
+		% luci.util.shellquote(iface))
+
 	if bwc then
 		luci.http.write("[")
 
@@ -137,14 +143,12 @@ function action_connections()
 end
 
 function action_nameinfo(...)
-	local i
-	local rv = { }
-	for i = 1, select('#', ...) do
-		local addr = select(i, ...)
-		local fqdn = nixio.getnameinfo(addr)
-		rv[addr] = fqdn or (addr:match(":") and "[%s]" % addr or addr)
-	end
+	local util = require "luci.util"
 
 	luci.http.prepare_content("application/json")
-	luci.http.write_json(rv)
+	luci.http.write_json(util.ubus("network.rrdns", "lookup", {
+		addrs = { ... },
+		timeout = 5000,
+		limit = 1000
+	}) or { })
 end

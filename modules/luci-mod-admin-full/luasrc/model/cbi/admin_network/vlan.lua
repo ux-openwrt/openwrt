@@ -5,12 +5,42 @@
 m = Map("network", translate("Switch"), translate("The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."))
 
 local fs = require "nixio.fs"
+local ut = require "luci.util"
 local nw = require "luci.model.network"
 local switches = { }
 
 nw.init(m.uci)
 
 local topologies = nw:get_switch_topologies() or {}
+
+local update_interfaces = function(old_ifname, new_ifname)
+	local info = { }
+
+	m.uci:foreach("network", "interface", function(section)
+		local old_ifnames = m.uci:get("network", section[".name"], "ifname")
+		local new_ifnames = { }
+		local cur_ifname
+		local changed = false
+		for cur_ifname in luci.util.imatch(old_ifnames) do
+			if cur_ifname == old_ifname then
+				new_ifnames[#new_ifnames+1] = new_ifname
+				changed = true
+			else
+				new_ifnames[#new_ifnames+1] = cur_ifname
+			end
+		end
+		if changed then
+			m.uci:set("network", section[".name"], "ifname", table.concat(new_ifnames, " "))
+
+			info[#info+1] = translatef("Interface %q device auto-migrated from %q to %q.",
+				section[".name"], old_ifname, new_ifname)
+		end
+	end)
+
+	if #info > 0 then
+		m.message = (m.message and m.message .. "\n" or "") .. table.concat(info, "\n")
+	end
+end
 
 m.uci:foreach("network", "switch",
 	function(x)
@@ -45,7 +75,7 @@ m.uci:foreach("network", "switch",
 		end
 
 		-- Parse some common switch properties from swconfig help output.
-		local swc = io.popen("swconfig dev %q help 2>/dev/null" % switch_name)
+		local swc = io.popen("swconfig dev %s help 2>/dev/null" % ut.shellquote(switch_name))
 		if swc then
 
 			local is_port_attr = false
@@ -259,16 +289,31 @@ m.uci:foreach("network", "switch",
 
 		-- When writing the "vid" or "vlan" option, serialize the port states
 		-- as well and write them as "ports" option to uci.
-		vid.write = function(self, section, value)
+		vid.write = function(self, section, new_vid)
 			local o
 			local p = { }
-
 			for _, o in ipairs(port_opts) do
-				local v = o:formvalue(section)
-				if v == "t" then
-					p[#p+1] = o.option .. v
-				elseif v == "u" then
+				local new_tag = o:formvalue(section)
+				if new_tag == "t" then
+					p[#p+1] = o.option .. new_tag
+				elseif new_tag == "u" then
 					p[#p+1] = o.option
+				end
+
+				if o.info and o.info.device then
+					local old_tag = o:cfgvalue(section)
+					local old_vid = self:cfgvalue(section)
+					if old_tag ~= new_tag or old_vid ~= new_vid then
+						local old_ifname = (old_tag == "u") and o.info.device
+							or "%s.%s" %{ o.info.device, old_vid }
+
+						local new_ifname = (new_tag == "u") and o.info.device
+							or "%s.%s" %{ o.info.device, new_vid }
+
+						if old_ifname ~= new_ifname then
+							update_interfaces(old_ifname, new_ifname)
+						end
+					end
 				end
 			end
 
@@ -277,7 +322,7 @@ m.uci:foreach("network", "switch",
 			end
 
 			m:set(section, "ports", table.concat(p, " "))
-			return Value.write(self, section, value)
+			return Value.write(self, section, new_vid)
 		end
 
 		-- Fallback to "vlan" option if "vid" option is supported but unset.
@@ -301,6 +346,7 @@ m.uci:foreach("network", "switch",
 			po.cfgvalue = portvalue
 			po.validate = portvalidate
 			po.write    = function() end
+			po.info     = pt
 
 			port_opts[#port_opts+1] = po
 		end

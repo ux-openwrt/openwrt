@@ -2,6 +2,7 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local ipc = require "luci.ip"
+local sys = require "luci.sys"
 local o
 require "luci.util"
 
@@ -68,9 +69,10 @@ se = s:taboption("advanced", Flag, "sequential_ip",
 	translate("Allocate IP addresses sequentially, starting from the lowest available address"))
 se.optional = true
 
-s:taboption("advanced", Flag, "boguspriv",
+bp = s:taboption("advanced", Flag, "boguspriv",
 	translate("Filter private"),
 	translate("Do not forward reverse lookups for local networks"))
+bp.default = bp.enabled
 
 s:taboption("advanced", Flag, "filterwin2k",
 	translate("Filter useless"),
@@ -113,7 +115,7 @@ s:taboption("advanced", Flag, "nonegcache",
 s:taboption("advanced", Value, "serversfile",
 	translate("Additional servers file"),
 	translate("This file may contain lines like 'server=/domain/1.2.3.4' or 'server=1.2.3.4' for"..
-	        "domain-specific or full upstream <abbr title=\"Domain Name System\">DNS</abbr> servers."))
+		"domain-specific or full upstream <abbr title=\"Domain Name System\">DNS</abbr> servers."))
 
 s:taboption("advanced", Flag, "strictorder",
 	translate("Strict order"),
@@ -210,6 +212,12 @@ cq.optional = true
 cq.datatype = "uinteger"
 cq.placeholder = 150
 
+cs = s:taboption("advanced", Value, "cachesize",
+	translate("Size of DNS query cache"),
+	translate("Number of cached DNS entries (max is 10000, 0 is no caching)"))
+cs.optional = true
+cs.datatype = "range(0,10000)"
+cs.placeholder = 150
 
 s:taboption("tftp", Flag, "enable_tftp",
 	translate("Enable TFTP server")).optional = true
@@ -251,7 +259,7 @@ o:depends("nonwildcard", true)
 
 o = s:taboption("general", DynamicList, "notinterface",
 	translate("Exclude interfaces"),
-	translate("Prevent listening on thise interfaces."))
+	translate("Prevent listening on these interfaces."))
 o.optional = true
 o:depends("nonwildcard", true)
 
@@ -262,8 +270,8 @@ s = m:section(TypedSection, "host", translate("Static Leases"),
 		"DHCP clients. They are also required for non-dynamic interface configurations where " ..
 		"only hosts with a corresponding lease are served.") .. "<br />" ..
 	translate("Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</em> " ..
-		"indentifies the host, the <em>IPv4-Address</em> specifies to the fixed address to " ..
-		"use and the <em>Hostname</em> is assigned as symbolic name to the requesting host. " ..
+		"identifies the host, the <em>IPv4-Address</em> specifies the fixed address to " ..
+		"use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. " ..
 		"The optional <em>Lease time</em> can be used to set non-standard host-specific " ..
 		"lease time, e.g. 12h, 3d or infinite."))
 
@@ -272,25 +280,53 @@ s.anonymous = true
 s.template = "cbi/tblsection"
 
 name = s:option(Value, "name", translate("Hostname"))
-name.datatype = "hostname"
+name.datatype = "hostname('strict')"
 name.rmempty  = true
+
+function name.write(self, section, value)
+	Value.write(self, section, value)
+	m:set(section, "dns", "1")
+end
+
+function name.remove(self, section)
+	Value.remove(self, section)
+	m:del(section, "dns")
+end
 
 mac = s:option(Value, "mac", translate("<abbr title=\"Media Access Control\">MAC</abbr>-Address"))
 mac.datatype = "list(macaddr)"
 mac.rmempty  = true
 
+function mac.cfgvalue(self, section)
+	local val = Value.cfgvalue(self, section)
+	return ipc.checkmac(val) or val
+end
+
 ip = s:option(Value, "ip", translate("<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Address"))
 ip.datatype = "or(ip4addr,'ignore')"
 
 time = s:option(Value, "leasetime", translate("Lease time"))
-time.rmempty  = true
+time.rmempty = true
+
+duid = s:option(Value, "duid", translate("<abbr title=\"The DHCP Unique Identifier\">DUID</abbr>"))
+duid.datatype = "and(rangelength(20,36),hexstring)"
+fp = io.open("/var/hosts/odhcpd")
+if fp then
+	for line in fp:lines() do
+		local net_val, duid_val = string.match(line, "# (%S+)%s+(%S+)")
+		if duid_val then
+			duid:value(duid_val, duid_val)
+		end
+	end
+	fp:close()
+end
 
 hostid = s:option(Value, "hostid", translate("<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Suffix (hex)"))
 
-ipc.neighbors({ family = 4 }, function(n)
-	if n.mac and n.dest then
-		ip:value(n.dest:string())
-		mac:value(n.mac, "%s (%s)" %{ n.mac, n.dest:string() })
+sys.net.host_hints(function(m, v4, v6, name)
+	if m and v4 then
+		ip:value(v4)
+		mac:value(m, "%s (%s)" %{ m, name or v4 })
 	end
 end)
 

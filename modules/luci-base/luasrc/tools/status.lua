@@ -4,6 +4,7 @@
 module("luci.tools.status", package.seeall)
 
 local uci = require "luci.model.uci".cursor()
+local ipc = require "luci.ip"
 
 local function dhcp_leases_common(family)
 	local rv = { }
@@ -26,17 +27,18 @@ local function dhcp_leases_common(family)
 				break
 			else
 				local ts, mac, ip, name, duid = ln:match("^(%d+) (%S+) (%S+) (%S+) (%S+)")
+				local expire = tonumber(ts) or 0
 				if ts and mac and ip and name and duid then
 					if family == 4 and not ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
-							macaddr  = mac,
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
+							macaddr  = ipc.checkmac(mac) or "00:00:00:00:00:00",
 							ipaddr   = ip,
 							hostname = (name ~= "*") and name
 						}
 					elseif family == 6 and ip:match(":") then
 						rv[#rv+1] = {
-							expires  = os.difftime(tonumber(ts) or 0, os.time()),
+							expires  = (expire ~= 0) and os.difftime(expire, os.time()),
 							ip6addr  = ip,
 							duid     = (duid ~= "*") and duid,
 							hostname = (name ~= "*") and name
@@ -63,18 +65,19 @@ local function dhcp_leases_common(family)
 			if not ln then
 				break
 			else
-				local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (%d+) (%S+) (%S+) (.*)")
+				local iface, duid, iaid, name, ts, id, length, ip = ln:match("^# (%S+) (%S+) (%S+) (%S+) (-?%d+) (%S+) (%S+) (.*)")
+				local expire = tonumber(ts) or 0
 				if ip and iaid ~= "ipv4" and family == 6 then
 					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
+						expires  = (expire >= 0) and os.difftime(expire, os.time()),
 						duid     = duid,
 						ip6addr  = ip,
 						hostname = (name ~= "-") and name
 					}
 				elseif ip and iaid == "ipv4" and family == 4 then
 					rv[#rv+1] = {
-						expires  = os.difftime(tonumber(ts) or 0, os.time()),
-						macaddr  = duid,
+						expires  = (expire >= 0) and os.difftime(expire, os.time()),
+						macaddr  = ipc.checkmac(duid:gsub("^(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)(%x%x)$", "%1:%2:%3:%4:%5:%6")) or "00:00:00:00:00:00",
 						ipaddr   = ip,
 						hostname = (name ~= "-") and name
 					}
@@ -184,7 +187,9 @@ function switch_status(devs)
 	local switches = { }
 	for dev in devs:gmatch("[^%s,]+") do
 		local ports = { }
-		local swc = io.popen("swconfig dev %q show" % dev, "r")
+		local swc = io.popen("swconfig dev %s show"
+			% luci.util.shellquote(dev), "r")
+
 		if swc then
 			local l
 			repeat
