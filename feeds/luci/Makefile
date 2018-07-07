@@ -1,40 +1,105 @@
-LUAC = luac
-LUAC_OPTIONS = -s
+include build/config.mk
 
-FILES = ffluci/config.lua
+MODULES = contrib/* applications/* libs/* modules/* themes/* i18n/*
 
-CFILES = ffluci/util.lua ffluci/http.lua \
-ffluci/fs.lua ffluci/i18n.lua ffluci/model/uci.lua \
-ffluci/template.lua ffluci/dispatcher.lua ffluci/menu.lua ffluci/init.lua
+OS:=$(shell uname)
+MODULES:=$(foreach item,$(wildcard $(MODULES)),$(if $(realpath $(wildcard $(item)/Makefile)),$(item)))
 
-DIRECTORIES = dist/ffluci/model dist/ffluci/controller/public dist/ffluci/controller/admin dist/ffluci/i18n dist/ffluci/view
+export OS
 
-INFILES = $(CFILES:%=src/%)
-OUTFILE = ffluci/init.lua
+.PHONY: all build gccbuild luabuild clean host gcchost luahost hostcopy hostclean
 
-all: compile
+all: build
 
-dist-compile: compile examples
-dist-source: source examples
+build: gccbuild luabuild
 
-examples:
-	cp src/ffluci/controller/public/* dist/ffluci/controller/public/
-	cp src/ffluci/controller/admin/* dist/ffluci/controller/admin/
-	cp src/ffluci/i18n/* dist/ffluci/i18n/
-	cp src/ffluci/view/* dist/ffluci/view/ -R
+gccbuild:
+	make -C libs/lmo CC="cc" CFLAGS="" LDFLAGS="" SDK="$(shell test -f .running-sdk && echo 1)" host-install
+	for i in $(MODULES); do \
+		make -C$$i SDK="$(shell test -f .running-sdk && echo 1)" compile || { \
+			echo "*** Compilation of $$i failed!"; \
+			exit 1; \
+		}; \
+	done
 
-compile:
-	mkdir -p $(DIRECTORIES)
-	$(LUAC) $(LUAC_OPTIONS) -o dist/$(OUTFILE) $(INFILES)
-	for i in $(CFILES); do [ -f dist/$$i ] || ln -s `dirname $$i | cut -s -d / -f 2- | sed -e 's/[^/]*\/*/..\//g'``basename $(OUTFILE)` dist/$$i; done
-	for i in $(FILES); do cp src/$$i dist/$$i; done
+luabuild: i18nbuild
+	for i in $(MODULES); do HOST=$(realpath host) \
+		SDK="$(shell test -f .running-sdk && echo 1)" make -C$$i luabuild; done
 
-source:
-	mkdir -p $(DIRECTORIES)
-	for i in $(CFILES); do cp src/$$i dist/$$i; done
-	for i in $(FILES); do cp src/$$i dist/$$i; done
-	
+i18nbuild:
+	mkdir -p host/lua-po
+	./build/i18n-po2lua.pl ./po host/lua-po
 
-.PHONY: clean
 clean:
-	rm dist -rf
+	rm -f .running-sdk
+	rm -rf docs
+	make -C libs/lmo host-clean
+	for i in $(MODULES); do make -C$$i clean; done
+
+
+host: build hostcopy
+
+gcchost: gccbuild hostcopy
+
+luahost: luabuild hostcopy
+
+hostcopy: 
+	mkdir -p host/tmp
+	mkdir -p host/var/state
+	for i in $(MODULES); do cp -pR $$i/dist/* host/ 2>/dev/null || true; done
+	for i in $(MODULES); do cp -pR $$i/hostfiles/* host/ 2>/dev/null || true; done
+	rm -f host/luci
+	ln -s .$(LUCI_MODULEDIR) host/luci
+	rm -rf /tmp/luci-* || true
+
+hostenv: sdk host ucidefaults
+
+sdk:
+	touch .running-sdk
+
+ucidefaults:
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/bin/uci-defaults --exclude luci-freifunk-*"
+
+runhttpd: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua build/lucid.lua"
+
+runuhttpd: hostenv
+	cp $(realpath build)/luci.cgi $(realpath host)/www/cgi-bin/luci
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "$(realpath host)/usr/sbin/uhttpd -p 8080 -h $(realpath host)/www -f"
+
+runlua: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "lua -i build/setup.lua"
+
+runshell: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) $$SHELL
+
+hostclean: clean
+	rm -rf host
+
+apidocs: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "build/makedocs.sh host/luci/ docs"
+
+nixiodocs: hostenv
+	build/hostenv.sh $(realpath host) $(LUA_MODULEDIR) $(LUA_LIBRARYDIR) "build/makedocs.sh libs/nixio/ nixiodocs"
+
+po: host
+	for L in $${LANGUAGE:-$$(find i18n/ -path 'i18n/*/luasrc/i18n/*' -name 'default.*.lua' | \
+	  sed -e 's!.*/default\.\(.*\)\.lua!\1!')}; do \
+	    build/i18n-lua2po.pl . $(realpath host)/po $$L; \
+	done
+
+run:
+	#	make run is deprecated				#
+	#	Please use:					#
+	#							#
+	#	To run LuCI WebUI using LuCIttpd		#
+	#	make runhttpd					#
+	#							#
+	#	To run LuCI WebUI using Boa/Webuci		#
+	#	make runboa 					#
+	#							#
+	#	To start a shell in the LuCI environment	#
+	#	make runshell					#
+	#							#
+	#	To run Lua CLI in the LuCI environment		#
+	#	make runlua					#
