@@ -1019,6 +1019,9 @@ msgstr "启用 VLAN"
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK"
 msgstr "启用 WPS 按键配置，要求使用 WPA(2)-PSK"
 
+msgid "Enable key reinstallation (KRACK) countermeasures"
+msgstr ""
+
 msgid "Enable learning and aging"
 msgstr "启用智能交换学习"
 
@@ -2342,6 +2345,9 @@ msgstr "内部私钥的密码"
 msgid "Password successfully changed!"
 msgstr "密码修改成功！"
 
+msgid "Password2"
+msgstr ""
+
 msgid "Path to CA-Certificate"
 msgstr "CA 证书路径"
 
@@ -3643,6 +3649,13 @@ msgstr "无线已重启"
 
 msgid "Wireless shut down"
 msgstr "无线已关闭"
+
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
 
 msgid "Write received DNS requests to syslog"
 msgstr "将收到的 DNS 请求写入系统日志"
