@@ -42,6 +42,9 @@ msgstr ""
 msgid "-- match by label --"
 msgstr ""
 
+msgid "-- match by uuid --"
+msgstr ""
+
 msgid "1 Minute Load:"
 msgstr "Навантаження за 1 хвилину:"
 
@@ -299,6 +302,9 @@ msgstr ""
 "Дозволити відповіді від клієнта на сервер у діапазоні 127.0.0.0/8, "
 "наприклад, для RBL-послуг"
 
+msgid "Allowed IPs"
+msgstr ""
+
 msgid ""
 "Also see <a href=\"https://www.sixxs.net/faq/connectivity/?faq=comparison"
 "\">Tunneling Comparison</a> on SIXXS"
@@ -306,9 +312,6 @@ msgstr ""
 
 msgid "Always announce default router"
 msgstr ""
-
-msgid "An additional network will be created if you leave this unchecked."
-msgstr "Якщо ви залишите це невибраним, буде створена додаткова мережа."
 
 msgid "Annex"
 msgstr ""
@@ -417,6 +420,9 @@ msgstr ""
 msgid "Authentication"
 msgstr "Автентифікація"
 
+msgid "Authentication Type"
+msgstr ""
+
 msgid "Authoritative"
 msgstr "Надійний"
 
@@ -513,7 +519,13 @@ msgstr ""
 "складається із позначених opkg змінених файлів конфігурації, невідокремних "
 "базових файлів, та файлів за користувацькими шаблонами резервного копіювання."
 
+msgid "Bind interface"
+msgstr ""
+
 msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
+msgid "Bind the tunnel to this interface (optional)."
 msgstr ""
 
 msgid "Bitrate"
@@ -582,6 +594,9 @@ msgid "Check"
 msgstr "Перевірити"
 
 msgid "Check fileystems before mount"
+msgstr ""
+
+msgid "Check this option to delete the existing networks from this radio."
 msgstr ""
 
 msgid "Checksum"
@@ -924,6 +939,9 @@ msgstr "Потрібен домен"
 msgid "Domain whitelist"
 msgstr "\"Білий список\" доменів"
 
+msgid "Don't Fragment"
+msgstr ""
+
 msgid ""
 "Don't forward <abbr title=\"Domain Name System\">DNS</abbr>-Requests without "
 "<abbr title=\"Domain Name System\">DNS</abbr>-Name"
@@ -998,6 +1016,9 @@ msgstr "Увімкнути <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 msgid "Enable HE.net dynamic endpoint update"
 msgstr "Увімкнути динамічне оновлення кінцевої точки HE.net"
 
+msgid "Enable IPv6 negotiation"
+msgstr ""
+
 msgid "Enable IPv6 negotiation on the PPP link"
 msgstr "Увімкнути узгодження IPv6 для PPP-з'єднань"
 
@@ -1028,6 +1049,9 @@ msgstr ""
 msgid "Enable mirroring of outgoing packets"
 msgstr ""
 
+msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
+msgstr ""
+
 msgid "Enable this mount"
 msgstr "Увімкнути це монтування"
 
@@ -1049,6 +1073,12 @@ msgstr "Режим інкапсуляції"
 
 msgid "Encryption"
 msgstr "Шифрування"
+
+msgid "Endpoint Host"
+msgstr ""
+
+msgid "Endpoint Port"
+msgstr ""
 
 msgid "Erasing..."
 msgstr "Видалення..."
@@ -1207,6 +1237,11 @@ msgstr "Вільно"
 msgid "Free space"
 msgstr "Вільне місце"
 
+msgid ""
+"Further information about WireGuard interfaces and peers at <a href=\"http://"
+"wireguard.io\">wireguard.io</a>."
+msgstr ""
+
 msgid "GHz"
 msgstr "ГГц"
 
@@ -1262,6 +1297,9 @@ msgid "HE.net password"
 msgstr "Пароль HE.net"
 
 msgid "HE.net username"
+msgstr ""
+
+msgid "HT mode (802.11n)"
 msgstr ""
 
 msgid "Handler"
@@ -1366,6 +1404,9 @@ msgstr "Довжина префікса IPv4"
 
 msgid "IPv4-Address"
 msgstr "IPv4-адреса"
+
+msgid "IPv4-in-IPv4 (RFC2003)"
+msgstr ""
 
 msgid "IPv6"
 msgstr "IPv6"
@@ -1579,11 +1620,11 @@ msgstr "Потрібен Java Script!"
 msgid "Join Network"
 msgstr "Підключення до мережі"
 
-msgid "Join Network: Settings"
-msgstr "Підключення до мережі: Настройки"
-
 msgid "Join Network: Wireless Scan"
 msgstr "Підключення до мережі: Сканування бездротових мереж"
+
+msgid "Joining Network: %q"
+msgstr ""
 
 msgid "Keep settings"
 msgstr "Зберегти настройки"
@@ -1698,6 +1739,9 @@ msgid "List of hosts that supply bogus NX domain results"
 msgstr "Список доменів, які підтримують результати підробки NX-доменів"
 
 msgid "Listen Interfaces"
+msgstr ""
+
+msgid "Listen Port"
 msgstr ""
 
 msgid "Listen only on the given interface or, if unspecified, on all"
@@ -2138,6 +2182,36 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
+msgid "Optional."
+msgstr ""
+
+msgid ""
+"Optional. Adds in an additional layer of symmetric-key cryptography for post-"
+"quantum resistance."
+msgstr ""
+
+msgid "Optional. Create routes for Allowed IPs for this peer."
+msgstr ""
+
+msgid ""
+"Optional. Host of peer. Names are resolved prior to bringing up the "
+"interface."
+msgstr ""
+
+msgid "Optional. Maximum Transmission Unit of tunnel interface."
+msgstr ""
+
+msgid "Optional. Port of peer."
+msgstr ""
+
+msgid ""
+"Optional. Seconds between keep alive messages. Default is 0 (disabled). "
+"Recommended value if this device is behind a NAT is 25."
+msgstr ""
+
+msgid "Optional. UDP port used for outgoing and incoming packets."
+msgstr ""
+
 msgid "Options"
 msgstr "Опції"
 
@@ -2161,6 +2235,12 @@ msgstr "Перевизначити MAC-адресу"
 
 msgid "Override MTU"
 msgstr "Перевизначити MTU"
+
+msgid "Override TOS"
+msgstr ""
+
+msgid "Override TTL"
+msgstr ""
 
 msgid "Override default interface name"
 msgstr ""
@@ -2283,6 +2363,9 @@ msgstr "Пік:"
 msgid "Peer IP address to assign"
 msgstr ""
 
+msgid "Peers"
+msgstr ""
+
 msgid "Perfect Forward Secrecy"
 msgstr ""
 
@@ -2291,6 +2374,9 @@ msgstr "Виконати перезавантаження"
 
 msgid "Perform reset"
 msgstr "Відновити"
+
+msgid "Persistent Keep Alive"
+msgstr ""
 
 msgid "Phy Rate:"
 msgstr "Фізична швидкість:"
@@ -2322,6 +2408,9 @@ msgstr ""
 msgid "Pre-emtive CRC errors (CRCP_P)"
 msgstr ""
 
+msgid "Preshared Key"
+msgstr ""
+
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
@@ -2329,7 +2418,7 @@ msgstr ""
 "Вважати вузол недоступним після визначеної кількості невдач отримання ехо-"
 "пакета LCP, використовуйте 0, щоб ігнорувати невдачі"
 
-msgid "Prevent listening on thise interfaces."
+msgid "Prevent listening on these interfaces."
 msgstr ""
 
 msgid "Prevents client-to-client communication"
@@ -2337,6 +2426,9 @@ msgstr "Запобігає зв'язкам клієнт-клієнт"
 
 msgid "Prism2/2.5/3 802.11b Wireless Controller"
 msgstr "Бездротовий 802.11b контролер Prism2/2.5/3"
+
+msgid "Private Key"
+msgstr ""
 
 msgid "Proceed"
 msgstr "Продовжити"
@@ -2371,7 +2463,13 @@ msgstr "Постачити нову мережу"
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Псевдо Ad-Hoc (ahdemo)"
 
+msgid "Public Key"
+msgstr ""
+
 msgid "Public prefix routed to this device for distribution to clients."
+msgstr ""
+
+msgid "QMI Cellular"
 msgstr ""
 
 msgid "Quality"
@@ -2517,6 +2615,9 @@ msgstr "Міст-ретранслятор"
 msgid "Remote IPv4 address"
 msgstr "Віддалена адреса IPv4"
 
+msgid "Remote IPv4 address or FQDN"
+msgstr ""
+
 msgid "Remove"
 msgstr "Видалити"
 
@@ -2540,6 +2641,18 @@ msgstr ""
 
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "Потрібно для деяких провайдерів, наприклад, Charter із DOCSIS 3"
+
+msgid "Required. Base64-encoded private key for this interface."
+msgstr ""
+
+msgid ""
+"Required. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
+msgid "Required. Public key of peer."
+msgstr ""
 
 msgid ""
 "Requires upstream supports DNSSEC; verify unsigned domain responses really "
@@ -2583,6 +2696,12 @@ msgid "Root directory for files served via TFTP"
 msgstr "Кореневий каталог для файлів TFTP"
 
 msgid "Root preparation"
+msgstr ""
+
+msgid "Route Allowed IPs"
+msgstr ""
+
+msgid "Route type"
 msgstr ""
 
 msgid "Routed IPv6 prefix for downstream interfaces"
@@ -2766,15 +2885,14 @@ msgstr "На жаль, об'єкт, який ви просили, не знай�
 msgid "Sorry, the server encountered an unexpected error."
 msgstr "На жаль, на сервері сталася неочікувана помилка."
 
-#, fuzzy
 msgid ""
 "Sorry, there is no sysupgrade support present; a new firmware image must be "
-"flashed manually. Please refer to the OpenWrt wiki for device specific "
-"install instructions."
+"flashed manually. Please refer to the wiki for device specific install "
+"instructions."
 msgstr ""
 "На жаль, автоматичне оновлення системи не підтримується. Новий образ "
-"прошивки повинен бути залитий вручну. Зверніться до OpenWrt Wiki за "
-"інструкцією з інсталяції для конкретного пристрою."
+"прошивки повинен бути залитий вручну. Зверніться до Wiki за інструкцією з "
+"інсталяції для конкретного пристрою."
 
 msgid "Sort"
 msgstr "Сортування"
@@ -2807,6 +2925,19 @@ msgid ""
 msgstr ""
 "Визначає максимальний час (секунди), після якого вважається, що вузли "
 "\"мертві\""
+
+msgid "Specify a TOS (Type of Service)."
+msgstr ""
+
+msgid ""
+"Specify a TTL (Time to Live) for the encapsulating packet other than the "
+"default (64)."
+msgstr ""
+
+msgid ""
+"Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
+"bytes)."
+msgstr ""
 
 msgid "Specify the secret encryption key here."
 msgstr "Вкажіть тут секретний ключ шифрування."
@@ -2964,6 +3095,10 @@ msgid ""
 msgstr ""
 
 msgid ""
+"The IPv4 address or the fully-qualified domain name of the remote tunnel end."
+msgstr ""
+
+msgid ""
 "The IPv6 prefix assigned to the provider, usually ends with <code>::</code>"
 msgstr ""
 "Призначений провайдеру IPv6-префікс, зазвичай закінчується на <code>::</code>"
@@ -3028,6 +3163,9 @@ msgstr "Довжина IPv4-префікса в бітах, решта вико�
 
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Довжина IPv6-префікса в бітах"
+
+msgid "The local IPv4 address over which the tunnel is created (optional)."
+msgstr ""
 
 msgid ""
 "The network ports on this device can be combined to several <abbr title="
@@ -3307,12 +3445,12 @@ msgstr "Оновити списки..."
 
 msgid ""
 "Upload a sysupgrade-compatible image here to replace the running firmware. "
-"Check \"Keep settings\" to retain the current configuration (requires an "
-"OpenWrt compatible firmware image)."
+"Check \"Keep settings\" to retain the current configuration (requires a "
+"compatible firmware image)."
 msgstr ""
 "Відвантажити sysupgrade-сумісний образ, щоб замінити поточну прошивку. Для "
 "збереження поточної конфігурації встановіть прапорець \"Зберегти настройки"
-"\" (потрібен OpenWrt-сумісний образ прошивки)."
+"\" (потрібен сумісний образ прошивки)."
 
 msgid "Upload archive..."
 msgstr "Відвантажити архів..."
@@ -3491,6 +3629,9 @@ msgid "Whether to route only packets from delegated prefixes"
 msgstr ""
 
 msgid "Width"
+msgstr ""
+
+msgid "WireGuard VPN"
 msgstr ""
 
 msgid "Wireless"
@@ -3715,6 +3856,12 @@ msgstr "так"
 
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid "An additional network will be created if you leave this unchecked."
+#~ msgstr "Якщо ви залишите це невибраним, буде створена додаткова мережа."
+
+#~ msgid "Join Network: Settings"
+#~ msgstr "Підключення до мережі: Настройки"
 
 #~ msgid "CPU"
 #~ msgstr "ЦП"
