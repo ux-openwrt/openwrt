@@ -5,8 +5,6 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-
-
 SELF=${0##*/}
 
 [ -z "$STRIP" ] && {
@@ -28,8 +26,14 @@ find $TARGETS -type f -a -exec file {} \; | \
   IFS=":"
   while read F S; do
     echo "$SELF: $F:$S"
-	[ "${F##*\.}" = "o" -o "${F##*\.}" = "ko" ] && \
-		eval "$STRIP_KMOD $F" || \
+	[ "${S}" = "relocatable" ] && {
+		eval "$STRIP_KMOD $F"
+	} || {
+		b=$(stat -c '%a' $F)
 		eval "$STRIP $F"
+		a=$(stat -c '%a' $F)
+		[ "$a" = "$b" ] || chmod $b $F
+	}
   done
+  true
 )

@@ -1,7 +1,6 @@
-diff -ruN dropbear-0.48-old/cli-runopts.c dropbear-0.48-new/cli-runopts.c
---- dropbear-0.48-old/cli-runopts.c	2006-03-09 16:06:03.000000000 +0100
-+++ dropbear-0.48-new/cli-runopts.c	2006-03-11 12:28:54.000000000 +0100
-@@ -188,6 +188,10 @@
+--- a/cli-runopts.c
++++ b/cli-runopts.c
+@@ -287,6 +287,10 @@ void cli_getopts(int argc, char ** argv)
  					debug_trace = 1;
  					break;
  #endif
@@ -12,7 +11,7 @@ diff -ruN dropbear-0.48-old/cli-runopts.c dropbear-0.48-new/cli-runopts.c
  				case 'F':
  				case 'e':
  				case 'c':
-@@ -199,7 +203,6 @@
+@@ -298,7 +302,6 @@ void cli_getopts(int argc, char ** argv)
  #ifndef ENABLE_CLI_LOCALTCPFWD
  				case 'L':
  #endif

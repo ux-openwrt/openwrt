@@ -17,7 +17,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * $Id: $
  *
  * Basic doc of driver's /proc interface:
  * /proc/switch/<interface>/
@@ -32,7 +31,6 @@
  *     ports: same syntax as for nvram's vlan*ports (eg. "1 2 3 4 5*")
  */
 
-#include <linux/config.h>
 #include <linux/module.h>
 #include <linux/init.h>
 #include <asm/uaccess.h>
@@ -70,18 +68,13 @@ static struct file_operations switch_proc_fops = {
 
 static ssize_t switch_proc_read(struct file *file, char *buf, size_t count, loff_t *ppos)
 {
-#ifdef LINUX_2_4
-	struct inode *inode = file->f_dentry->d_inode;
-	struct proc_dir_entry *dent = inode->u.generic_ip;
-#else
 	struct proc_dir_entry *dent = PDE(file->f_dentry->d_inode);
-#endif
 	char *page;
 	int len = 0;
-	
+
 	if ((page = kmalloc(SWITCH_MAX_BUFSZ, GFP_KERNEL)) == NULL)
 		return -ENOBUFS;
-	
+
 	if (dent->data != NULL) {
 		switch_proc_handler *handler = (switch_proc_handler *) dent->data;
 		if (handler->handler.read != NULL)
@@ -100,18 +93,14 @@ static ssize_t switch_proc_read(struct file *file, char *buf, size_t count, loff
 		len = 0;
 	}
 
+	kfree(page);
 	return len;
 }
 
 
 static ssize_t switch_proc_write(struct file *file, const char *buf, size_t count, void *data)
 {
-#ifdef LINUX_2_4
-	struct inode *inode = file->f_dentry->d_inode;
-	struct proc_dir_entry *dent = inode->u.generic_ip;
-#else
 	struct proc_dir_entry *dent = PDE(file->f_dentry->d_inode);
-#endif
 	char *page;
 	int ret = -EINVAL;
 
@@ -123,7 +112,7 @@ static ssize_t switch_proc_write(struct file *file, const char *buf, size_t coun
 		return -EINVAL;
 	}
 	page[count] = 0;
-	
+
 	if (dent->data != NULL) {
 		switch_proc_handler *handler = (switch_proc_handler *) dent->data;
 		if (handler->handler.write != NULL) {
@@ -138,18 +127,18 @@ static ssize_t switch_proc_write(struct file *file, const char *buf, size_t coun
 
 static int handle_driver_name(void *driver, char *buf, int nr)
 {
-	char *name = ((switch_driver *) driver)->name;
+	const char *name = ((switch_driver *) driver)->name;
 	return sprintf(buf, "%s\n", name);
 }
 
 static int handle_driver_version(void *driver, char *buf, int nr)
 {
-	char *version = ((switch_driver *) driver)->version;
+	const char *version = ((switch_driver *) driver)->version;
 	strcpy(buf, version);
 	return sprintf(buf, "%s\n", version);
 }
 
-static void add_handler(switch_driver *driver, switch_config *handler, struct proc_dir_entry *parent, int nr)
+static void add_handler(switch_driver *driver, const switch_config *handler, struct proc_dir_entry *parent, int nr)
 {
 	switch_priv *priv = (switch_priv *) driver->data;
 	struct proc_dir_entry *p;
@@ -157,31 +146,33 @@ static void add_handler(switch_driver *driver, switch_config *handler, struct pr
 
 	switch_proc_handler *tmp;
 	tmp = (switch_proc_handler *) kmalloc(sizeof(switch_proc_handler), GFP_KERNEL);
+	if (!tmp)
+		return;
 	INIT_LIST_HEAD(&tmp->list);
 	tmp->parent = parent;
 	tmp->nr = nr;
 	tmp->driver = driver;
 	memcpy(&tmp->handler, handler, sizeof(switch_config));
 	list_add(&tmp->list, &priv->data.list);
-	
+
 	mode = 0;
 	if (handler->read != NULL) mode |= S_IRUSR;
 	if (handler->write != NULL) mode |= S_IWUSR;
-	
+
 	if ((p = create_proc_entry(handler->name, mode, parent)) != NULL) {
 		p->data = (void *) tmp;
 		p->proc_fops = &switch_proc_fops;
 	}
 }
 
-static inline void add_handlers(switch_driver *driver, switch_config *handlers, struct proc_dir_entry *parent, int nr)
+static inline void add_handlers(switch_driver *driver, const switch_config *handlers, struct proc_dir_entry *parent, int nr)
 {
 	int i;
-	
+
 	for (i = 0; handlers[i].name != NULL; i++) {
 		add_handler(driver, &(handlers[i]), parent, nr);
 	}
-}		
+}
 
 static void remove_handlers(switch_priv *priv)
 {
@@ -204,7 +195,7 @@ static void do_unregister(switch_driver *driver)
 	switch_priv *priv = (switch_priv *) driver->data;
 
 	remove_handlers(priv);
-	
+
 	for(i = 0; priv->ports[i] != NULL; i++) {
 		sprintf(buf, "%d", i);
 		remove_proc_entry(buf, priv->port_dir);
@@ -220,7 +211,7 @@ static void do_unregister(switch_driver *driver)
 	remove_proc_entry("vlan", priv->driver_dir);
 
 	remove_proc_entry(driver->interface, switch_root);
-			
+
 	if (priv->nr == (drv_num - 1))
 		drv_num--;
 
@@ -238,22 +229,36 @@ static int do_register(switch_driver *driver)
 	switch_priv *priv;
 	int i;
 	char buf[4];
-	
-	if ((priv = kmalloc(sizeof(switch_priv), GFP_KERNEL)) == NULL)
-		return -ENOBUFS;
+
+	priv = kmalloc(sizeof(switch_priv), GFP_KERNEL);
+	if (!priv)
+		return -ENOMEM;
 	driver->data = (void *) priv;
 
+	priv->ports = kmalloc((driver->ports + 1) * sizeof(struct proc_dir_entry *),
+			      GFP_KERNEL);
+	if (!priv->ports) {
+		kfree(priv);
+		return -ENOMEM;
+	}
+	priv->vlans = kmalloc((driver->vlans + 1) * sizeof(struct proc_dir_entry *),
+			      GFP_KERNEL);
+	if (!priv->vlans) {
+		kfree(priv->ports);
+		kfree(priv);
+		return -ENOMEM;
+	}
+
 	INIT_LIST_HEAD(&priv->data.list);
-	
+
 	priv->nr = drv_num++;
 	priv->driver_dir = proc_mkdir(driver->interface, switch_root);
 	if (driver->driver_handlers != NULL) {
 		add_handlers(driver, driver->driver_handlers, priv->driver_dir, 0);
 		add_handlers(driver, global_driver_handlers, priv->driver_dir, 0);
 	}
-	
+
 	priv->port_dir = proc_mkdir("port", priv->driver_dir);
-	priv->ports = kmalloc((driver->ports + 1) * sizeof(struct proc_dir_entry *), GFP_KERNEL);
 	for (i = 0; i < driver->ports; i++) {
 		sprintf(buf, "%d", i);
 		priv->ports[i] = proc_mkdir(buf, priv->port_dir);
@@ -261,9 +266,8 @@ static int do_register(switch_driver *driver)
 			add_handlers(driver, driver->port_handlers, priv->ports[i], i);
 	}
 	priv->ports[i] = NULL;
-	
+
 	priv->vlan_dir = proc_mkdir("vlan", priv->driver_dir);
-	priv->vlans = kmalloc((driver->vlans + 1) * sizeof(struct proc_dir_entry *), GFP_KERNEL);
 	for (i = 0; i < driver->vlans; i++) {
 		sprintf(buf, "%d", i);
 		priv->vlans[i] = proc_mkdir(buf, priv->vlan_dir);
@@ -271,7 +275,7 @@ static int do_register(switch_driver *driver)
 			add_handlers(driver, driver->vlan_handlers, priv->vlans[i], i);
 	}
 	priv->vlans[i] = NULL;
-	
+
 
 	return 0;
 }
@@ -290,7 +294,7 @@ static inline int isspace(char c) {
 
 #define toupper(c) (islower(c) ? ((c) ^ 0x20) : (c))
 #define islower(c) (((unsigned char)((c) - 'a')) < 26)
-														 
+
 int switch_parse_media(char *buf)
 {
 	char *str = buf;
@@ -336,9 +340,10 @@ switch_vlan_config *switch_parse_vlan(switch_driver *driver, char *buf)
 {
 	switch_vlan_config *c;
 	int j, u, p, s;
-	
-	c = kmalloc(sizeof(switch_vlan_config), GFP_KERNEL);
-	memset(c, 0, sizeof(switch_vlan_config));
+
+	c = kzalloc(sizeof(switch_vlan_config), GFP_KERNEL);
+	if (!c)
+		return NULL;
 
 	while (isspace(*buf)) buf++;
 	j = 0;
@@ -349,7 +354,7 @@ switch_vlan_config *switch_parse_vlan(switch_driver *driver, char *buf)
 		u = ((j == driver->cpuport) ? 0 : 1);
 		p = 0;
 		s = !(*buf >= '0' && *buf <= '9');
-	
+
 		if (s) {
 			while (s && !isspace(*buf) && (*buf != 0)) {
 				switch(*buf) {
@@ -373,16 +378,33 @@ switch_vlan_config *switch_parse_vlan(switch_driver *driver, char *buf)
 
 			j = 0;
 		}
-		
+
 		while (isspace(*buf)) buf++;
 	}
-	if (*buf != 0) return NULL;
+	if (*buf != 0) {
+		kfree(c);
+		return NULL;
+	}
 
 	c->port &= (1 << driver->ports) - 1;
 	c->untag &= (1 << driver->ports) - 1;
 	c->pvid &= (1 << driver->ports) - 1;
-	
+
 	return c;
+}
+
+
+int switch_device_registered (char* device) {
+	struct list_head *pos;
+
+	list_for_each(pos, &drivers.list) {
+		if (strcmp(list_entry(pos, switch_driver, list)->interface, device) == 0) {
+			printk("There is already a switch registered on the device '%s'\n", device);
+			return -EINVAL;
+		}
+	}
+
+	return 0;
 }
 
 
@@ -391,7 +413,7 @@ int switch_register_driver(switch_driver *driver)
 	struct list_head *pos;
 	switch_driver *new;
 	int ret;
-	
+
 	list_for_each(pos, &drivers.list) {
 		if (strcmp(list_entry(pos, switch_driver, list)->name, driver->name) == 0) {
 			printk("Switch driver '%s' already exists in the kernel\n", driver->name);
@@ -404,10 +426,12 @@ int switch_register_driver(switch_driver *driver)
 	}
 
 	new = kmalloc(sizeof(switch_driver), GFP_KERNEL);
+	if (!new)
+		return -ENOMEM;
 	memcpy(new, driver, sizeof(switch_driver));
 	new->name = strdup(driver->name);
 	new->interface = strdup(driver->interface);
-	
+
 	if ((ret = do_register(new)) < 0) {
 		kfree(new->name);
 		kfree(new);
@@ -444,7 +468,7 @@ static int __init switch_init(void)
 	}
 
 	INIT_LIST_HEAD(&drivers.list);
-	
+
 	return 0;
 }
 
@@ -456,6 +480,7 @@ static void __exit switch_exit(void)
 MODULE_AUTHOR("Felix Fietkau <openwrt@nbd.name>");
 MODULE_LICENSE("GPL");
 
+EXPORT_SYMBOL(switch_device_registered);
 EXPORT_SYMBOL(switch_register_driver);
 EXPORT_SYMBOL(switch_unregister_driver);
 EXPORT_SYMBOL(switch_parse_vlan);

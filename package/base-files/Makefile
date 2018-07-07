@@ -1,191 +1,155 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2007-2012 OpenWrt.org
+# Copyright (C) 2010 Vertical Communications
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
+include $(INCLUDE_DIR)/version.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=8
+PKG_RELEASE:=117
 
-PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)
-
-REV:=$(shell LANG=C svn info | awk '/^Revision:/ { print$$2 }' )
-ifeq ($(REV),)
-  REV:=0
-endif
+PKG_FILE_DEPENDS:=$(PLATFORM_DIR)/ $(GENERIC_PLATFORM_DIR)/base-files/
+PKG_BUILD_DEPENDS:=opkg/host
 
 include $(INCLUDE_DIR)/package.mk
 
 ifneq ($(DUMP),1)
-  TARGET:=-$(BOARD)-$(KERNEL)
-  UCLIBC_VERSION:=${shell cat $(STAGING_DIR)/uclibc_version 2>/dev/null}
-  LIBGCC_VERSION:=${shell cat $(STAGING_DIR)/gcc_version 2>/dev/null}
-else
-  UCLIBC_VERSION:=<UCLIBC_VERSION>
-  LIBGCC_VERSION:=<LIBGCC_VERSION>
+  TARGET:=-$(BOARD)
+  ifneq ($(wildcard $(PLATFORM_DIR)/base-files-$(PROFILE) $(PLATFORM_SUBDIR)/base-files-$(PROFILE)),)
+    TARGET:=$(TARGET)-$(PROFILE)
+  endif
 endif
 
-CONFIG_PACKAGE_base-files$(TARGET):=$(CONFIG_PACKAGE_base-files)
-
-define Package/base-files$(TARGET)
+define Package/base-files
   SECTION:=base
   CATEGORY:=Base system
-  DEFAULT:=y
+  DEPENDS:=+netifd +libc
   TITLE:=Base filesystem for OpenWrt
-  DESCRIPTION:=\
-	This package contains a base filesystem and system scripts for OpenWrt.
   URL:=http://openwrt.org/
-  VERSION:=$(PKG_RELEASE)-$(REV)
+  VERSION:=$(PKG_RELEASE)-$(REVISION)
 endef
 
-define -ar7-2.4/conffiles
-/etc/config/network
-endef
-
-define -aruba-2.6/conffiles
-/etc/config/network
-endef
-
-define -au1000-2.6/conffiles
-/etc/config/network
-endef
-
-define -rb532-2.6/conffiles
-/etc/config/network
-endef
-
-define -sibyte-2.6/conffiles
-/etc/config/network
-endef
-
-define -x86-2.6/conffiles
-/etc/config/network
-endef
-
-define -xscale-2.6/conffiles
-/etc/config/network
-endef
-
-define Package/base-files$(TARGET)/conffiles
-/etc/banner
+define Package/base-files/conffiles
 /etc/hosts
 /etc/inittab
 /etc/group
 /etc/passwd
+/etc/shadow
 /etc/profile
 /etc/shells
-/etc/ipkg.conf
 /etc/sysctl.conf
+/etc/rc.local
+/etc/sysupgrade.conf
+/etc/config/
+/etc/dropbear/
+/etc/crontabs/
 $(call $(TARGET)/conffiles)
 endef
 
-define Package/libgcc
-  SECTION:=libs
-  CATEGORY:=Base system
-  DEFAULT:=y
-  DEPENDS:=@!NATIVE_TOOLCHAIN
-  TITLE:=GCC support library
-  URL:=http://gcc.gnu.org/
-  VERSION:=$(LIBGCC_VERSION)-$(PKG_RELEASE)
+define Package/base-files/description
+ This package contains a base filesystem and system scripts for OpenWrt.
 endef
 
-define Package/libpthread
-  SECTION:=libs
-  CATEGORY:=Libraries
-  DEPENDS:=@!NATIVE_TOOLCHAIN
-  TITLE:=POSIX thread library
-  URL:=http://uclibc.org/
-  VERSION:=$(UCLIBC_VERSION)-$(PKG_RELEASE)
+ifneq ($(CONFIG_PREINITOPT),)
+define ImageConfigOptions
+	mkdir -p $(1)/lib/preinit
+	echo 'pi_suppress_stderr="$(CONFIG_TARGET_PREINIT_SUPPRESS_STDERR)"' >$(1)/lib/preinit/00_preinit.conf
+	echo 'fs_failsafe_wait_timeout=$(if $(CONFIG_TARGET_PREINIT_TIMEOUT),$(CONFIG_TARGET_PREINIT_TIMEOUT),2)' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_init_path=$(if $(CONFIG_TARGET_INIT_PATH),$(CONFIG_TARGET_INIT_PATH),"/bin:/sbin:/usr/bin:/usr/sbin")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_init_env=$(if $(CONFIG_TARGET_INIT_ENV),$(CONFIG_TARGET_INIT_ENV),"")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_init_cmd=$(if $(CONFIG_TARGET_INIT_CMD),$(CONFIG_TARGET_INIT_CMD),"/sbin/init")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_init_suppress_stderr="$(CONFIG_TARGET_INIT_SUPPRESS_STDERR)"' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_ifname=$(if $(CONFIG_TARGET_PREINIT_IFNAME),$(CONFIG_TARGET_PREINIT_IFNAME),"")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_ip=$(if $(CONFIG_TARGET_PREINIT_IP),$(CONFIG_TARGET_PREINIT_IP),"192.168.1.1")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_netmask=$(if $(CONFIG_TARGET_PREINIT_NETMASK),$(CONFIG_TARGET_PREINIT_NETMASK),"255.255.255.0")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_broadcast=$(if $(CONFIG_TARGET_PREINIT_BROADCAST),$(CONFIG_TARGET_PREINIT_BROADCAST),"192.168.1.255")' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_preinit_net_messages="$(CONFIG_TARGET_PREINIT_SHOW_NETMSG)"' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_preinit_no_failsafe_netmsg="$(CONFIG_TARGET_PREINIT_SUPPRESS_FAILSAFE_NETMSG)"' >>$(1)/lib/preinit/00_preinit.conf
 endef
-
-define Package/uclibc
-  SECTION:=libs
-  CATEGORY:=Base system
-  DEFAULT:=y
-  DEPENDS:=@!NATIVE_TOOLCHAIN
-  TITLE:=C library embedded systems
-  URL:=http://uclibc.org/
-  VERSION:=$(UCLIBC_VERSION)-$(PKG_RELEASE)
-endef
+endif
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 endef
 
-define Build/Compile/ar7
-	$(TARGET_CC) -o $(PKG_BUILD_DIR)/adam2patcher src/adam2patcher.c
+define Build/Compile/Default
+
 endef
+Build/Compile = $(Build/Compile/Default)
 
-define Build/Compile/brcm
-	$(TARGET_CC) -o $(PKG_BUILD_DIR)/jffs2root src/jffs2root.c
-endef
-
-define Build/Compile
-  $(call Build/Compile/$(BOARD))
-endef
-
-
-define Package/base-files$(TARGET)/install-ar7
-	mkdir -p $(1)/sbin
-	$(CP) $(PKG_BUILD_DIR)/adam2patcher $(1)/sbin
-endef
-
-define Package/base-files$(TARGET)/install-brcm
-	rm -f $(1)/etc/config/network
-	mkdir -p $(1)/sbin
-	$(CP) $(PKG_BUILD_DIR)/jffs2root $(1)/sbin
-endef
-
-define Package/base-files$(TARGET)/install
-	$(CP) ./default/* $(1)/
-	if [ -d $(BOARD)-$(KERNEL) ]; then \
-		$(CP) $(BOARD)-$(KERNEL)/* $(1)/; \
+define Package/base-files/install
+	$(CP) ./files/* $(1)/
+	if [ -d $(GENERIC_PLATFORM_DIR)/base-files/. ]; then \
+		$(CP) $(GENERIC_PLATFORM_DIR)/base-files/* $(1)/; \
 	fi
-	$(SED) 's,$$$$R,r$(REV),g' $(1)/etc/banner
-	$(SED) 's,$$$$S,$(BOARD)-$(KERNEL),g' $(1)/etc/ipkg.conf
+	if [ -d $(PLATFORM_DIR)/base-files/. ]; then \
+		$(CP) $(PLATFORM_DIR)/base-files/* $(1)/; \
+	fi
+	if [ -d $(PLATFORM_DIR)/base-files-$(PROFILE)/. ]; then \
+		$(CP) $(PLATFORM_DIR)/base-files-$(PROFILE)/* $(1)/; \
+	fi
+	if [ -d $(PLATFORM_DIR)/$(PROFILE)/base-files/. ]; then \
+		$(CP) $(PLATFORM_DIR)/$(PROFILE)/base-files/* $(1)/; \
+	fi
+	$(if $(filter-out $(PLATFORM_DIR),$(PLATFORM_SUBDIR)), \
+		if [ -d $(PLATFORM_SUBDIR)/base-files/. ]; then \
+			$(CP) $(PLATFORM_SUBDIR)/base-files/* $(1)/; \
+		fi; \
+		if [ -d $(PLATFORM_SUBDIR)/base-files-$(PROFILE)/. ]; then \
+			$(CP) $(PLATFORM_SUBDIR)/base-files-$(PROFILE)/* $(1)/; \
+		fi; \
+		if [ -d $(PLATFORM_SUBDIR)/$(PROFILE)/base-files/. ]; then \
+			$(CP) $(PLATFORM_SUBDIR)/$(PROFILE)/base-files/* $(1)/; \
+		fi \
+	)
+
+	$(VERSION_SED) \
+		$(1)/etc/banner \
+		$(1)/etc/openwrt_version \
+		$(1)/etc/openwrt_release
+
+	mkdir -p $(1)/CONTROL
 	mkdir -p $(1)/dev
 	mkdir -p $(1)/etc/crontabs
-	mkdir -p $(1)/jffs
-	mkdir -p $(1)/lib
+	mkdir -p $(1)/etc/rc.d
+	mkdir -p $(1)/overlay
+	mkdir -p $(1)/lib/firmware
+	$(if $(LIB_SUFFIX),-ln -s lib $(1)/lib$(LIB_SUFFIX))
 	mkdir -p $(1)/mnt
 	mkdir -p $(1)/proc
 	mkdir -p $(1)/tmp
 	mkdir -p $(1)/usr/lib
+	$(if $(LIB_SUFFIX),-ln -s lib $(1)/usr/lib$(LIB_SUFFIX))
 	mkdir -p $(1)/usr/bin
 	mkdir -p $(1)/sys
 	mkdir -p $(1)/www
+	mkdir -p $(1)/root
 	ln -sf /proc/mounts $(1)/etc/mtab
 	rm -f $(1)/var
 	ln -sf /tmp $(1)/var
 	mkdir -p $(1)/etc
-$(call Package/base-files$(TARGET)/install-$(BOARD),$(1))
-endef
+	ln -sf /tmp/resolv.conf /tmp/fstab /tmp/TZ $(1)/etc/
 
-define Package/libgcc/install
-	install -m0755 -d $(1)/lib
-	$(CP) $(STAGING_DIR)/lib/libgcc_s.so.* $(1)/lib/
-endef
+	chmod 0600 $(1)/etc/shadow
+	chmod 1777 $(1)/tmp
 
-define Package/libpthread/install
-	install -m0755 -d $(1)/lib
-	$(CP) $(STAGING_DIR)/lib/libpthread.so.* $(1)/lib/
-	$(CP) $(STAGING_DIR)/lib/libpthread-$(UCLIBC_VERSION).so $(1)/lib/
-endef
-
-define Package/uclibc/install
-	install -m0755 -d $(1)/lib
-	for file in ld-uClibc libc libcrypt libdl libm libnsl libresolv librt libuClibc libutil; do \
-		$(CP) $(STAGING_DIR)/lib/$$$$file.so.* $(1)/lib/; \
-		$(CP) $(STAGING_DIR)/lib/$$$$file-$(UCLIBC_VERSION).so $(1)/lib/; \
+	$(call ImageConfigOptions,$(1))
+	$(call Package/base-files/install-target,$(1))
+	for conffile in $(1)/etc/config/*; do \
+		if [ -f "$$$$conffile" ]; then \
+			grep "$$$${conffile##$(1)}" $(1)/CONTROL/conffiles || \
+				echo "$$$${conffile##$(1)}" >> $(1)/CONTROL/conffiles; \
+		fi \
 	done
 endef
 
-$(eval $(call BuildPackage,base-files$(TARGET)))
-$(eval $(call BuildPackage,libgcc))
-$(eval $(call BuildPackage,libpthread))
-$(eval $(call BuildPackage,uclibc))
+ifneq ($(DUMP),1)
+  -include $(PLATFORM_DIR)/base-files.mk
+endif
+
+$(eval $(call BuildPackage,base-files))

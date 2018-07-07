@@ -1,27 +1,42 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 include $(TOPDIR)/rules.mk
+
+PKG_NAME:=mkimage
+PKG_VERSION:=2012.04.01
+
+PKG_SOURCE:=u-boot-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=ftp://ftp.denx.de/pub/u-boot
+PKG_MD5SUM:=192bb231082d9159fb6e16de3039b6b2
+PKG_CAT:=bzcat
+
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/u-boot-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/host-build.mk
 
-PKG_BUILD_DIR:=$(TOOL_BUILD_DIR)/mkimage
-
-define Build/Compile
-	$(CC) -O -c src/crc32.c -o $(PKG_BUILD_DIR)/crc32.o
-	$(CC) -O -c src/mkimage.c -o $(PKG_BUILD_DIR)/mkimage.o
-	$(CC) -O -o $(PKG_BUILD_DIR)/mkimage $(PKG_BUILD_DIR)/mkimage.o $(PKG_BUILD_DIR)/crc32.o
+define Host/Prepare
+	$(Host/Prepare/Default)
+	rm -f \
+		$(HOST_BUILD_DIR)/include/errno.h \
+		$(HOST_BUILD_DIR)/include/malloc.h
 endef
 
-define Build/Install
-	mkdir -p $(STAGING_DIR)/bin
-	$(CP) $(PKG_BUILD_DIR)/mkimage $(STAGING_DIR)/bin/
+define Host/Compile
+	rm -f $(HOST_BUILD_DIR)/tools/.depend
+	touch $(HOST_BUILD_DIR)/include/config.h
+	$(MAKE) -C $(HOST_BUILD_DIR) BUILD_DIR= BIN_FILES-y="mkimage" HOSTLDFLAGS="$(HOST_STATIC_LINKING)" tools
 endef
 
-define Build/Clean
-	rm -f $(STAGING_DIR)/bin/mkimage
+define Host/Install
+	$(CP) $(HOST_BUILD_DIR)/tools/mkimage $(STAGING_DIR_HOST)/bin/
+endef
+
+define Host/Clean
+	rm -f $(STAGING_DIR_HOST)/bin/mkimage
 endef
 
 $(eval $(call HostBuild))

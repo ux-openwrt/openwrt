@@ -56,7 +56,6 @@ void sym_init(void)
 
 	sym = sym_lookup("ARCH", 0);
 	sym->type = S_STRING;
-	sym->flags |= SYMBOL_AUTO;
 	p = getenv("ARCH");
 	if (p)
 		sym_add_default(sym, p);
@@ -197,6 +196,7 @@ static void sym_calc_visibility(struct symbol *sym)
 {
 	struct property *prop;
 	tristate tri;
+	int deselected = 0;
 
 	/* any prompt visible? */
 	tri = no;
@@ -204,18 +204,17 @@ static void sym_calc_visibility(struct symbol *sym)
 		prop->visible.tri = expr_calc_value(prop->visible.expr);
 		tri = E_OR(tri, prop->visible.tri);
 	}
-/* tristate always enabled */
-#if 0
-	if (tri == mod && (sym->type != S_TRISTATE || modules_val == no))
-#else
 	if (tri == mod && (sym->type != S_TRISTATE))
-#endif
 		tri = yes;
+	if (sym->rev_dep_inv.expr && (expr_calc_value(sym->rev_dep_inv.expr) == yes)) {
+		tri = no;
+		deselected = 1;
+	}
 	if (sym->visible != tri) {
 		sym->visible = tri;
 		sym_set_changed(sym);
 	}
-	if (sym_is_choice_value(sym))
+	if (sym_is_choice_value(sym) || deselected)
 		return;
 	tri = no;
 	if (sym->rev_dep.expr)
@@ -267,6 +266,26 @@ static struct symbol *sym_calc_choice(struct symbol *sym)
 	return NULL;
 }
 
+void sym_set_changed(struct symbol *sym)
+{
+	struct property *prop;
+
+	sym->flags |= SYMBOL_CHANGED;
+	for (prop = sym->prop; prop; prop = prop->next) {
+		if (prop->menu)
+			prop->menu->flags |= MENU_CHANGED;
+	}
+}
+
+void sym_set_all_changed(void)
+{
+	struct symbol *sym;
+	int i;
+
+	for_all_symbols(i, sym)
+		sym_set_changed(sym);
+}
+
 void sym_calc_value(struct symbol *sym)
 {
 	struct symbol_value newval, oldval;
@@ -311,6 +330,8 @@ void sym_calc_value(struct symbol *sym)
 		if (sym_is_choice_value(sym) && sym->visible == yes) {
 			prop = sym_get_choice_prop(sym);
 			newval.tri = (prop_get_symbol(prop)->curr.val == sym) ? yes : no;
+		} else if (sym->rev_dep_inv.expr && (expr_calc_value(sym->rev_dep_inv.expr) == yes)) {
+			newval.tri = no;
 		} else if (E_OR(sym->visible, sym->rev_dep.tri) != no) {
 			sym->flags |= SYMBOL_WRITE;
 			if (sym_has_value(sym))
@@ -360,11 +381,14 @@ void sym_calc_value(struct symbol *sym)
 		sym->curr.val = sym_calc_choice(sym);
 	sym_validate_range(sym);
 
-	if (memcmp(&oldval, &sym->curr, sizeof(oldval)))
+	if (memcmp(&oldval, &sym->curr, sizeof(oldval))) {
+		sym->flags &= ~SYMBOL_VALID;
 		sym_set_changed(sym);
-
-	if (modules_sym == sym)
-		modules_val = modules_sym->curr.tri;
+		if (modules_sym == sym) {
+			sym_set_all_changed();
+			modules_val = modules_sym->curr.tri;
+		}
+	}
 
 	if (sym_is_choice(sym)) {
 		int flags = sym->flags & (SYMBOL_CHANGED | SYMBOL_WRITE);
@@ -375,6 +399,9 @@ void sym_calc_value(struct symbol *sym)
 				sym_set_changed(e->right.sym);
 		}
 	}
+
+	if (sym->flags & SYMBOL_AUTO)
+		sym->flags &= ~SYMBOL_WRITE;
 }
 
 void sym_clear_all_valid(void)
@@ -387,26 +414,6 @@ void sym_clear_all_valid(void)
 	sym_change_count++;
 	if (modules_sym)
 		sym_calc_value(modules_sym);
-}
-
-void sym_set_changed(struct symbol *sym)
-{
-	struct property *prop;
-
-	sym->flags |= SYMBOL_CHANGED;
-	for (prop = sym->prop; prop; prop = prop->next) {
-		if (prop->menu)
-			prop->menu->flags |= MENU_CHANGED;
-	}
-}
-
-void sym_set_all_changed(void)
-{
-	struct symbol *sym;
-	int i;
-
-	for_all_symbols(i, sym)
-		sym_set_changed(sym);
 }
 
 bool sym_tristate_within_range(struct symbol *sym, tristate val)
@@ -460,8 +467,6 @@ bool sym_set_tristate_value(struct symbol *sym, tristate val)
 	sym->user.tri = val;
 	if (oldval != val) {
 		sym_clear_all_valid();
-		if (sym == modules_sym)
-			sym_set_all_changed();
 	}
 
 	return true;
@@ -754,6 +759,7 @@ struct symbol **sym_re_search(const char *pattern)
 				return NULL;
 			}
 		}
+		sym_calc_value(sym);
 		sym_arr[cnt++] = sym;
 	}
 	if (sym_arr)
@@ -814,7 +820,7 @@ struct symbol *sym_check_deps(struct symbol *sym)
 		goto out;
 
 	for (prop = sym->prop; prop; prop = prop->next) {
-		if (prop->type == P_CHOICE || prop->type == P_SELECT)
+		if (prop->type == P_CHOICE || prop->type == P_SELECT || prop->type == P_DESELECT)
 			continue;
 		sym2 = sym_check_expr_deps(prop->visible.expr);
 		if (sym2)
@@ -882,6 +888,8 @@ const char *prop_get_type_name(enum prop_type type)
 		return "choice";
 	case P_SELECT:
 		return "select";
+	case P_DESELECT:
+		return "deselect";
 	case P_RANGE:
 		return "range";
 	case P_UNKNOWN:

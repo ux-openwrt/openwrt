@@ -1,49 +1,21 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-include $(TOPDIR)/rules.mk
-include $(INCLUDE_DIR)/target.mk
+curdir:=target
 
-all: install
+$(curdir)/builddirs:=linux sdk imagebuilder toolchain
+$(curdir)/builddirs-default:=linux
+$(curdir)/builddirs-install:=linux $(if $(CONFIG_SDK),sdk) $(if $(CONFIG_IB),imagebuilder) $(if $(CONFIG_MAKE_TOOLCHAIN),toolchain)
 
-$(BIN_DIR):
-	mkdir -p $(BIN_DIR)
+$(curdir)/imagebuilder/install:=$(curdir)/linux/install
 
-TARGETS-y := linux utils
-TARGETS-$(CONFIG_SDK) += sdk
+$(eval $(call stampfile,$(curdir),target,prereq,.config))
+$(eval $(call stampfile,$(curdir),target,compile,$(TMP_DIR)/.build))
+$(eval $(call stampfile,$(curdir),target,install,$(TMP_DIR)/.build))
 
-linux-compile: utils-install
-linux-install: $(BIN_DIR)
-sdk-compile: linux-install
-image_install: linux-install
+$($(curdir)/stamp-install): $($(curdir)/stamp-compile) 
 
-download: $(patsubst %,%-download,$(TARGETS-y))
-prepare: linux-prepare
-compile: linux-compile image_compile
-install: image_clean $(patsubst %,%-install,$(TARGETS-y)) image_install
-clean: $(patsubst %,%-clean,$(TARGETS-y)) image_clean
-
-image_clean: FORCE
-	$(MAKE) -C image/$(BOARD) clean
-	rm -f $(BIN_DIR)/openwrt-*
-	
-image_compile: FORCE
-	$(MAKE) -C image/$(BOARD) compile
-
-image_install: image_compile
-	$(MAKE) -C image/$(BOARD) install
-
-%-clean: FORCE
-	$(MAKE) -C $(patsubst %-clean,%,$@) clean
-%-download: FORCE
-	$(MAKE) -C $(patsubst %-download,%,$@) download
-%-prepare: FORCE
-	$(MAKE) -C $(patsubst %-prepare,%,$@) prepare
-%-compile: %-prepare
-	$(MAKE) -C $(patsubst %-compile,%,$@) compile
-%-install: %-compile
-	$(MAKE) -C $(patsubst %-install,%,$@) install
-
+$(eval $(call subdir,$(curdir)))

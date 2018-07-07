@@ -20,7 +20,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <glob.h>
 
 /* end standard C headers. */
 
@@ -748,6 +747,7 @@ char *zconftext;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <glob.h>
 
 #define LKC_DIRECT_LINK
 #include "lkc.h"
@@ -2268,7 +2268,10 @@ void zconf_nextfile(const char *name)
 	struct buffer *buf;
 
 	retval = glob(name, GLOB_ERR | GLOB_MARK, NULL, &files);
-	if (retval == GLOB_NOSPACE || retval == GLOB_ABORTED || retval == GLOB_NOMATCH) {
+	if (retval == GLOB_NOMATCH)
+		return;
+
+	if (retval == GLOB_NOSPACE || retval == GLOB_ABORTED) {
 		printf("%s:%d: glob failed: %s \"%s\"\n", zconf_curname(), zconf_lineno(),
 			retval == GLOB_NOSPACE ? "failed to allocate memory" :
 				retval == GLOB_ABORTED ? "read error" : "no match",
@@ -2280,7 +2283,7 @@ void zconf_nextfile(const char *name)
 		filename = files.gl_pathv[i];
 
 		file = file_lookup(filename);
-                buf = malloc(sizeof(*buf));
+		buf = malloc(sizeof(*buf));
 		memset(buf, 0, sizeof(*buf));
 		current_buf->state = YY_CURRENT_BUFFER;
 		zconfin = zconf_fopen(filename);

@@ -1,5 +1,5 @@
---- dropbear-0.47.old/options.h	2006-01-31 13:36:25.301562500 +0100
-+++ dropbear-0.47.dev/options.h	2006-01-31 13:37:41.846346250 +0100
+--- a/options.h
++++ b/options.h
 @@ -5,6 +5,11 @@
  #ifndef _OPTIONS_H_
  #define _OPTIONS_H_

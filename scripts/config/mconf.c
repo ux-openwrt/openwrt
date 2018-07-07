@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <locale.h>
 
-#define BUFSIZE 32768
+#define BUFSIZE 524288
 #define LKC_DIRECT_LINK
 #include "lkc.h"
 
@@ -405,6 +405,7 @@ static void get_symbol_str(struct gstr *r, struct symbol *sym)
 	                               sym_get_string_value(sym));
 	for_all_prompts(sym, prop)
 		get_prompt_str(r, prop);
+
 	hit = false;
 	for_all_properties(sym, prop, P_SELECT) {
 		if (!hit) {
@@ -416,9 +417,27 @@ static void get_symbol_str(struct gstr *r, struct symbol *sym)
 	}
 	if (hit)
 		str_append(r, "\n");
+
+	hit = false;
+	for_all_properties(sym, prop, P_DESELECT) {
+		if (!hit) {
+			str_append(r, "  Deselects: ");
+			hit = true;
+		} else
+			str_printf(r, " && ");
+		expr_gstr_print(prop->expr, r);
+	}
+	if (hit)
+		str_append(r, "\n");
+
 	if (sym->rev_dep.expr) {
 		str_append(r, "  Selected by: ");
 		expr_gstr_print(sym->rev_dep.expr, r);
+		str_append(r, "\n");
+	}
+	if (sym->rev_dep_inv.expr) {
+		str_append(r, "  Deselected by: ");
+		expr_gstr_print(sym->rev_dep_inv.expr, r);
 		str_append(r, "\n");
 	}
 	str_append(r, "\n\n");
@@ -853,6 +872,8 @@ static void show_help(struct menu *menu)
 	struct gstr help = str_new();
 	struct symbol *sym = menu->sym;
 
+	help.max_width = cols - 10;
+
 	if (sym->help)
 	{
 		if (sym->name) {
@@ -888,6 +909,7 @@ static void conf_choice(struct menu *menu)
 	const char *prompt = menu_get_prompt(menu);
 	struct menu *child;
 	struct symbol *active;
+	struct property *prop;
 	int stat;
 
 	active = sym_get_choice_value(menu->sym);
@@ -920,6 +942,13 @@ static void conf_choice(struct menu *menu)
 		case 0:
 			if (sscanf(input_buf, "%p", &child) != 1)
 				break;
+			
+			if (sym_get_tristate_value(child->sym) != yes) {
+				for_all_properties(menu->sym, prop, P_RESET) {
+					if (expr_calc_value(prop->visible.expr) != no)
+						conf_reset();
+				}
+			}
 			sym_set_tristate_value(child->sym, yes);
 			return;
 		case 1:

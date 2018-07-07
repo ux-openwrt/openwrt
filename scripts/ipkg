@@ -116,7 +116,7 @@ Valid destinations are directories or one of the dest names from $IPKG_CONF:" >&
 	fi
 
 	# Global ipkg state directories
-	IPKG_DIR_PREFIX=usr/lib/ipkg
+	IPKG_DIR_PREFIX=usr/lib/opkg
 	IPKG_LISTS_DIR=$IPKG_OFFLINE_ROOT/$IPKG_DIR_PREFIX/lists
 	IPKG_PENDING_DIR=$IPKG_OFFLINE_ROOT/$IPKG_DIR_PREFIX/pending
 	if [ -z "$IPKG_TMP" ]; then
@@ -146,7 +146,7 @@ Valid destinations are directories or one of the dest names from $IPKG_CONF:" >&
 		export no_proxy="$IPKG_NO_PROXY"
 	fi
 
-	IPKG_STATUS_FIELDS='\(Package\|Status\|Essential\|Version\|Conffiles\|Root\)'
+	IPKG_STATUS_FIELDS='\(Package\|Status\|Essential\|Version\|Conffiles\|Root\|Architecture\)'
 }
 
 ipkg_usage() {
@@ -234,7 +234,6 @@ ipkg_download() {
 		proxyoption="--proxy=on"
 	fi
 
-	echo "Downloading $src ..."
 	rm -f $IPKG_TMP/$src_file
 	case "$src" in
 	http://* | ftp://*)
@@ -252,7 +251,6 @@ ipkg_download() {
 		;;
 	esac
 
-	echo "Done."
 	return 0
 }
 
@@ -597,8 +595,8 @@ ipkg_depends() {
 		all_deps="$all_deps $new_pkgs"
 		local new_deps=
 		for pkg in $new_pkgs; do
-			if echo $pkg | grep -q '[^a-z0-9.+-]'; then
-				echo "ipkg_depends: ERROR: Package name $pkg contains illegal characters (should be [a-z0-9.+-])" >&2
+			if echo $pkg | grep -q '[^A-Za-z0-9.+-]'; then
+				echo "ipkg_depends: ERROR: Package name $pkg contains illegal characters (should be [A-Za-z0-9.+-])" >&2
 				return 1
 			fi
 			# TODO: Fix this. For now I am ignoring versions and alternations in dependencies.
@@ -665,7 +663,7 @@ Status: install ok not-installed" | ipkg_status_update_sd $sd $pkg
 			curcheck="`expr $curcheck + 1`"
 			local is_installed="`ipkg_get_installed $pkg`"
 			if [ "$is_installed" = "installed" ]; then
-				echo "$pkg is installed" > /dev/console
+				echo "$pkg is installed"
 				continue
 			fi
 
@@ -693,7 +691,6 @@ Status: install ok not-installed" | ipkg_status_update_sd $sd $pkg
 				return 1;
 			fi
 
-			echo ""
 			local tmp_pkg_file="$IPKG_TMP/"`ipkg_file_part $filename`
 			if ! ipkg_download `ipkg_src_byname $src`/$filename $tmp_pkg_file; then
 				echo "ipkg_get_install: Perhaps you need to run \`ipkg update'?"
@@ -776,7 +773,7 @@ ipkg_install_file_dest() {
 	mkdir -p $IPKG_TMP/$pkg/data
 	mkdir -p $info_dir
 
-	if ! $pkg_extract_stdout $filename ./control.tar.gz | (cd $IPKG_TMP/$pkg/control; tar -xzf - ) ; then
+	if ! $pkg_extract_stdout $filename ./control.tar.gz | (cd $IPKG_TMP/$pkg/control; zcat | tar -xf - ) ; then
 		echo "ipkg_install_file: ERROR unpacking control.tar.gz from $filename"
 		return 1
 	fi
@@ -797,7 +794,7 @@ Status: install ok pending" | ipkg_status_update_sd $sd $pkg
 	fi
 
 
-	echo -n "Unpacking $pkg..."
+	printf "Unpacking $pkg..."
 	set +o noglob
 	for file in $IPKG_TMP/$pkg/control/*; do
 		local base_file="`ipkg_file_part $file`"
@@ -806,13 +803,13 @@ Status: install ok pending" | ipkg_status_update_sd $sd $pkg
 	set -o noglob
 	rm -r $IPKG_TMP/$pkg/control
 
-	if ! $pkg_extract_stdout $filename ./data.tar.gz | (cd $IPKG_TMP/$pkg/data; tar -xzf - ) ; then
+	if ! $pkg_extract_stdout $filename ./data.tar.gz | (cd $IPKG_TMP/$pkg/data; zcat | tar -xf - ) ; then
 		echo "ipkg_install_file: ERROR unpacking data.tar.gz from $filename"
 		return 1
 	fi
 	echo "Done."
 
-	echo -n "Configuring $pkg..."
+	printf "Configuring $pkg..."
 	export PKG_ROOT=$dest
 	if [ -x "$info_dir/$pkg.preinst" ]; then
 		if ! $info_dir/$pkg.preinst install; then
@@ -831,7 +828,7 @@ Status: install ok pending" | ipkg_status_update_sd $sd $pkg
 				local use_maintainers_conffile=
 				if [ -z "$FORCE_DEFAULTS" ]; then
 					while true; do
-						echo -n "Configuration file \`$conffile'
+						printf "Configuration file \`$conffile'
  ==> File on system created by you or by a script.
  ==> File also in package provided by package maintainer.
    What would you like to do about it ?  Your options are:
@@ -878,7 +875,7 @@ diff -u $dest/$conffile $IPKG_TMP/$pkg/data/$conffile"
 	rm -rf $IPKG_TMP/$pkg/data
 	rmdir $IPKG_TMP/$pkg
 	rm -f $info_dir/$pkg.list
-	$pkg_extract_stdout $filename ./data.tar.gz | tar tzf - | sed -e 's/^\.//' > $info_dir/$pkg.list
+	$pkg_extract_stdout $filename ./data.tar.gz | zcat | tar tf - | sed -e '/\/$/d; s/^\.//' > $info_dir/$pkg.list
 
 	if [ -x "$info_dir/$pkg.postinst" ]; then
 		$info_dir/$pkg.postinst configure
@@ -907,7 +904,6 @@ ipkg_install_file() {
 }
 
 ipkg_install() {
-
 	while [ $# -gt 0 ]; do
 		local pkg="$1"
 		shift
@@ -964,7 +960,7 @@ ipkg_install_wanted() {
 		if [ -n "$FORCE_DEFAULTS" ]; then
 			echo "Installing them now."
 		else
-			echo -n "Install them now [Y/n] ? "
+			printf "Install them now [Y/n] ? "
 			read response
 			case "$response" in
 			[Nn] | [Nn][Oo])

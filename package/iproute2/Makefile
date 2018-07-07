@@ -1,21 +1,20 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iproute2
-PKG_VERSION:=2.6.15-060110
+PKG_VERSION:=3.3.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://developer.osdl.org/dev/iproute2/download/
-PKG_MD5SUM:=04f57a6d366d36426d276178b600f5c5
-PKG_CAT:=zcat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://kernel.org/pub/linux/utils/net/iproute2/
+PKG_MD5SUM:=308e7145218dd552c2766fe527e239e1
+PKG_BUILD_PARALLEL:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/iproute2-$(PKG_VERSION)
 
@@ -28,41 +27,89 @@ define Package/iproute2/Default
 endef
 
 define Package/ip
-  $(call Package/iproute2/Default)
+$(call Package/iproute2/Default)
+  SUBMENU:=Routing and Redirection
+  DEPENDS:= +libnl-tiny
   TITLE:=Routing control utility
 endef
 
+define Package/ip/conffiles
+/etc/iproute2/rt_tables
+endef
+
 define Package/tc
-  $(call Package/iproute2/Default)
+$(call Package/iproute2/Default)
   TITLE:=Traffic control utility
+  DEPENDS:=+kmod-sched-core
+endef
+
+define Package/genl
+$(call Package/iproute2/Default)
+  TITLE:=General netlink utility frontend
+endef
+
+define Package/ss
+$(call Package/iproute2/Default)
+  TITLE:=Socket statistics utility
 endef
 
 define Build/Configure
-	$(SED) "s:-O2:${TARGET_CFLAGS}:g" $(PKG_BUILD_DIR)/Makefile
 	$(SED) "s,-I/usr/include/db3,," $(PKG_BUILD_DIR)/Makefile
 	$(SED) "s,^KERNEL_INCLUDE.*,KERNEL_INCLUDE=$(LINUX_DIR)/include," \
 		$(PKG_BUILD_DIR)/Makefile
 	$(SED) "s,^LIBC_INCLUDE.*,LIBC_INCLUDE=$(STAGING_DIR)/include," \
 		$(PKG_BUILD_DIR)/Makefile
-	# For now disable compiling of the misc directory because it seems to fail
-	rm -rf $(PKG_BUILD_DIR)/misc 
-	$(SED) "s, misc,," $(PKG_BUILD_DIR)/Makefile
+	echo "static const char SNAPSHOT[] = \"$(PKG_VERSION)-$(PKG_RELEASE)-openwrt\";" \
+		> $(PKG_BUILD_DIR)/include/SNAPSHOT.h
 endef
 
+ifdef CONFIG_USE_EGLIBC
+  ifndef CONFIG_EGLIBC_VERSION_2_13
+    TARGET_CFLAGS += -DHAVE_SETNS
+  endif
+endif
+
+MAKE_FLAGS += \
+	EXTRA_CCOPTS="$(TARGET_CFLAGS) -I../include -I$(STAGING_DIR)/usr/include/libnl-tiny" \
+	KERNEL_INCLUDE="$(LINUX_DIR)/include" \
+	FPIC="$(FPIC)"
+
 define Build/Compile
-	$(MAKE) -j1 -C $(PKG_BUILD_DIR)/netem HOSTCC="$(HOSTCC)" CFLAGS="-D_GNU_SOURCE -O2 -Wstrict-prototypes -Wall -I ../include -DRESOLVE_HOSTNAMES"
-	$(MAKE) -j1 -C $(PKG_BUILD_DIR) $(TARGET_CONFIGURE_OPTS) KERNEL_INCLUDE=$(LINUX_DIR)/include all tc/tc ip/ip
+	+$(MAKE_VARS) $(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) $(MAKE_FLAGS)
+endef
+
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/include
+	$(CP) $(PKG_BUILD_DIR)/include/libnetlink.h $(1)/usr/include/
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/lib/libnetlink.a $(1)/usr/lib/
 endef
 
 define Package/ip/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/ip/ip $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/etc/iproute2
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/iproute2/rt_tables $(1)/etc/iproute2
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/ip/ip $(1)/usr/sbin/
 endef
 
 define Package/tc/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/tc/tc $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/tc/tc $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_BIN) ./files/30-teql $(1)/etc/hotplug.d/iface/
+endef
+
+define Package/genl/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/genl/genl $(1)/usr/sbin/
+endef
+
+define Package/ss/install
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/misc/ss $(1)/usr/sbin/
 endef
 
 $(eval $(call BuildPackage,ip))
 $(eval $(call BuildPackage,tc))
+$(eval $(call BuildPackage,genl))
+$(eval $(call BuildPackage,ss))
