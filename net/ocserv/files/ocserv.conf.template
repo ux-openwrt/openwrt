@@ -18,6 +18,11 @@ auth = "|AUTH|"
 # A banner to be displayed on clients
 banner = "Welcome to OpenWRT"
 
+# When the server has a dynamic DNS address (that may change),
+# should set that to true to ask the client to resolve again on
+# reconnects.
+listen-host-is-dyndns = |DYNDNS|
+
 # Use listen-host to limit to specific IPs or to the IPs of a provided 
 # hostname.
 #listen-host = [IP|HOSTNAME]
@@ -124,7 +129,7 @@ auth-timeout = 40
 
 # The time (in seconds) that a client is not allowed to reconnect after 
 # a failed authentication attempt.
-#min-reauth-time = 2
+min-reauth-time = 360
 
 # Cookie timeout (in seconds)
 # which he can reconnect. That cookie will be invalided if not
@@ -272,8 +277,8 @@ ping-leases = false
 # based on a user or group. The syntax depends on the input accepted
 # by the commands route-add-cmd and route-del-cmd (see below).
 
-#config-per-user = /etc/ocserv/config-per-user/
-#config-per-group = /etc/ocserv/config-per-group/
+config-per-user = /etc/ocserv/config-per-user/
+config-per-group = /etc/ocserv/config-per-group/
 
 # When config-per-xxx is specified and there is no group or user that
 # matches, then utilize the following configuration.

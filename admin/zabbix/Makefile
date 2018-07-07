@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2013 OpenWrt.org
+# Copyright (C) 2006-2014 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zabbix
-PKG_VERSION:=2.2.6
+PKG_VERSION:=2.4.3
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/zabbix
-PKG_MD5SUM:=38bc2407f80053d71853bb3419da364a
+PKG_MD5SUM:=e8a0699c4e49999a15c63650a2280600
 
 PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=
@@ -31,7 +31,7 @@ define Package/zabbix/Default
   TITLE:=Zabbix
   URL:=http://www.zabbix.com/
   SUBMENU:=zabbix
-  MAINTAINER:=Mirko Vogt <mirko@openwrt.org>
+  MAINTAINER:=Etienne CHAMPETIER <champetier.etienne@gmail.com>
 endef
 
 define Package/zabbix-agent

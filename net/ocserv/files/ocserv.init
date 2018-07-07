@@ -30,12 +30,17 @@ setup_config() {
 
 	test $auth = "plain" && authsuffix="\[/var/etc/ocpasswd\]"
 
+	dyndns="false"
+	hostname=`uci show ddns|grep domain|head -1|cut -d '=' -f 2`
+	[ -n "$hostname" ] && dyndns="true"
+
 	mkdir -p /var/etc
 	sed -e "s/|PORT|/$port/g" \
 	    -e "s/|MAX_CLIENTS|/$max_clients/g" \
 	    -e "s/|MAX_SAME|/$max_same/g" \
 	    -e "s/|DPD|/$dpd/g" \
 	    -e "s#|AUTH|#$auth$authsuffix#g" \
+	    -e "s#|DYNDNS|#$dyndns#g" \
 	    -e "s/|PREDICTABLE_IPS|/$predictable_ips/g" \
 	    -e "s/|CISCO_COMPAT|/$cisco_compat/g" \
 	    -e "s/|UDP|/$udp/g" \
@@ -89,8 +94,14 @@ start() {
 	user_exists ocserv 72 || user_add ocserv 72 72 /var/lib/ocserv
 	group_exists ocserv 72 || group_add ocserv 72
 
-	hostname=`uci get ddns.myddns.domain`
+	hostname=`uci show ddns|grep domain|head -1|cut -d '=' -f 2`
 	[ -z "$hostname" ] && hostname=`uci get system.@system[0].hostname`
+
+	[ -f /etc/config/ocserv-dir/ca-key.pem ] && mv /etc/config/ocserv-dir/ca-key.pem /etc/ocserv/ca-key.pem
+	[ -f /etc/config/ocserv-dir/ca.pem ] && mv /etc/config/ocserv-dir/ca.pem /etc/ocserv/ca.pem
+	[ -f /etc/config/ocserv-dir/server-key.pem ] && mv /etc/config/ocserv-dir/server-key.pem /etc/ocserv/server-key.pem
+	[ -f /etc/config/ocserv-dir/server-cert.pem ] && mv /etc/config/ocserv-dir/server-cert.pem /etc/ocserv/server-cert.pem 
+	[ -d /etc/config/ocserv-dir ] && rmdir /etc/config/ocserv-dir
 
 	[ ! -f /etc/ocserv/ca-key.pem ] && [ -x /usr/bin/certtool ] && {
 		logger -t ocserv "Generating CA certificate..."

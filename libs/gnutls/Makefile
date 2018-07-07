@@ -8,18 +8,32 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=3.2.17
-PKG_RELEASE:=2
+PKG_VERSION:=3.3.16
+PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
-PKG_MD5SUM:=271c6fc8c546abb8bd547eb12bfff518
+PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3
+PKG_MD5SUM:=c2143db71a57248f7bdb2fb6acd6b567
 PKG_MAINTAINER:=Nikos Mavrogiannopoulos <nmav@gnutls.org>
 
 PKG_INSTALL:=1
 PKG_LIBTOOL_PATHS:=. lib
 PKG_CHECK_FORMAT_SECURITY:=0
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_GNUTLS_ALPN \
+	CONFIG_GNUTLS_ANON \
+	CONFIG_GNUTLS_CRYPTODEV \
+	CONFIG_GNUTLS_DTLS_SRTP \
+	CONFIG_GNUTLS_EXT_LIBTASN1 \
+	CONFIG_GNUTLS_HEARTBEAT \
+	CONFIG_GNUTLS_OCSP \
+	CONFIG_GNUTLS_OPENPGP \
+	CONFIG_GNUTLS_PKCS11 \
+	CONFIG_GNUTLS_PSK \
+	CONFIG_GNUTLS_SRP \
+	CONFIG_LIBNETTLE_MINI \
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -108,6 +122,7 @@ CONFIGURE_ARGS+= \
 	--disable-doc \
 	--disable-tests \
 	--disable-rsa-export \
+	--with-default-trust-store-dir=/etc/ssl/certs/ \
 	--disable-crywrap
 
 ifneq ($(CONFIG_GNUTLS_EXT_LIBTASN1),y)
