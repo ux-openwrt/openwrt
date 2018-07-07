@@ -14,6 +14,8 @@
 #define LKC_DIRECT_LINK
 #include "lkc.h"
 
+#define LOCAL_BUILD_SETTINGS "/.openwrt/defconfig"
+
 static void conf_warning(const char *fmt, ...)
 	__attribute__ ((format (printf, 1, 2)));
 
@@ -87,7 +89,7 @@ void conf_reset(void)
 {
 	struct symbol *sym;
 	int i;
-	
+
 	for_all_symbols(i, sym) {
 		sym->flags |= SYMBOL_NEW | SYMBOL_CHANGED;
 		if (sym_is_choice(sym))
@@ -104,55 +106,12 @@ void conf_reset(void)
 			sym->user.tri = no;
 		}
 	}
+	conf_read_simple(NULL, 0);
 }
 
-int conf_read_simple(const char *name)
-{
-	FILE *in = NULL;
+int conf_read_file(FILE *in, struct symbol *sym){
 	char line[1024];
 	char *p, *p2;
-	struct symbol *sym;
-	int i;
-
-	if (name) {
-		in = zconf_fopen(name);
-	} else {
-		const char **names = conf_confnames;
-		while ((name = *names++)) {
-			name = conf_expand_value(name);
-			in = zconf_fopen(name);
-			if (in) {
-				printf(_("#\n"
-				         "# using defaults found in %s\n"
-				         "#\n"), name);
-				break;
-			}
-		}
-	}
-	if (!in)
-		return 1;
-
-	conf_filename = name;
-	conf_lineno = 0;
-	conf_warnings = 0;
-	conf_unsaved = 0;
-
-	for_all_symbols(i, sym) {
-		sym->flags |= SYMBOL_NEW | SYMBOL_CHANGED;
-		if (sym_is_choice(sym))
-			sym->flags &= ~SYMBOL_NEW;
-		sym->flags &= ~SYMBOL_VALID;
-		switch (sym->type) {
-		case S_INT:
-		case S_HEX:
-		case S_STRING:
-			if (sym->user.val)
-				free(sym->user.val);
-		default:
-			sym->user.val = NULL;
-			sym->user.tri = no;
-		}
-	}
 
 	while (fgets(line, sizeof(line), in)) {
 		conf_lineno++;
@@ -169,12 +128,12 @@ int conf_read_simple(const char *name)
 				continue;
 			sym = sym_find(line + 9);
 			if (!sym) {
-				conf_warning("trying to assign nonexistent symbol %s", line + 9);
+				//conf_warning("trying to assign nonexistent symbol %s", line + 9);
 				break;
-			} else if (!(sym->flags & SYMBOL_NEW)) {
-				conf_warning("trying to reassign symbol %s", sym->name);
+			} /*else if (!(sym->flags & SYMBOL_NEW)) {
+				//conf_warning("trying to reassign symbol %s", sym->name);
 				break;
-			}
+			}*/
 			switch (sym->type) {
 			case S_BOOLEAN:
 			case S_TRISTATE:
@@ -199,12 +158,12 @@ int conf_read_simple(const char *name)
 				*p2 = 0;
 			sym = sym_find(line + 7);
 			if (!sym) {
-				conf_warning("trying to assign nonexistent symbol %s", line + 7);
+				//conf_warning("trying to assign nonexistent symbol %s", line + 7);
 				break;
-			} else if (!(sym->flags & SYMBOL_NEW)) {
+			} /*else if (!(sym->flags & SYMBOL_NEW)) {
 				conf_warning("trying to reassign symbol %s", sym->name);
 				break;
-			}
+			}*/
 			switch (sym->type) {
 			case S_TRISTATE:
 				if (p[0] == 'm') {
@@ -271,11 +230,7 @@ int conf_read_simple(const char *name)
 				}
 				break;
 			case yes:
-				if (cs->user.tri != no) {
-					conf_warning("%s creates inconsistent choice state", sym->name);
-					cs->flags |= SYMBOL_NEW;
-				} else
-					cs->user.val = sym;
+				cs->user.val = sym;
 				break;
 			}
 			cs->user.tri = E_OR(cs->user.tri, sym->user.tri);
@@ -283,9 +238,80 @@ int conf_read_simple(const char *name)
 	}
 	fclose(in);
 
+	return 0;
+}
+
+int conf_read_simple(const char *name, int load_config)
+{
+	FILE *in = NULL;
+	FILE *defaults = NULL;
+	struct symbol *sym;
+	int i;
+	char *home_dir = getenv("HOME");
+	char *default_config_path = NULL;
+	
+	if(home_dir){
+			default_config_path = malloc(strlen(home_dir) + sizeof(LOCAL_BUILD_SETTINGS) + 1);
+			sprintf(default_config_path, "%s%s", home_dir, LOCAL_BUILD_SETTINGS);
+			defaults = zconf_fopen(default_config_path);
+			if(defaults)
+					printf("# using buildsystem predefines from %s\n", default_config_path);
+			free(default_config_path);
+	}
+	
+	if(load_config){
+		if (name) {
+			in = zconf_fopen(name);
+		} else {
+			const char **names = conf_confnames;
+			while ((name = *names++)) {
+				name = conf_expand_value(name);
+				in = zconf_fopen(name);
+				if (in) {
+					printf(_("#\n"
+					         "# using defaults found in %s\n"
+					         "#\n"), name);
+					break;
+				}
+			}
+		}
+	}
+
+	if (!in && !defaults)
+		return 1;
+
+	conf_filename = name;
+	conf_lineno = 0;
+	conf_warnings = 0;
+	conf_unsaved = 0;
+	
+	for_all_symbols(i, sym) {
+		sym->flags |= SYMBOL_NEW | SYMBOL_CHANGED;
+		if (sym_is_choice(sym))
+			sym->flags &= ~SYMBOL_NEW;
+		sym->flags &= ~SYMBOL_VALID;
+		switch (sym->type) {
+		case S_INT:
+		case S_HEX:
+		case S_STRING:
+			if (sym->user.val)
+				free(sym->user.val);
+		default:
+			sym->user.val = NULL;
+			sym->user.tri = no;
+		}
+	}
+
+	if(defaults)
+		conf_read_file(defaults, sym);
+	
+	if(in)
+		conf_read_file(in, sym);
+	
 	if (modules_sym)
 		sym_calc_value(modules_sym);
-	return 0;
+
+	return 0;	
 }
 
 int conf_read(const char *name)
@@ -295,7 +321,7 @@ int conf_read(const char *name)
 	struct expr *e;
 	int i;
 
-	if (conf_read_simple(name))
+	if (conf_read_simple(name, 1))
 		return 1;
 
 	for_all_symbols(i, sym) {
@@ -352,7 +378,7 @@ int conf_read(const char *name)
 
 int conf_write(const char *name)
 {
-	FILE *out, *out_h;
+	FILE *out;
 	struct symbol *sym;
 	struct menu *menu;
 	const char *basename;
@@ -389,12 +415,6 @@ int conf_write(const char *name)
 	out = fopen(newname, "w");
 	if (!out)
 		return 1;
-	out_h = NULL;
-	if (!name) {
-		out_h = fopen(".tmpconfig.h", "w");
-		if (!out_h)
-			return 1;
-	}
 	sym = sym_lookup("OPENWRTVERSION", 0);
 	sym_calc_value(sym);
 	time(&now);
@@ -410,16 +430,6 @@ int conf_write(const char *name)
 		     sym_get_string_value(sym),
 		     use_timestamp ? "# " : "",
 		     use_timestamp ? ctime(&now) : "");
-	if (out_h)
-		fprintf(out_h, "/*\n"
-			       " * Automatically generated C config: don't edit\n"
-			       " * OpenWrt version: %s\n"
-			       "%s%s"
-			       " */\n"
-			       "#define AUTOCONF_INCLUDED\n",
-			       sym_get_string_value(sym),
-			       use_timestamp ? " * " : "",
-			       use_timestamp ? ctime(&now) : "");
 
 	if (!sym_change_count)
 		sym_clear_all_valid();
@@ -435,11 +445,6 @@ int conf_write(const char *name)
 				     "#\n"
 				     "# %s\n"
 				     "#\n", str);
-			if (out_h)
-				fprintf(out_h, "\n"
-					       "/*\n"
-					       " * %s\n"
-					       " */\n", str);
 		} else if (!(sym->flags & SYMBOL_CHOICE)) {
 			sym_calc_value(sym);
 			if (!(sym->flags & SYMBOL_WRITE))
@@ -460,18 +465,12 @@ int conf_write(const char *name)
 				switch (sym_get_tristate_value(sym)) {
 				case no:
 					fprintf(out, "# CONFIG_%s is not set\n", sym->name);
-					if (out_h)
-						fprintf(out_h, "#undef CONFIG_%s\n", sym->name);
 					break;
 				case mod:
 					fprintf(out, "CONFIG_%s=m\n", sym->name);
-					if (out_h)
-						fprintf(out_h, "#define CONFIG_%s_MODULE 1\n", sym->name);
 					break;
 				case yes:
 					fprintf(out, "CONFIG_%s=y\n", sym->name);
-					if (out_h)
-						fprintf(out_h, "#define CONFIG_%s 1\n", sym->name);
 					break;
 				}
 				break;
@@ -479,40 +478,28 @@ int conf_write(const char *name)
 				// fix me
 				str = sym_get_string_value(sym);
 				fprintf(out, "CONFIG_%s=\"", sym->name);
-				if (out_h)
-					fprintf(out_h, "#define CONFIG_%s \"", sym->name);
 				do {
 					l = strcspn(str, "\"\\");
 					if (l) {
 						fwrite(str, l, 1, out);
-						if (out_h)
-							fwrite(str, l, 1, out_h);
 					}
 					str += l;
 					while (*str == '\\' || *str == '"') {
 						fprintf(out, "\\%c", *str);
-						if (out_h)
-							fprintf(out_h, "\\%c", *str);
 						str++;
 					}
 				} while (*str);
 				fputs("\"\n", out);
-				if (out_h)
-					fputs("\"\n", out_h);
 				break;
 			case S_HEX:
 				str = sym_get_string_value(sym);
 				if (str[0] != '0' || (str[1] != 'x' && str[1] != 'X')) {
 					fprintf(out, "CONFIG_%s=%s\n", sym->name, str);
-					if (out_h)
-						fprintf(out_h, "#define CONFIG_%s 0x%s\n", sym->name, str);
 					break;
 				}
 			case S_INT:
 				str = sym_get_string_value(sym);
 				fprintf(out, "CONFIG_%s=%s\n", sym->name, str);
-				if (out_h)
-					fprintf(out_h, "#define CONFIG_%s %s\n", sym->name, str);
 				break;
 			}
 		}
@@ -532,11 +519,6 @@ int conf_write(const char *name)
 		}
 	}
 	fclose(out);
-	if (out_h) {
-		fclose(out_h);
-		rename(".tmpconfig.h", "include/linux/autoconf.h");
-		file_write_dep(NULL);
-	}
 	if (!name || basename != conf_def_filename) {
 		if (!name)
 			name = conf_def_filename;

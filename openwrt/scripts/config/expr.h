@@ -74,9 +74,10 @@ struct symbol {
 	struct property *prop;
 	struct expr *dep, *dep2;
 	struct expr_value rev_dep;
+	struct expr_value rev_dep_inv;
 };
 
-#define for_all_symbols(i, sym) for (i = 0; i < 257; i++) for (sym = symbol_hash[i]; sym; sym = sym->next) if (sym->type != S_OTHER)
+#define for_all_symbols(i, sym) for (i = 0; i < SYMBOL_HASHSIZE; i++) for (sym = symbol_hash[i]; sym; sym = sym->next) if (sym->type != S_OTHER)
 
 #define SYMBOL_YES		0x0001
 #define SYMBOL_MOD		0x0002
@@ -97,10 +98,9 @@ struct symbol {
 
 #define SYMBOL_MAXLENGTH	256
 #define SYMBOL_HASHSIZE		257
-#define SYMBOL_HASHMASK		0xff
 
 enum prop_type {
-	P_UNKNOWN, P_PROMPT, P_COMMENT, P_MENU, P_DEFAULT, P_CHOICE, P_SELECT, P_RANGE
+	P_UNKNOWN, P_PROMPT, P_COMMENT, P_MENU, P_DEFAULT, P_CHOICE, P_DESELECT, P_SELECT, P_RANGE, P_RESET
 };
 
 struct property {

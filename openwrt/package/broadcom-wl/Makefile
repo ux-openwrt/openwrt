@@ -1,148 +1,175 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 2480 2005-11-14 02:07:33Z nbd $
 
 include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=broadcom-wl
-PKG_VERSION:=4.80.17.0
-PKG_RELEASE:=1
-WLC_VERSION:=0.1
+PKG_VERSION:=5.10.56.27.3
+PKG_RELEASE:=5
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)_$(ARCH).tar.bz2
 PKG_SOURCE_URL:=http://downloads.openwrt.org/sources
-PKG_MD5SUM:=3183ddb60e3e882b41df1776c89b614c
-PKG_CAT:=bzcat
 
-PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MD5SUM.mipsel:=3363e3a6b3d9d73c49dea870c7834eac
+PKG_MD5SUM.mips:=f8de63debc75333d6b4e28193eb051ff
+PKG_MD5SUM:=$(PKG_MD5SUM.$(ARCH))
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/broadcom-wl/Default
-  SECTION:=net
-  CATEGORY:=Kernel drivers
-  DEPENDS:=@PACKAGE_kmod-brcm-wl||PACKAGE_kmod-brcm-wl-mimo
+  SECTION:=kernel
+  CATEGORY:=Kernel modules
+  DEPENDS:=@PACKAGE_kmod-brcm-wl||PACKAGE_kmod-brcm-wl-mini
   SUBMENU:=Proprietary BCM43xx WiFi driver
-  SUBMENUDEP:=@LINUX_2_4_BRCM
+  SUBMENUDEP:=@TARGET_brcm47xx||TARGET_brcm63xx
 endef
 
-define Package/kmod-brcm-wl/Default
+define KernelPackage/brcm-wl/Default
   $(call Package/broadcom-wl/Default)
   SECTION:=kernel
-  DEPENDS:=@LINUX_2_4_BRCM
+  DEPENDS:=@TARGET_brcm47xx||TARGET_brcm63xx +wireless-tools
   TITLE:=Kernel driver for BCM43xx chipsets
-  DESCRIPTION:=\
-	This package contains the proprietary wireless driver for the Broadcom \\\
-	BCM43xx chipset
-  VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(PKG_RELEASE)
+  FILES:=$(PKG_BUILD_DIR)/driver$(1)/wl.ko $(PKG_BUILD_DIR)/glue/wl_glue.ko
+  AUTOLOAD:=$(call AutoLoad,30,wl_glue wl)
 endef
 
-define Package/kmod-brcm-wl
-  $(call Package/kmod-brcm-wl/Default)
-  DEFAULT:=y
+define KernelPackage/brcm-wl/Default/description
+ This package contains the proprietary wireless driver for the Broadcom 
+ BCM43xx chipset.
+endef
+
+define KernelPackage/brcm-wl
+$(call KernelPackage/brcm-wl/Default,)
   TITLE+= (normal version)
-  DESCRIPTION+= (normal version).
 endef
 
-define Package/kmod-brcm-wl-mimo
-  $(call Package/kmod-brcm-wl/Default)
-  TITLE+= (MIMO version)
-  DESCRIPTION+= (MIMO version).
+define KernelPackage/brcm-wl/description
+$(call KernelPackage/brcm-wl/Default/description)
+endef
+
+define KernelPackage/brcm-wl-mini
+$(call KernelPackage/brcm-wl/Default,-mini)
+  TITLE+= (Legacy version)
+endef
+
+define KernelPackage/brcm-wl-mini/description
+$(call KernelPackage/brcm-wl/Default/description)
 endef
 
 define Package/wlc
-  $(call Package/broadcom-wl/Default)
-  DEFAULT:=y
-  TITLE:=Proprietary Broadcom wl driver setup utility
-  DESCRIPTION:=\
-	This package contains an utility for initializing the proprietary Broadcom \\\
-	wl driver.
+$(call Package/broadcom-wl/Default)
+  TITLE:=wl driver setup utility
+endef
+
+define Package/wlc/description
+ This package contains an utility for initializing the proprietary Broadcom 
+ wl driver.
 endef
 
 define Package/wl
-  $(call Package/broadcom-wl/Default)
+$(call Package/broadcom-wl/Default)
   TITLE:=Proprietary Broadcom wl driver config utility
-  DESCRIPTION:=\
-	This package contains the proprietary utility (wl) for configuring the \\\
-	proprietary Broadcom wl driver.
+endef
+
+define Package/wl/description
+ This package contains the proprietary utility (wl) for configuring the 
+ proprietary Broadcom wl driver.
 endef
 
 define Package/nas
-  $(call Package/broadcom-wl/Default)
-  DEPENDS+= +nvram
+$(call Package/broadcom-wl/Default)
   TITLE:=Proprietary Broadcom WPA/WPA2 authenticator
-  DESCRIPTION:=\
-	This package contains the proprietary WPA/WPA2 authenticator (nas) for the \\\
-	proprietary Broadcom wl driver.
 endef
 
-MAKEFLAGS_KMOD:= -C "$(LINUX_DIR)" \
+define Package/nas/description
+ This package contains the proprietary WPA/WPA2 authenticator (nas) for the 
+ proprietary Broadcom wl driver.
+endef
+
+MAKE_KMOD := $(MAKE) -C "$(LINUX_DIR)" \
 		CROSS_COMPILE="$(TARGET_CROSS)" \
 		ARCH="$(LINUX_KARCH)" \
 		PATH="$(TARGET_PATH)" \
-		SUBDIRS="$(PKG_BUILD_DIR)/kmod"
+		SUBDIRS="$(PKG_BUILD_DIR)/kmod" \
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	$(CP) src/* $(PKG_BUILD_DIR)/
+	$(CP) $(PKG_BUILD_DIR)/driver $(PKG_BUILD_DIR)/driver-mini
+	$(CP) ./src/glue $(PKG_BUILD_DIR)/glue
 endef
 
 define Build/Compile
 	# Compile the kernel part
-	$(MAKE) $(MAKEFLAGS_KMOD) \
-		modules
-	$(MAKE) $(MAKEFLAGS_KMOD) MOD_NAME="_mimo" \
+	$(MAKE_KMOD) \
+		SUBDIRS="$(PKG_BUILD_DIR)/driver" \
+		MODFLAGS="-DMODULE -mlong-calls" \
 		modules
 
-	# Compile wlc
-	$(MAKE) -C $(PKG_BUILD_DIR)/wlc \
+	$(MAKE_KMOD) \
+		SUBDIRS="$(PKG_BUILD_DIR)/driver-mini" \
+		MODFLAGS="-DMODULE -mlong-calls" \
+		BUILD_TYPE="wl_apsta_mini" \
+		modules
+
+	# Compile glue driver
+	$(MAKE_KMOD) -C "$(LINUX_DIR)" \
+		SUBDIRS="$(PKG_BUILD_DIR)/glue" \
+		modules                                        
+
+	# Compile libshared
+	$(MAKE) -C $(PKG_BUILD_DIR)/shared \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="-I$(PKG_BUILD_DIR)/wlc/include $(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -I. -I$(PKG_BUILD_DIR)/driver/include" \
 		all
+
+	$(TARGET_CC) -o $(PKG_BUILD_DIR)/wlc \
+		-I$(PKG_BUILD_DIR)/shared -I$(PKG_BUILD_DIR)/driver/include \
+		./src/wlc.c $(PKG_BUILD_DIR)/shared/libshared.a
+
+	$(TARGET_CC) -o $(PKG_BUILD_DIR)/nas \
+		$(PKG_BUILD_DIR)/nas_exe.o \
+		$(PKG_BUILD_DIR)/shared/libshared.a
+
+	$(TARGET_CC) -o $(PKG_BUILD_DIR)/wl \
+		$(PKG_BUILD_DIR)/wl_exe.o \
+		$(PKG_BUILD_DIR)/shared/libshared.a
 endef
 
-define wl_template
-	install -d -m0755 $(1)/etc/modules.d
-	echo "wl$(2)" > $(1)/etc/modules.d/20-wl$(2)
-	install -d -m0755 $(1)/lib/modules/$(LINUX_VERSION)
-	install -m0644 $(PKG_BUILD_DIR)/kmod/wl$(2).o $(PKG_BUILD_DIR)/kmod/wl$(2).o.patch $(1)/lib/modules/$(LINUX_VERSION)/
-endef
-
-define Package/kmod-brcm-wl/install
-	$(call wl_template,$(1))
-endef
-
-define Package/kmod-brcm-wl-mimo/install
-	$(call wl_template,$(1),_mimo)
+define Build/InstallDev
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/shared/libshared.a $(1)/usr/lib/
 endef
 
 define Package/wlc/install
 	$(CP) ./files/* $(1)/
-	install -d -m0755 $(1)/sbin
-	install -m0755 $(PKG_BUILD_DIR)/wlc/wlc $(1)/sbin/
+	$(INSTALL_DIR) $(1)/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wlc $(1)/sbin/
+endef
+
+define Package/wlc/postinst
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || /etc/init.d/wlunbind enable || true
 endef
 
 define Package/wl/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/wl $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/wl $(1)/usr/sbin/
 endef
 
 define Package/nas/install
-	install -d -m0755 $(1)/usr/lib
-	install -m0755 $(PKG_BUILD_DIR)/libbcmcrypto.so $(1)/usr/lib/
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/nas $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/nas $(1)/usr/sbin/
 	ln -sf nas $(1)/usr/sbin/nas4not
 	ln -sf nas $(1)/usr/sbin/nas4wds
 endef
 
-$(eval $(call BuildPackage,kmod-brcm-wl))
-$(eval $(call BuildPackage,kmod-brcm-wl-mimo))
+$(eval $(call KernelPackage,brcm-wl))
+$(eval $(call KernelPackage,brcm-wl-mini))
 $(eval $(call BuildPackage,wlc))
 $(eval $(call BuildPackage,wl))
 $(eval $(call BuildPackage,nas))

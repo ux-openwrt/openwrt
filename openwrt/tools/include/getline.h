@@ -27,12 +27,12 @@
  * SUCH DAMAGE.
  */
 
-#ifndef __linux__
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#if !defined(__linux__) && !(defined(__APPLE__) && __DARWIN_C_LEVEL >= 200809L)
 /*
  * Emulate glibc getline() via BSD fgetln().
  * Note that outsize is not changed unless memory is allocated.
@@ -40,10 +40,16 @@
 static inline ssize_t
 getline(char **outbuf, size_t *outsize, FILE *fp)
 {
-	char *buf;
 	size_t len;
 
+#ifndef __CYGWIN__
+	char *buf;
 	buf = fgetln(fp, &len);
+#else
+	char buf[512];
+	fgets(buf, sizeof(buf), fp);	
+	len = strlen(buf);
+#endif
 	if (buf == NULL)
 		return (-1);
 

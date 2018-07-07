@@ -1,145 +1,133 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 include $(INCLUDE_DIR)/host.mk
--include $(INCLUDE_DIR)/modules-$(KERNEL).mk
+include $(INCLUDE_DIR)/prereq.mk
 
-LINUX_SOURCE:=linux-$(LINUX_VERSION).tar.bz2
-LINUX_SITE=http://www.us.kernel.org/pub/linux/kernel/v$(KERNEL) \
-           http://www.us.kernel.org/pub/linux/kernel/v$(KERNEL) \
-           http://www.kernel.org/pub/linux/kernel/v$(KERNEL) \
-           http://www.de.kernel.org/pub/linux/kernel/v$(KERNEL)
+ifneq ($(DUMP),1)
+  all: compile
+endif
 
-KERNEL_IDIR:=$(KERNEL_BUILD_DIR)/kernel-ipkg
-KERNEL_IPKG:=$(KERNEL_BUILD_DIR)/kernel_$(LINUX_VERSION)-$(BOARD)-$(LINUX_RELEASE)_$(ARCH).ipk
-TARGETS += $(KERNEL_IPKG)
-INSTALL_TARGETS += $(KERNEL_IPKG)
+export QUILT=1
+STAMP_PREPARED:=$(LINUX_DIR)/.prepared
+STAMP_CONFIGURED:=$(LINUX_DIR)/.configured
+include $(INCLUDE_DIR)/download.mk
+include $(INCLUDE_DIR)/quilt.mk
+include $(INCLUDE_DIR)/kernel-defaults.mk
 
-LINUX_KARCH:=$(shell echo $(ARCH) | sed -e 's/i[3-9]86/i386/' \
-	-e 's/mipsel/mips/' \
-	-e 's/mipseb/mips/' \
-	-e 's/powerpc/ppc/' \
-	-e 's/sh[234]/sh/' \
-	-e 's/armeb/arm/' \
-)
+define Kernel/Prepare
+	$(call Kernel/Prepare/Default)
+endef
 
+define Kernel/Configure
+	$(call Kernel/Configure/Default)
+endef
 
-$(TARGETS): $(PACKAGE_DIR)
+define Kernel/CompileModules
+	$(call Kernel/CompileModules/Default)
+endef
 
-$(PACKAGE_DIR):
-	mkdir -p $@
+define Kernel/CompileImage
+	$(call Kernel/CompileImage/Default)
+endef
 
-$(DL_DIR)/$(LINUX_SOURCE):
-	-mkdir -p $(DL_DIR)
-	$(SCRIPT_DIR)/download.pl $(DL_DIR) $(LINUX_SOURCE) $(LINUX_KERNEL_MD5SUM) $(LINUX_SITE)
+define Kernel/Clean
+	$(call Kernel/Clean/Default)
+endef
 
-$(LINUX_DIR)/.unpacked: $(DL_DIR)/$(LINUX_SOURCE)
+define Download/kernel
+  URL:=$(LINUX_SITE)
+  FILE:=$(LINUX_SOURCE)
+  MD5SUM:=$(LINUX_KERNEL_MD5SUM)
+endef
+
+ifdef CONFIG_COLLECT_KERNEL_DEBUG
+  define Kernel/CollectDebug
+	rm -rf $(KERNEL_BUILD_DIR)/debug
+	mkdir -p $(KERNEL_BUILD_DIR)/debug/modules
+	$(CP) $(LINUX_DIR)/vmlinux $(KERNEL_BUILD_DIR)/debug/
+	-$(CP) \
+		$(STAGING_DIR_ROOT)/lib/modules/$(LINUX_VERSION)/* \
+		$(KERNEL_BUILD_DIR)/debug/modules/
+	$(FIND) $(KERNEL_BUILD_DIR)/debug -type f | $(XARGS) $(KERNEL_CROSS)strip --only-keep-debug
+	$(TAR) c -C $(KERNEL_BUILD_DIR) debug | bzip2 -c -9 > $(BIN_DIR)/kernel-debug.tar.bz2
+  endef
+endif
+
+define BuildKernel
+  $(if $(QUILT),$(Build/Quilt))
+  $(if $(LINUX_SITE),$(call Download,kernel))
+
+  $(STAMP_PREPARED): $(if $(LINUX_SITE),$(DL_DIR)/$(LINUX_SOURCE))
+	-rm -rf $(KERNEL_BUILD_DIR)
 	-mkdir -p $(KERNEL_BUILD_DIR)
-	bzcat $(DL_DIR)/$(LINUX_SOURCE) | tar -C $(KERNEL_BUILD_DIR) $(TAR_OPTIONS) -
-	touch $@
+	$(Kernel/Prepare)
+	touch $$@
 
-ifeq ($(KERNEL),2.4)
-$(LINUX_DIR)/.configured: $(LINUX_DIR)/.patched
-	$(SED) "s,\-mcpu=,\-mtune=,g;" $(LINUX_DIR)/arch/mips/Makefile
-	$(MAKE) -C $(LINUX_DIR) CROSS_COMPILE="$(KERNEL_CROSS)" CC="$(KERNEL_CC)" ARCH=$(LINUX_KARCH) oldconfig include/linux/compile.h include/linux/version.h
-	touch $@
+  $(KERNEL_BUILD_DIR)/symtab.txt: FORCE
+	find $(LINUX_DIR) $(STAGING_DIR_ROOT)/lib/modules -name \*.ko | \
+		xargs $(TARGET_CROSS)nm | \
+		awk '$$$$1 == "U" { print $$$$2 } ' | \
+		sort -u > $$@
 
-$(LINUX_DIR)/.depend_done: $(LINUX_DIR)/.configured
-	$(MAKE) -C $(LINUX_DIR) CROSS_COMPILE="$(KERNEL_CROSS)" ARCH=$(LINUX_KARCH) dep
-	touch $@
+  $(KERNEL_BUILD_DIR)/symtab.h: $(KERNEL_BUILD_DIR)/symtab.txt
+	( \
+		echo '#define SYMTAB_KEEP \'; \
+		cat $(KERNEL_BUILD_DIR)/symtab.txt | \
+			awk '{print "*(__ksymtab." $$$$1 ") \\" }'; \
+		echo; \
+		echo '#define SYMTAB_KEEP_GPL \'; \
+		cat $(KERNEL_BUILD_DIR)/symtab.txt | \
+			awk '{print "*(__ksymtab_gpl." $$$$1 ") \\" }'; \
+		echo; \
+		echo '#define SYMTAB_KEEP_STR \'; \
+		cat $(KERNEL_BUILD_DIR)/symtab.txt | \
+			awk '{print "*(__ksymtab_strings." $$$$1 ") \\" }'; \
+		echo; \
+	) > $$@
 
-$(LINUX_DIR)/vmlinux: $(LINUX_DIR)/.depend_done
-else
-$(LINUX_DIR)/.configured: $(LINUX_DIR)/.patched
-	$(MAKE) -C $(LINUX_DIR) CROSS_COMPILE="$(KERNEL_CROSS)" CC="$(KERNEL_CC)" ARCH=$(LINUX_KARCH) oldconfig prepare scripts
-	touch $@
-endif
+  $(STAMP_CONFIGURED): $(STAMP_PREPARED) $(LINUX_KCONFIG_LIST) $(TOPDIR)/.config
+	$(Kernel/Configure)
+	touch $$@
 
-ramdisk-config: $(LINUX_DIR)/.configured FORCE
-	mv $(LINUX_DIR)/.config $(LINUX_DIR)/.config.old
-	grep -v INITRAMFS $(LINUX_DIR)/.config.old > $(LINUX_DIR)/.config
-ifeq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
-	echo 'CONFIG_INITRAMFS_SOURCE="../../root"' >> $(LINUX_DIR)/.config
-	echo 'CONFIG_INITRAMFS_ROOT_UID=0' >> $(LINUX_DIR)/.config
-	echo 'CONFIG_INITRAMFS_ROOT_GID=0' >> $(LINUX_DIR)/.config
-	mkdir -p $(BUILD_DIR)/root/etc/init.d
-	$(CP) ../generic-2.6/files/init $(BUILD_DIR)/root/
-else
-	rm -f $(BUILD_DIR)/root/init $(BUILD_DIR)/root/etc/init.d/S00initramfs
-	echo 'CONFIG_INITRAMFS_SOURCE=""' >> $(LINUX_DIR)/.config
-endif
+  $(LINUX_DIR)/.modules: $(STAMP_CONFIGURED) $(LINUX_DIR)/.config FORCE
+	$(Kernel/CompileModules)
+	touch $$@
 
-$(LINUX_DIR)/vmlinux: $(LINUX_DIR)/.linux-compile pkg-install ramdisk-config
-	$(MAKE) -C $(LINUX_DIR) CROSS_COMPILE="$(KERNEL_CROSS)" CC="$(KERNEL_CC)" ARCH=$(LINUX_KARCH) $(KERNELNAME)
+  $(LINUX_DIR)/.image: $(STAMP_CONFIGURED) $(if $(CONFIG_STRIP_KERNEL_EXPORTS),$(KERNEL_BUILD_DIR)/symtab.h) FORCE
+	$(Kernel/CompileImage)
+	$(Kernel/CollectDebug)
+	touch $$@
+	
+  mostlyclean: FORCE
+	$(Kernel/Clean)
 
-$(LINUX_KERNEL): $(LINUX_DIR)/vmlinux
-	$(KERNEL_CROSS)objcopy -O binary -R .reginfo -R .note -R .comment -R .mdebug -S $< $@
-	touch -c $(LINUX_KERNEL)
+  define BuildKernel
+  endef
 
-$(LINUX_DIR)/.modules_done:
-	rm -rf $(KERNEL_BUILD_DIR)/modules
-	$(MAKE) -C "$(LINUX_DIR)" CROSS_COMPILE="$(KERNEL_CROSS)" CC="$(KERNEL_CC)" ARCH=$(LINUX_KARCH) modules
-	$(MAKE) -C "$(LINUX_DIR)" CROSS_COMPILE="$(KERNEL_CROSS)" CC="$(KERNEL_CC)" ARCH=$(LINUX_KARCH) DEPMOD=true INSTALL_MOD_PATH=$(KERNEL_BUILD_DIR)/modules modules_install
-	touch $(LINUX_DIR)/.modules_done
+  download: $(DL_DIR)/$(LINUX_SOURCE)
+  prepare: $(STAMP_CONFIGURED)
+  compile: $(LINUX_DIR)/.modules
+	$(MAKE) -C image compile TARGET_BUILD=
 
-modules: $(LINUX_DIR)/.modules_done
-packages: $(TARGETS)
+  oldconfig menuconfig nconfig: $(STAMP_PREPARED) $(STAMP_CHECKED) FORCE
+	rm -f $(STAMP_CONFIGURED)
+	$(LINUX_RECONF_CMD) > $(LINUX_DIR)/.config
+	$(_SINGLE)$(MAKE) -C $(LINUX_DIR) $(KERNEL_MAKEOPTS) $$@
+	$(LINUX_RECONF_DIFF) $(LINUX_DIR)/.config > $(LINUX_RECONFIG_TARGET)
 
-$(LINUX_DIR)/.linux-compile:
-	@rm -f $(BUILD_DIR)/linux
-	ln -sf $(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION) $(BUILD_DIR)/linux
-	@$(MAKE) modules
-	touch $@
+  install: $(LINUX_DIR)/.image
+	+$(MAKE) -C image compile install TARGET_BUILD=
 
-$(KERNEL_IPKG):
-	rm -rf $(KERNEL_IDIR)
-	mkdir -p $(KERNEL_IDIR)/etc
-	$(SCRIPT_DIR)/make-ipkg-dir.sh $(KERNEL_IDIR) ../control/kernel.control $(LINUX_VERSION)-$(BOARD)-$(LINUX_RELEASE) $(ARCH)
-	if [ -f ./config/$(BOARD).modules ]; then \
-		cp ./config/$(BOARD).modules $(KERNEL_IDIR)/etc/modules; \
-	fi
-	$(IPKG_BUILD) $(KERNEL_IDIR) $(KERNEL_BUILD_DIR)
-
-$(TOPDIR)/.kernel.mk: $(TOPDIR)/target/linux/$(BOARD)-$(KERNEL)/Makefile
-	echo "CONFIG_BOARD:=$(BOARD)" > $@
-	echo "CONFIG_KERNEL:=$(KERNEL)" >> $@
-	echo "CONFIG_LINUX_VERSION:=$(LINUX_VERSION)" >> $@
-	echo "CONFIG_LINUX_RELEASE:=$(LINUX_RELEASE)" >> $@
-	echo "CONFIG_LINUX_KARCH:=$(LINUX_KARCH)" >> $@
-
-pkg-install: FORCE
-	@for pkg in $(INSTALL_TARGETS); do \
-		$(IPKG) install $$pkg || echo; \
-	done
-
-download: $(DL_DIR)/$(LINUX_SOURCE)
-prepare: $(LINUX_DIR)/.configured
-	@mkdir -p $(LINUX_DIR) $(PACKAGE_DIR)
-
-compile: prepare $(LINUX_DIR)/.linux-compile
-	@$(MAKE) packages
-
-install: compile $(LINUX_KERNEL)
-
-mostlyclean: FORCE
-	rm -f $(LINUX_DIR)/.linux-compile
-	rm -f $(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION)/.modules_done
-	rm -f $(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION)/.drivers-unpacked
-	$(MAKE) -C $(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION) clean
-	rm -f $(LINUX_KERNEL)
-
-rebuild: FORCE
-	-$(MAKE) mostlyclean
-	if [ -f $(LINUX_KERNEL) ]; then \
-		$(MAKE) clean; \
-	fi
-	$(MAKE) compile $(MAKE_TRACE)
-
-clean: FORCE
-	rm -f $(STAMP_DIR)/.linux-compile
+  clean: FORCE
 	rm -rf $(KERNEL_BUILD_DIR)
-	rm -f $(TARGETS)
 
+  image-prereq:
+	@+$(NO_TRACE_MAKE) -s -C image prereq TARGET_BUILD=
+
+  prereq: image-prereq
+
+endef

@@ -1,20 +1,18 @@
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2010 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=arptables
-PKG_VERSION:=0.0.3
+PKG_VERSION:=0.0.3-4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-v$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/ebtables
-PKG_MD5SUM:=1672244603c8979577aa4738be35a759
-PKG_CAT:=zcat
+PKG_MD5SUM:=1d4ab05761f063b0751645d8f2b8f8e5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-v$(PKG_VERSION)
 
@@ -23,7 +21,9 @@ include $(INCLUDE_DIR)/package.mk
 define Package/arptables
   SECTION:=net
   CATEGORY:=Network
+  SUBMENU:=Firewall
   TITLE:=ARP firewalling software
+  DEPENDS:=+kmod-arptables
   URL:=http://ebtables.sourceforge.net
 endef
 
@@ -35,7 +35,7 @@ define Build/Compile
 endef
 
 define Package/arptables/install
-	install -m0755 -d $(1)/usr/sbin
+	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(1)/usr/sbin/
 endef
 

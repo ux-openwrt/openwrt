@@ -1,7 +1,13 @@
-diff -urN ppp-2.4.3.orig/pppd/Makefile.linux ppp-2.4.3/pppd/Makefile.linux
---- ppp-2.4.3.orig/pppd/Makefile.linux	2006-02-05 20:13:06.000000000 +0100
-+++ ppp-2.4.3/pppd/Makefile.linux	2006-02-05 20:24:22.000000000 +0100
-@@ -172,8 +172,8 @@
+build: Add required CFLAGS for libpcap
+
+This patch adds some flags to required to properly link libpcap within the
+OpenWrt environment.
+
+Signed-off-by: Jo-Philipp Wich <jow@openwrt.org>
+
+--- a/pppd/Makefile.linux
++++ b/pppd/Makefile.linux
+@@ -170,8 +170,8 @@ endif
  
  ifdef FILTER
  ifneq ($(wildcard /usr/include/pcap-bpf.h),)

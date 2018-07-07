@@ -1,30 +1,25 @@
 # 
-# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 include $(TOPDIR)/rules.mk
+
+PKG_NAME:=sstrip
+
 include $(INCLUDE_DIR)/host-build.mk
 
-PKG_BUILD_DIR:=$(TOOL_BUILD_DIR)/sstrip
-
-OS:=$(shell uname)
-ifeq ($(HOST_OS),Darwin)
-  CFLAGS += -I./include
-endif
-
-define Build/Compile
-	$(CC) $(CFLAGS) -o $(PKG_BUILD_DIR)/sstrip src/sstrip.c
+define Host/Compile
+	$(HOSTCC) $(HOST_CFLAGS) -I./include -include endian.h $(HOST_STATIC_LINKING) -o $(HOST_BUILD_DIR)/sstrip src/sstrip.c
 endef
 
-define Build/Install
-	mkdir -p $(STAGING_DIR)/bin
-	$(CP) $(PKG_BUILD_DIR)/sstrip $(STAGING_DIR)/bin/
+define Host/Install
+	$(CP) $(HOST_BUILD_DIR)/sstrip $(STAGING_DIR_HOST)/bin/
 endef
 
-define Build/Clean
-	rm -f $(STAGING_DIR)/bin/sstrip
+define Host/Clean
+	rm -f $(STAGING_DIR_HOST)/bin/sstrip
 endef
 
 $(eval $(call HostBuild))

@@ -1,7 +1,13 @@
-diff -ruN ppp-2.4.3-orig/pppd/Makefile.linux ppp-2.4.3-3/pppd/Makefile.linux
---- ppp-2.4.3-orig/pppd/Makefile.linux	2004-11-13 13:02:22.000000000 +0100
-+++ ppp-2.4.3-3/pppd/Makefile.linux	2004-12-16 04:43:41.000000000 +0100
-@@ -48,19 +48,19 @@
+pppd: tune Linux config defaults for OpenWrt
+
+This patch adjusts a number defaults to properly match the OpenWrt environment.
+It is not intended for upstream.
+
+Signed-off-by: Jo-Philipp Wich <jow@openwrt.org>
+
+--- a/pppd/Makefile.linux
++++ b/pppd/Makefile.linux
+@@ -48,7 +48,7 @@ MPPE=y
  # Uncomment the next line to include support for PPP packet filtering.
  # This requires that the libpcap library and headers be installed
  # and that the kernel driver support PPP packet filtering.
@@ -10,10 +16,7 @@ diff -ruN ppp-2.4.3-orig/pppd/Makefile.linux ppp-2.4.3-3/pppd/Makefile.linux
  
  # Uncomment the next line to enable multilink PPP (enabled by default)
  # Linux distributions: Please leave multilink ENABLED in your builds
- # of pppd!
--HAVE_MULTILINK=y
-+#HAVE_MULTILINK=y
- 
+@@ -58,11 +58,11 @@ HAVE_MULTILINK=y
  # Uncomment the next line to enable the TDB database (enabled by default.)
  # If you enable multilink, then TDB is automatically enabled also.
  # Linux distributions: Please leave TDB ENABLED in your builds.
@@ -23,28 +26,27 @@ diff -ruN ppp-2.4.3-orig/pppd/Makefile.linux ppp-2.4.3-3/pppd/Makefile.linux
 -HAS_SHADOW=y
 +#HAS_SHADOW=y
  #USE_PAM=y
- #HAVE_INET6=y
+-#HAVE_INET6=y
++HAVE_INET6=y
  
-@@ -77,7 +77,7 @@
+ # Enable plugins
+ PLUGIN=y
+@@ -77,7 +77,7 @@ MAXOCTETS=y
  
  INCLUDE_DIRS= -I../include
  
 -COMPILE_FLAGS= -DHAVE_PATHS_H -DIPX_CHANGE -DHAVE_MMAP
 +COMPILE_FLAGS= -DHAVE_PATHS_H -DHAVE_MMAP
  
- CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS)
+ CFLAGS= $(COPTS) $(COMPILE_FLAGS) $(INCLUDE_DIRS) '-DDESTDIR="@DESTDIR@"'
  
-@@ -117,12 +117,12 @@
+@@ -117,10 +117,10 @@ CFLAGS   += -DHAS_SHADOW
  #LIBS     += -lshadow $(LIBS)
  endif
  
 -ifneq ($(wildcard /usr/include/crypt.h),)
 +#ifneq ($(wildcard /usr/include/crypt.h),)
- CFLAGS   += -DHAVE_CRYPT_H=1
--endif
--ifneq ($(wildcard /usr/lib/libcrypt.*),)
-+#endif
-+#ifneq ($(wildcard /usr/lib/libcrypt.*),)
+ CFLAGS  += -DHAVE_CRYPT_H=1
  LIBS	+= -lcrypt
 -endif
 +#endif

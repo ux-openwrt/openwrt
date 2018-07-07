@@ -1,24 +1,22 @@
-diff -urN busybox.old/miscutils/crond.c busybox.dev/miscutils/crond.c
---- busybox.old/miscutils/crond.c	2004-04-14 19:51:21.000000000 +0200
-+++ busybox.dev/miscutils/crond.c	2005-12-11 22:54:07.878256250 +0100
-@@ -36,7 +36,7 @@
- #define arysize(ary)    (sizeof(ary)/sizeof((ary)[0]))
+--- a/miscutils/crond.c
++++ b/miscutils/crond.c
+@@ -37,7 +37,7 @@
  
- #ifndef CRONTABS
--#define CRONTABS        "/var/spool/cron/crontabs"
-+#define CRONTABS        "/etc/crontabs"
- #endif
- #ifndef TMPDIR
- #define TMPDIR          "/var/spool/cron"
-diff -urN busybox.old/miscutils/crontab.c busybox.dev/miscutils/crontab.c
---- busybox.old/miscutils/crontab.c	2004-04-14 19:51:21.000000000 +0200
-+++ busybox.dev/miscutils/crontab.c	2005-12-11 22:54:28.647554250 +0100
-@@ -28,7 +28,7 @@
- #include <sys/resource.h>
  
- #ifndef CRONTABS
--#define CRONTABS        "/var/spool/cron/crontabs"
+ #define TMPDIR          CONFIG_FEATURE_CROND_DIR
+-#define CRONTABS        CONFIG_FEATURE_CROND_DIR "/crontabs"
 +#define CRONTABS        "/etc/crontabs"
+ #ifndef SENDMAIL
+ # define SENDMAIL       "sendmail"
  #endif
- #ifndef TMPDIR
- #define TMPDIR          "/var/spool/cron"
+--- a/miscutils/crontab.c
++++ b/miscutils/crontab.c
+@@ -22,7 +22,7 @@
+ 
+ #include "libbb.h"
+ 
+-#define CRONTABS        CONFIG_FEATURE_CROND_DIR "/crontabs"
++#define CRONTABS        "/etc/crontabs"
+ #ifndef CRONUPDATE
+ #define CRONUPDATE      "cron.update"
+ #endif

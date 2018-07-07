@@ -508,9 +508,10 @@ int main(int ac, char **av)
 {
 	int i = 1;
 	const char *name;
+	char *output = NULL;
 	struct stat tmpstat;
 
-	if (ac > i && av[i][0] == '-') {
+	while (ac > i && av[i][0] == '-') {
 		switch (av[i++][1]) {
 		case 'o':
 			input_mode = ask_new;
@@ -530,6 +531,9 @@ int main(int ac, char **av)
 					av[0]);
 				exit(1);
 			}
+			break;
+		case 'w':
+			output = av[i++];
 			break;
 		case 'n':
 			input_mode = set_no;
@@ -579,28 +583,11 @@ int main(int ac, char **av)
 		}
 	case ask_all:
 	case ask_new:
-		conf_read(NULL);
-		break;
 	case set_no:
 	case set_mod:
 	case set_yes:
 	case set_random:
-		name = getenv("KCONFIG_ALLCONFIG");
-		if (name && !stat(name, &tmpstat)) {
-			conf_read_simple(name);
-			break;
-		}
-		switch (input_mode) {
-		case set_no:	 name = "allno.config"; break;
-		case set_mod:	 name = "allmod.config"; break;
-		case set_yes:	 name = "allyes.config"; break;
-		case set_random: name = "allrandom.config"; break;
-		default: break;
-		}
-		if (!stat(name, &tmpstat))
-			conf_read_simple(name);
-		else if (!stat("all.config", &tmpstat))
-			conf_read_simple("all.config");
+		conf_read(NULL);
 		break;
 	default:
 		break;
@@ -618,7 +605,7 @@ int main(int ac, char **av)
 		conf_cnt = 0;
 		check_conf(&rootmenu);
 	} while (conf_cnt);
-	if (conf_write(NULL)) {
+	if (conf_write(output)) {
 		fprintf(stderr, _("\n*** Error during writing of the build configuration.\n\n"));
 		return 1;
 	}

@@ -1,23 +1,23 @@
-# 
-# Copyright (C) 2006 OpenWrt.org
+#
+# Copyright (C) 2006-2012 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id$
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dropbear
-PKG_VERSION:=0.48.1
-PKG_RELEASE:=1
+PKG_VERSION:=2011.54
+PKG_RELEASE:=2
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://matt.ucc.asn.au/dropbear/releases/
-PKG_MD5SUM:=ca8e53a766faec831882831364568421
-PKG_CAT:=zcat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:= \
+	http://matt.ucc.asn.au/dropbear/releases/ \
+	http://www.mirrors.wiretapped.net/security/cryptography/apps/ssh/dropbear/
+PKG_MD5SUM:=c627ffe09570fad7aa94d8eac2b9320c
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -29,10 +29,17 @@ define Package/dropbear
   $(call Package/dropbear/Default)
   SECTION:=net
   CATEGORY:=Base system
-  DEFAULT:=y
   TITLE:=Small SSH2 client/server
-  DESCRIPTION:=\
-	A small SSH2 server/client designed for small memory environments.
+endef
+
+define Package/dropbear/description
+ A small SSH2 server/client designed for small memory environments.
+endef
+
+define Package/dropbear/conffiles
+/etc/dropbear/dropbear_rsa_host_key
+/etc/dropbear/dropbear_dss_host_key 
+/etc/config/dropbear 
 endef
 
 define Package/dropbearconvert
@@ -42,78 +49,65 @@ define Package/dropbearconvert
   TITLE:=Utility for converting SSH keys
 endef
 
+CONFIGURE_ARGS += \
+	--with-shared \
+	--disable-pam \
+	--enable-openpty \
+	--enable-syslog \
+	$(if $(CONFIG_SHADOW_PASSWORDS),,--disable-shadow) \
+	--disable-lastlog \
+	--disable-utmp \
+	--disable-utmpx \
+	--disable-wtmp \
+	--disable-wtmpx \
+	--disable-loginfunc \
+	--disable-pututline \
+	--disable-pututxline \
+	--disable-zlib \
+	--enable-bundled-libtom
+
+TARGET_CFLAGS += -DARGTYPE=3 -ffunction-sections -fdata-sections
+TARGET_LDFLAGS += -Wl,--gc-sections
+
 define Build/Configure
 	$(SED) 's,^/\* #define PKG_MULTI.*,#define PKG_MULTI,g' $(PKG_BUILD_DIR)/options.h
 	$(SED) 's,^#define DO_HOST_LOOKUP,/* & */,g' $(PKG_BUILD_DIR)/options.h
-	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
-		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
-		./configure \
-			--target=$(GNU_TARGET_NAME) \
-			--host=$(GNU_TARGET_NAME) \
-			--build=$(GNU_HOST_NAME) \
-			--program-prefix="" \
-			--program-suffix="" \
-			--prefix=/usr \
-			--exec-prefix=/usr \
-			--bindir=/usr/bin \
-			--datadir=/usr/share \
-			--includedir=/usr/include \
-			--infodir=/usr/share/info \
-			--libdir=/usr/lib \
-			--libexecdir=/usr/lib \
-			--localstatedir=/var \
-			--mandir=/usr/share/man \
-			--sbindir=/usr/sbin \
-			--sysconfdir=/etc \
-			$(DISABLE_LARGEFILE) \
-			$(DISABLE_NLS) \
-			--with-shared \
-			--disable-pam \
-			--enable-openpty \
-			--enable-syslog \
-			--disable-shadow \
-			--disable-lastlog \
-			--disable-utmp \
-			--disable-utmpx \
-			--disable-wtmp \
-			--disable-wtmpx \
-			--disable-loginfunc \
-			--disable-pututline \
-			--disable-pututxline \
-			--disable-zlib \
-	);
+	$(call Build/Configure/Default)
 endef
 
 define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		LD="$(TARGET_CC)" \
 		PROGRAMS="dropbear dbclient dropbearkey scp" \
 		MULTI=1 SCPPROGRESS=1
-	$(MAKE) -C $(PKG_BUILD_DIR) \
+	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		LD="$(TARGET_CC)" \
 		PROGRAMS="dropbearconvert"
 endef
-	
+
 define Package/dropbear/install
-	install -d -m0755 $(1)/usr/sbin
-	install -m0755 $(PKG_BUILD_DIR)/dropbearmulti \
-		$(1)/usr/sbin/dropbear
-	install -d -m0755 $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dropbearmulti $(1)/usr/sbin/dropbear
+	$(INSTALL_DIR) $(1)/usr/bin
 	ln -sf ../sbin/dropbear $(1)/usr/bin/scp
 	ln -sf ../sbin/dropbear $(1)/usr/bin/ssh
 	ln -sf ../sbin/dropbear $(1)/usr/bin/dbclient
 	ln -sf ../sbin/dropbear $(1)/usr/bin/dropbearkey
-	install -d -m0755 $(1)/etc/init.d
-	install -m0755 ./files/dropbear.init $(1)/etc/init.d/S50dropbear
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/dropbear.config $(1)/etc/config/dropbear
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_BIN) ./files/dropbear.init $(1)/etc/init.d/dropbear
+	$(INSTALL_DIR) $(1)/usr/lib/opkg/info
+	$(INSTALL_DIR) $(1)/etc/dropbear
+	touch $(1)/etc/dropbear/dropbear_rsa_host_key
+	touch $(1)/etc/dropbear/dropbear_dss_host_key
 endef
 
 define Package/dropbearconvert/install
-	install -d -m0755 $(1)/usr/bin
-	install -m0755 $(PKG_BUILD_DIR)/dropbearconvert \
-		$(1)/usr/bin/dropbearconvert
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/dropbearconvert $(1)/usr/bin/dropbearconvert
 endef
 
 $(eval $(call BuildPackage,dropbear))

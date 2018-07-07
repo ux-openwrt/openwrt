@@ -1,141 +1,108 @@
 # Makefile for OpenWrt
 #
-# Copyright (C) 2006 OpenWrt.org
-# Copyright (C) 2006 by Felix Fietkau <openwrt@nbd.name>
+# Copyright (C) 2007 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
 
-RELEASE:=Kamikaze
-#VERSION:=2.0 # uncomment for final release
+TOPDIR:=${CURDIR}
+LC_ALL:=C
+LANG:=C
+export TOPDIR LC_ALL LANG
 
-#--------------------------------------------------------------
-# Just run 'make menuconfig', configure stuff, then run 'make'.
-# You shouldn't need to mess with anything beyond this point...
-#--------------------------------------------------------------
+world:
 
-all: world
+include $(TOPDIR)/include/host.mk
 
-SHELL:=/usr/bin/env bash
-export TOPDIR=${shell pwd}
-include $(TOPDIR)/include/verbose.mk
+ifneq ($(OPENWRT_BUILD),1)
+  # XXX: these three lines are normally defined by rules.mk
+  # but we can't include that file in this context
+  empty:=
+  space:= $(empty) $(empty)
+  _SINGLE=export MAKEFLAGS=$(space);
 
-OPENWRTVERSION:=$(RELEASE)
-ifneq ($(VERSION),)
-  OPENWRTVERSION:=$(VERSION) ($(OPENWRTVERSION))
+  override OPENWRT_BUILD=1
+  export OPENWRT_BUILD
+  GREP_OPTIONS=
+  export GREP_OPTIONS
+  include $(TOPDIR)/include/debug.mk
+  include $(TOPDIR)/include/depends.mk
+  include $(TOPDIR)/include/toplevel.mk
 else
-  REV:=$(shell LANG=C svn info | awk '/^Revision:/ { print$$2 }' )
-  ifneq ($(REV),)
-    OPENWRTVERSION:=$(OPENWRTVERSION)/r$(REV)
-  endif
-endif
-export OPENWRTVERSION
+  include rules.mk
+  include $(INCLUDE_DIR)/depends.mk
+  include $(INCLUDE_DIR)/subdir.mk
+  include target/Makefile
+  include package/Makefile
+  include tools/Makefile
+  include toolchain/Makefile
 
-ifneq ($(shell ./scripts/timestamp.pl -p .pkginfo package Makefile),.pkginfo)
-  .pkginfo .config: FORCE
-endif
+$(toolchain/stamp-install): $(tools/stamp-install)
+$(target/stamp-compile): $(toolchain/stamp-install) $(tools/stamp-install) $(BUILD_DIR)/.prepared
+$(package/stamp-cleanup): $(target/stamp-compile)
+$(package/stamp-compile): $(target/stamp-compile) $(package/stamp-cleanup)
+$(package/stamp-install): $(package/stamp-compile)
+$(package/stamp-rootfs-prepare): $(package/stamp-install)
+$(target/stamp-install): $(package/stamp-compile) $(package/stamp-install) $(package/stamp-rootfs-prepare)
 
-ifeq ($(FORCE),)
-  .config scripts/config/conf scripts/config/mconf: .prereq-build
-  world: .prereq-packages
-endif
+printdb:
+	@true
 
-.pkginfo:
-	@echo Collecting package info...
-	@-for dir in package/*/; do \
-		echo Source-Makefile: $${dir}Makefile; \
-		$(NO_TRACE_MAKE) --no-print-dir DUMP=1 -C $$dir || echo "ERROR: please fix $${dir}Makefile" >&2; \
-	done > $@
-
-pkginfo-clean: FORCE
-	-rm -f .pkginfo .config.in
-
-.config.in: .pkginfo
-	@./scripts/gen_menuconfig.pl < $< > $@ || rm -f $@
-
-.config: ./scripts/config/conf .config.in
-	@[ -f .config ] || $(NO_TRACE_MAKE) menuconfig
-	@$< -D .config Config.in &> /dev/null
-
-scripts/config/mconf:
-	@$(MAKE) -C scripts/config all
-
-scripts/config/conf:
-	@$(MAKE) -C scripts/config conf
-
-config: scripts/config/conf .config.in FORCE
-	$< Config.in
-
-config-clean: FORCE
-	$(NO_TRACE_MAKE) -C scripts/config clean
-
-defconfig: scripts/config/conf .config.in FORCE
-	touch .config
-	$< -D .config Config.in
-
-oldconfig: scripts/config/conf .config.in FORCE
-	$< -o Config.in
-
-menuconfig: scripts/config/mconf .config.in FORCE
-	$< Config.in
-
-package/%: .pkginfo FORCE
-	$(MAKE) -C package $(patsubst package/%,%,$@)
-
-target/%: .pkginfo FORCE
-	$(MAKE) -C target $(patsubst target/%,%,$@)
-
-tools/%: FORCE
-	$(MAKE) -C tools $(patsubst tools/%,%,$@)
-
-toolchain/%: FORCE
-	$(MAKE) -C toolchain $(patsubst toolchain/%,%,$@)
-
-.prereq-build: include/prereq-build.mk
-	@$(NO_TRACE_MAKE) -s -f $(TOPDIR)/include/prereq-build.mk prereq 2>/dev/null || { \
-		echo "Prerequisite check failed. Use FORCE=1 to override."; \
-		rm -rf $(TOPDIR)/tmp; \
-		false; \
-	}
-	@rm -rf $(TOPDIR)/tmp
-	@touch $@
-
-.prereq-packages: include/prereq.mk .pkginfo .config
-	@$(NO_TRACE_MAKE) -s -C package prereq 2>/dev/null || { \
-		echo "Prerequisite check failed. Use FORCE=1 to override."; \
-		false; \
-	}
-	@rm -rf "$(TOPDIR)/tmp"
-	@touch $@
-	
-prereq: .prereq-build .prereq-packages FORCE
-
-download: .config FORCE
-	$(MAKE) tools/download
-	$(MAKE) toolchain/download
-	$(MAKE) package/download
-	$(MAKE) target/download
-
-world: .config FORCE
-	$(MAKE) tools/install
-	$(MAKE) toolchain/install
-	$(MAKE) target/compile
-	$(MAKE) package/compile
-	$(MAKE) package/install
-	$(MAKE) target/install
-	$(MAKE) package/index
+prepare: $(target/stamp-compile)
 
 clean: FORCE
-	rm -rf build_* bin
+	$(_SINGLE)$(SUBMAKE) target/linux/clean
+	rm -rf $(BUILD_DIR) $(BIN_DIR) $(BUILD_LOG_DIR)
 
 dirclean: clean
-	rm -rf staging_dir_* toolchain_build_* tool_build
+	rm -rf $(STAGING_DIR) $(STAGING_DIR_HOST) $(STAGING_DIR_TOOLCHAIN) $(TOOLCHAIN_DIR) $(BUILD_DIR_HOST) $(BUILD_DIR_TOOLCHAIN)
+	rm -rf $(TMP_DIR)
 
-distclean: dirclean config-clean
-	rm -rf dl .*config* .pkg* .prereq 
+ifndef DUMP_TARGET_DB
+$(BUILD_DIR)/.prepared: Makefile
+	@mkdir -p $$(dirname $@)
+	@touch $@
 
-.SILENT: clean dirclean distclean config-clean download world
-FORCE: ;
-.PHONY: FORCE
-%: ;
+tmp/.prereq_packages: .config
+	unset ERROR; \
+	for package in $(sort $(prereq-y) $(prereq-m)); do \
+		$(_SINGLE)$(NO_TRACE_MAKE) -s -r -C package/$$package prereq || ERROR=1; \
+	done; \
+	if [ -n "$$ERROR" ]; then \
+		echo "Package prerequisite check failed."; \
+		false; \
+	fi
+	touch $@
+endif
+
+# check prerequisites before starting to build
+prereq: $(target/stamp-prereq) tmp/.prereq_packages
+	@if [ ! -f "$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)" ]; then \
+		echo 'ERROR: Missing site config for target "$(REAL_GNU_TARGET_NAME)" !'; \
+		echo '       The missing file will cause configure scripts to fail during compilation.'; \
+		echo '       Please provide a "$(INCLUDE_DIR)/site/$(REAL_GNU_TARGET_NAME)" file and restart the build.'; \
+		exit 1; \
+	fi
+
+prepare: .config $(tools/stamp-install) $(toolchain/stamp-install)
+world: prepare $(target/stamp-compile) $(package/stamp-cleanup) $(package/stamp-compile) $(package/stamp-install) $(package/stamp-rootfs-prepare) $(target/stamp-install) FORCE
+	$(_SINGLE)$(SUBMAKE) -r package/index
+
+# update all feeds, re-create index files, install symlinks
+package/symlinks:
+	$(SCRIPT_DIR)/feeds update -a
+	$(SCRIPT_DIR)/feeds install -a
+
+# re-create index files, install symlinks
+package/symlinks-install:
+	$(SCRIPT_DIR)/feeds update -i
+	$(SCRIPT_DIR)/feeds install -a
+
+# remove all symlinks, don't touch ./feeds
+package/symlinks-clean:
+	$(SCRIPT_DIR)/feeds uninstall -a
+
+.PHONY: clean dirclean prereq prepare world package/symlinks package/symlinks-install package/symlinks-clean
+
+endif
