@@ -124,7 +124,7 @@ detect_by_model() {
 	# Netgear WGT634U exception
 	if grep -sqE 'mtd0: 000(6|a)0000' /proc/mtd; then
 		ucidef_add_switch "switch0" \
-			"0:wan" "1:lan" "2:lan" "3:lan" "4:lan" "5@eth0"
+			"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "5@eth0"
 		return
 	fi
 
@@ -175,9 +175,9 @@ detect_by_model() {
 }
 
 
-local model="$(sed -ne 's/^machine[ \t]*: //p' /proc/cpuinfo)"
-local boardtype="$(nvram get boardtype)"
-local boardnum="$(nvram get boardnum)"
+model="$(sed -ne 's/^machine[ \t]*: //p' /proc/cpuinfo)"
+boardtype="$(nvram get boardtype)"
+boardnum="$(nvram get boardnum)"
 
 board_config_update
 

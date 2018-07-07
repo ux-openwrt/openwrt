@@ -13,13 +13,13 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/libusb
-PKG_MD5SUM:=2ca521fffadd0c28fdf174e6ec73865b
+PKG_HASH:=ed5bdd160c7b01ef767fb931a81b454f46226d1e2cf58502ced758d3e5a9fdc4
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=LGPL-2.1
 
-PKG_MAINTAINER := Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER := Felix Fietkau <nbd@nbd.name>
 
 include $(INCLUDE_DIR)/package.mk
 

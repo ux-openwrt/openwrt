@@ -10,12 +10,12 @@ include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ppp
 PKG_VERSION:=2.4.7
-PKG_RELEASE:=8
+PKG_RELEASE:=10
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://download.samba.org/pub/ppp/
-PKG_MD5SUM:=78818f40e6d33a1d1de68a1551f6595a
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_HASH:=02e0a3dd3e4799e33103f70ec7df75348c8540966ee7c948e4ed8a42bbccfb30
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_LICENSE:=BSD-4-Clause
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
@@ -117,6 +117,17 @@ define Package/ppp-mod-pptp/description
 This package contains a PPtP plugin for ppp.
 endef
 
+define Package/ppp-mod-passwordfd
+$(call Package/ppp/Default)
+  DEPENDS:=@(PACKAGE_ppp||PACKAGE_ppp-multilink)
+  TITLE:=pap/chap secret from filedescriptor
+endef
+
+define Package/ppp-mod-passwordfd/description
+This package allows to pass the PAP/CHAP secret from a filedescriptor.
+Eliminates the need for a secrets file.
+endef
+
 define Package/chat
 $(call Package/ppp/Default)
   TITLE:=Establish conversation with a modem
@@ -161,6 +172,9 @@ $(call Build/Configure/Default,, \
 		$(PKG_BUILD_DIR)/pppd/plugins/pppoatm/linux/
 endef
 
+TARGET_CFLAGS += -ffunction-sections -fdata-sections
+TARGET_LDFLAGS += -Wl,--gc-sections
+
 MAKE_FLAGS += COPTS="$(TARGET_CFLAGS)" \
 		PRECOMPILED_FILTER=1 \
 		STAGING_DIR="$(STAGING_DIR)"
@@ -195,6 +209,7 @@ define Package/ppp/install
 	$(INSTALL_DIR) $(1)/lib/netifd/proto
 	$(INSTALL_BIN) ./files/ppp.sh $(1)/lib/netifd/proto/
 	$(INSTALL_BIN) ./files/lib/netifd/ppp-up $(1)/lib/netifd/
+	$(INSTALL_BIN) ./files/lib/netifd/ppp6-up $(1)/lib/netifd/
 	$(INSTALL_BIN) ./files/lib/netifd/ppp-down $(1)/lib/netifd/
 endef
 Package/ppp-multilink/install=$(Package/ppp/install)
@@ -238,6 +253,12 @@ define Package/ppp-mod-pptp/install
 	$(INSTALL_DATA) ./files/etc/ppp/options.pptp $(1)/etc/ppp/
 endef
 
+define Package/ppp-mod-passwordfd/install
+	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PKG_VERSION)
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/lib/pppd/$(PKG_VERSION)/passwordfd.so \
+		$(1)/usr/lib/pppd/$(PKG_VERSION)/
+endef
+
 define Package/chat/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/sbin/chat $(1)/usr/sbin/
@@ -260,6 +281,7 @@ $(eval $(call BuildPackage,ppp-mod-pppoe))
 $(eval $(call BuildPackage,ppp-mod-radius))
 $(eval $(call BuildPackage,ppp-mod-pppol2tp))
 $(eval $(call BuildPackage,ppp-mod-pptp))
+$(eval $(call BuildPackage,ppp-mod-passwordfd))
 $(eval $(call BuildPackage,chat))
 $(eval $(call BuildPackage,pppdump))
 $(eval $(call BuildPackage,pppstats))

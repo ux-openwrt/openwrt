@@ -58,7 +58,7 @@ set_state() {
 	cpva642)
 		status_led="CPVA642:green:power:"
 		;;
-	ct536_ct5621)
+	ct-536p_5621t)
 		status_led="CT536_CT5621:green:power"
 		;;
 	cvg834g)
@@ -69,6 +69,9 @@ set_state() {
 		;;
 	dgnd3700v1_dgnd3800b)
 		status_led="DGND3700v1_3800B:green:power"
+		;;
+	evg2000)
+		status_led="EVG2000:green:power"
 		;;
 	fast2504n)
 		status_led="fast2504n:green:ok"
@@ -98,6 +101,9 @@ set_state() {
 		;;
 	hg655b)
 		status_led="HW65x:green:power"
+		;;
+	livebox1)
+		status_led="Livebox1:red:adsl-fail-power"
 		;;
 	p870hw-51a_v2)
 		status_led="P870HW-51a:green:power"

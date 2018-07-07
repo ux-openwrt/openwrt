@@ -1,7 +1,6 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mt76
-PKG_VERSION:=2016-03-04
 PKG_RELEASE=1
 
 PKG_LICENSE:=GPLv2
@@ -9,12 +8,14 @@ PKG_LICENSE_FILES:=
 
 PKG_SOURCE_URL:=https://github.com/openwrt/mt76
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=7059cc27df894a4b845b6deb7c51425ffb4b7c5c
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.xz
+PKG_SOURCE_DATE:=2017-01-15
+PKG_SOURCE_VERSION:=85d12fea1abe8654f694dc6594781f85168aa2c2
+PKG_MIRROR_HASH:=d07c019a3f836860409c58c303195df832f5dc31168201c3fa7d23f4f5927a79
 
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_BUILD_PARALLEL:=1
+
+STAMP_CONFIGURED_DEPENDS := $(STAGING_DIR)/usr/include/mac80211-backport/backport/autoconf.h
 
 include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
@@ -22,7 +23,9 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/mt76
   SUBMENU:=Wireless Drivers
   TITLE:=MediaTek MT76x2/MT7603 wireless driver
-  DEPENDS:=+kmod-mac80211 +@DRIVER_11N_SUPPORT @PCI_SUPPORT
+  DEPENDS:= \
+	+kmod-mac80211 @PCI_SUPPORT @!LINUX_3_18 \
+	+@DRIVER_11AC_SUPPORT +@DRIVER_11N_SUPPORT +@DRIVER_11W_SUPPORT
   FILES:=\
 	$(PKG_BUILD_DIR)/mt76.ko \
 	$(PKG_BUILD_DIR)/mt76x2e.ko \

@@ -1,6 +1,6 @@
 /* 
  * ptgen - partition table generator
- * Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
+ * Copyright (C) 2006 by Felix Fietkau <nbd@nbd.name>
  *
  * uses parts of afdisk
  * Copyright (C) 2002 by David Roetzel <david@roetzel.de>
@@ -93,7 +93,9 @@ static long to_kbytes(const char *string) {
 	}
 
 	/* result: number + 1024^(exp) */
-	return result * ((2 << ((10 * exp) - 1)) ?: 1);
+	if (exp == 0)
+		return result;
+	return result * (2 << ((10 * exp) - 1));
 }
 
 /* convert the sector number into a CHS value for the partition table */

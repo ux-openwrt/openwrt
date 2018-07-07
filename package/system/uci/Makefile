@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2008-2014 OpenWrt.org
+# Copyright (C) 2016 LEDE project
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -7,24 +8,19 @@
 
 include $(TOPDIR)/rules.mk
 
-UCI_VERSION=2016-02-02
-UCI_RELEASE=1
-
 PKG_NAME:=uci
-PKG_VERSION:=$(UCI_VERSION)$(if $(UCI_RELEASE),.$(UCI_RELEASE))
 PKG_RELEASE:=1
-PKG_REV:=d4e42a9081e0b6fa5cbb072bcbfe01adccdad694
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL=$(OPENWRT_GIT)/project/uci.git
-PKG_SOURCE_SUBDIR:=uci-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=$(PKG_REV)
+PKG_SOURCE_URL=$(LEDE_GIT)/project/uci.git
 PKG_SOURCE_PROTO:=git
+PKG_SOURCE_DATE=2016-07-04
+PKG_SOURCE_VERSION:=e1bf4356e1b513e158e1b5049147087ed6342cfd
+PKG_MIRROR_HASH:=4994a10a9e15f71312502f8babf045da7cea18c64227b387fc2dcf64f2252f19
 
 PKG_LICENSE:=LGPL-2.1
 PKG_LICENSE_FILES:=
 
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 
 PKG_BUILD_PARALLEL:=0
 

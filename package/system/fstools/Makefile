@@ -8,23 +8,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=fstools
-PKG_VERSION:=2016-04-25
-
-PKG_RELEASE=$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL=$(OPENWRT_GIT)/project/fstools.git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=89847de58a17dacedab36ef07ec4c12ef8c0e84a
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_SOURCE_URL=$(LEDE_GIT)/project/fstools.git
+PKG_SOURCE_DATE:=2016-12-04
+PKG_SOURCE_VERSION:=84b530a732b12cca1cd5ee9ba163b7ead7a83de3
+PKG_MIRROR_HASH:=b607138de1adbb7f49e53daebe28ac1352910fa2b29278365edeabafc5b46a91
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=
 
 PKG_USE_MIPS16:=0
+PKG_FLAGS:=nonshared
 
-PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
+PKG_BUILD_DEPENDS := util-linux
+PKG_CONFIG_DEPENDS := CONFIG_NAND_SUPPORT CONFIG_FSTOOLS_UBIFS_EXTROOT
+
+PKG_MAINTAINER:=John Crispin <john@phrozen.org>
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
@@ -50,6 +52,13 @@ define Package/fstools/config
 			This option makes it possible to use extroot functionality if the root filesystem resides on an UBIFS partition
 endef
 
+define Package/snapshot-tool
+  SECTION:=base
+  CATEGORY:=Base system
+  TITLE:=rootfs snapshoting tool
+  DEPENDS:=+libubox +fstools
+endef
+
 define Package/block-mount
   SECTION:=base
   CATEGORY:=Base system
@@ -60,10 +69,16 @@ endef
 define Package/fstools/install
 	$(INSTALL_DIR) $(1)/sbin $(1)/lib
 
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{mount_root,jffs2reset,snapshot_tool} $(1)/sbin/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/{mount_root,jffs2reset} $(1)/sbin/
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/libfstools.so $(1)/lib/
-	$(INSTALL_BIN) ./files/snapshot $(1)/sbin/
 	$(LN) jffs2reset $(1)/sbin/jffs2mark
+endef
+
+define Package/snapshot-tool/install
+	$(INSTALL_DIR) $(1)/sbin
+
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/snapshot_tool $(1)/sbin/
+	$(INSTALL_BIN) ./files/snapshot $(1)/sbin/
 endef
 
 define Package/block-mount/install
@@ -88,4 +103,5 @@ define Build/InstallDev
 endef
 
 $(eval $(call BuildPackage,fstools))
+$(eval $(call BuildPackage,snapshot-tool))
 $(eval $(call BuildPackage,block-mount))

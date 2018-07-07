@@ -14,12 +14,12 @@ PKG_RELEASE:=5
 PKG_SOURCE_URL:=http://ftp.samba.org/pub/samba \
 	http://ftp.samba.org/pub/samba/stable
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_MD5SUM:=76da2fa64edd94a0188531e7ecb27c4e
+PKG_HASH:=8f2c8a7f2bd89b0dfd228ed917815852f7c625b2bc0936304ac3ed63aaf83751
 
 PKG_LICENSE:=GPL-3.0
 PKG_LICENSE_FILES:=COPYING
 
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 
 PKG_BUILD_PARALLEL:=1
 
@@ -82,6 +82,7 @@ CONFIGURE_VARS += \
 	samba_cv_USE_SETRESUID=yes \
 	samba_cv_have_setreuid=yes \
 	samba_cv_have_setresuid=yes \
+	ac_cv_header_libunwind_h=no \
 	ac_cv_header_zlib_h=no \
 	samba_cv_zlib_1_2_3=no \
 	ac_cv_path_PYTHON="" \

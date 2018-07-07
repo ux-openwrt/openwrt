@@ -11,9 +11,9 @@ BOARD:=ixp4xx
 BOARDNAME:=Intel IXP4xx
 FEATURES:=squashfs
 MAINTAINER:=Imre Kaloz <kaloz@openwrt.org>
-SUBTARGETS=generic harddisk
+SUBTARGETS:=generic harddisk
 
-KERNEL_PATCHVER:=3.18
+KERNEL_PATCHVER:=4.4
 
 include $(INCLUDE_DIR)/target.mk
 

@@ -11,7 +11,7 @@ PKG_NAME:=ltq-ptm
 PKG_RELEASE:=1
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/ltq-ptm-$(BUILD_VARIANT)
 
-PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
+PKG_MAINTAINER:=John Crispin <john@phrozen.org>
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,11 +30,6 @@ KernelPackage/ltq-ptm-danube=$(call KernelPackage/ltq-ptm-template,danube,xway)
 KernelPackage/ltq-ptm-ar9=$(call KernelPackage/ltq-ptm-template,ar9,xway)
 KernelPackage/ltq-ptm-ase=$(call KernelPackage/ltq-ptm-template,ase,ase)
 KernelPackage/ltq-ptm-vr9=$(call KernelPackage/ltq-ptm-template,vr9,xrx200)
-
-define Build/Prepare
-	$(INSTALL_DIR) $(PKG_BUILD_DIR)
-	$(CP) ./src/* $(PKG_BUILD_DIR)
-endef
 
 define Build/Configure
 endef

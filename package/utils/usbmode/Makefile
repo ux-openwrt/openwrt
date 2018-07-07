@@ -1,20 +1,19 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbmode
-PKG_VERSION:=2014-08-26
-PKG_RELEASE=$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_URL=$(OPENWRT_GIT)/project/usbmode.git
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL=$(LEDE_GIT)/project/usbmode.git
+PKG_SOURCE_DATE:=2014-08-26
 PKG_SOURCE_VERSION:=993a9a542791953c4804f7ddbb3a07756738e37a
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_MIRROR_HASH:=dc4daa80a0d51524b41c6bf67cb368ca51fcfba1217adedd6823b24a68be5bf4
 CMAKE_INSTALL:=1
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=
 
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 
 PKG_DATA_VERSION:=20150115
 PKG_DATA_URL:=http://www.draisberghof.de/usb_modeswitch
@@ -27,7 +26,7 @@ include $(INCLUDE_DIR)/cmake.mk
 define Download/data
   FILE:=$(PKG_DATA_FILENAME)
   URL:=$(PKG_DATA_URL)
-  MD5SUM:=662bcd56a97e560ea974bc710822de51
+  HASH:=90549f589835a68279369c3dc0d47eb7338ee3bad09d737e7b85e1ab15bd2d8b
 endef
 $(eval $(call Download,data))
 
@@ -44,6 +43,17 @@ define Build/Prepare
 	rm -f \
 		$(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/05c6:1000:sVe=GT
 	cp ./data/* $(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/
+	#in order to keep the Lede GIT repo free of filenames with colons,
+	#we name the files xxxx-yyyy
+	# and rename here after copying to the build directory
+	for filevar in $(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/*-* ; \
+	do \
+		[ -f "$$$$filevar" ] || continue ; \
+		FILENAME=$$$$(basename $$$$filevar) ; \
+		NEWNAME=$$$${FILENAME//-/:} ; \
+		rm "$(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/$$$$NEWNAME" ; \
+		mv "$(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/$$$$FILENAME" "$(PKG_BUILD_DIR)/$(PKG_DATA_PATH)/usb_modeswitch.d/$$$$NEWNAME" ; \
+	done
 endef
 
 define Package/usb-modeswitch/install

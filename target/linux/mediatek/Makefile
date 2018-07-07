@@ -4,10 +4,11 @@ include $(TOPDIR)/rules.mk
 
 ARCH:=arm
 BOARD:=mediatek
-BOARDNAME:=Mediatek Ralink ARM
-FEATURES:=squashfs
+BOARDNAME:=MediaTek Ralink ARM
+FEATURES:=squashfs nand ubifs
 CPU_TYPE:=cortex-a7
-MAINTAINER:=John Crispin <blogic@openwrt.org>
+CPU_SUBTYPE:=neon-vfpv4
+MAINTAINER:=John Crispin <john@phrozen.org>
 
 KERNEL_PATCHVER:=4.4
 

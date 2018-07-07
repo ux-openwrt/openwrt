@@ -1,12 +1,12 @@
 /*
  *  GPIO Button Hotplug driver
  *
- *  Copyright (C) 2012 Felix Fietkau <nbd@openwrt.org>
+ *  Copyright (C) 2012 Felix Fietkau <nbd@nbd.name>
  *  Copyright (C) 2008-2010 Gabor Juhos <juhosg@openwrt.org>
  *
  *  Based on the diag.c - GPIO interface driver for Broadcom boards
  *    Copyright (C) 2006 Mike Baker <mbm@openwrt.org>,
- *    Copyright (C) 2006-2007 Felix Fietkau <nbd@openwrt.org>
+ *    Copyright (C) 2006-2007 Felix Fietkau <nbd@nbd.name>
  *    Copyright (C) 2008 Andy Boyett <agb@openwrt.org>
  *
  *  This program is free software; you can redistribute it and/or modify it
@@ -82,21 +82,30 @@ extern u64 uevent_next_seqnum(void);
 	}
 
 static struct bh_map button_map[] = {
-	BH_MAP(BTN_0,		"BTN_0"),
-	BH_MAP(BTN_1,		"BTN_1"),
-	BH_MAP(BTN_2,		"BTN_2"),
-	BH_MAP(BTN_3,		"BTN_3"),
-	BH_MAP(BTN_4,		"BTN_4"),
-	BH_MAP(BTN_5,		"BTN_5"),
-	BH_MAP(BTN_6,		"BTN_6"),
-	BH_MAP(BTN_7,		"BTN_7"),
-	BH_MAP(BTN_8,		"BTN_8"),
-	BH_MAP(BTN_9,		"BTN_9"),
-	BH_MAP(KEY_POWER,	"power"),
-	BH_MAP(KEY_RESTART,	"reset"),
-	BH_MAP(KEY_RFKILL,	"rfkill"),
-	BH_MAP(KEY_WPS_BUTTON,	"wps"),
-	BH_MAP(KEY_WIMAX,	"wwan"),
+	BH_MAP(BTN_0,			"BTN_0"),
+	BH_MAP(BTN_1,			"BTN_1"),
+	BH_MAP(BTN_2,			"BTN_2"),
+	BH_MAP(BTN_3,			"BTN_3"),
+	BH_MAP(BTN_4,			"BTN_4"),
+	BH_MAP(BTN_5,			"BTN_5"),
+	BH_MAP(BTN_6,			"BTN_6"),
+	BH_MAP(BTN_7,			"BTN_7"),
+	BH_MAP(BTN_8,			"BTN_8"),
+	BH_MAP(BTN_9,			"BTN_9"),
+	BH_MAP(KEY_BRIGHTNESS_ZERO,	"brightness_zero"),
+	BH_MAP(KEY_CONFIG,		"config"),
+	BH_MAP(KEY_COPY,		"copy"),
+	BH_MAP(KEY_EJECTCD,		"eject"),
+	BH_MAP(KEY_HELP,		"help"),
+	BH_MAP(KEY_LIGHTS_TOGGLE,	"lights_toggle"),
+	BH_MAP(KEY_PHONE,		"phone"),
+	BH_MAP(KEY_POWER,		"power"),
+	BH_MAP(KEY_RESTART,		"reset"),
+	BH_MAP(KEY_RFKILL,		"rfkill"),
+	BH_MAP(KEY_VIDEO,		"video"),
+	BH_MAP(KEY_WIMAX,		"wwan"),
+	BH_MAP(KEY_WLAN,		"wlan"),
+	BH_MAP(KEY_WPS_BUTTON,		"wps"),
 };
 
 /* -------------------------------------------------------------------------*/
@@ -661,7 +670,7 @@ module_init(gpio_button_init);
 module_exit(gpio_button_exit);
 
 MODULE_AUTHOR("Gabor Juhos <juhosg@openwrt.org>");
-MODULE_AUTHOR("Felix Fietkau <nbd@openwrt.org>");
+MODULE_AUTHOR("Felix Fietkau <nbd@nbd.name>");
 MODULE_DESCRIPTION("Polled GPIO Buttons hotplug driver");
 MODULE_LICENSE("GPL v2");
 MODULE_ALIAS("platform:" DRV_NAME);

@@ -36,6 +36,14 @@ hostapd_append_wep_key() {
 	esac
 }
 
+hostapd_append_wpa_key_mgmt() {
+	local auth_type="$(echo $auth_type | tr 'a-z' 'A-Z')"
+
+	append wpa_key_mgmt "WPA-$auth_type"
+	[ "$ieee80211r" -gt 0 ] && append wpa_key_mgmt "FT-${auth_type}"
+	[ "$ieee80211w" -gt 0 ] && append wpa_key_mgmt "WPA-${auth_type}-SHA256"
+}
+
 hostapd_add_log_config() {
 	config_add_boolean \
 		log_80211 \
@@ -186,7 +194,8 @@ hostapd_set_bss_options() {
 		wps_pushbutton wps_label ext_registrar wps_pbc_in_m1 \
 		wps_device_type wps_device_name wps_manufacturer wps_pin \
 		macfilter ssid wmm uapsd hidden short_preamble rsn_preauth \
-		iapp_interface eapol_version
+		iapp_interface eapol_version acct_server acct_secret acct_port \
+		dynamic_vlan ieee80211w
 
 	set_default isolate 0
 	set_default maxassoc 0
@@ -197,6 +206,7 @@ hostapd_set_bss_options() {
 	set_default wmm 1
 	set_default uapsd 1
 	set_default eapol_version 0
+	set_default acct_port 1813
 
 	append bss_conf "ctrl_interface=/var/run/hostapd"
 	if [ "$isolate" -gt 0 ]; then
@@ -220,6 +230,15 @@ hostapd_set_bss_options() {
 		[ -n "$wpa_pair_rekey"   ] && append bss_conf "wpa_ptk_rekey=$wpa_pair_rekey"    "$N"
 		[ -n "$wpa_master_rekey" ] && append bss_conf "wpa_gmk_rekey=$wpa_master_rekey"  "$N"
 	}
+
+	[ -n "$acct_server" ] && {
+		append bss_conf "acct_server_addr=$acct_server" "$N"
+		append bss_conf "acct_server_port=$acct_port" "$N"
+		[ -n "$acct_secret" ] && \
+			append bss_conf "acct_server_shared_secret=$acct_secret" "$N"
+	}
+
+	local vlan_possible=""
 
 	case "$auth_type" in
 		none)
@@ -245,17 +264,16 @@ hostapd_set_bss_options() {
 			[ "$eapol_version" -ge "1" -a "$eapol_version" -le "2" ] && append bss_conf "eapol_version=$eapol_version" "$N"
 
 			wps_possible=1
-			append wpa_key_mgmt "WPA-PSK"
 		;;
 		eap)
 			json_get_vars \
 				auth_server auth_secret auth_port \
-				acct_server acct_secret acct_port \
 				dae_client dae_secret dae_port \
 				ownip \
-				eap_reauth_period dynamic_vlan \
-				vlan_naming vlan_tagged_interface \
-				vlan_bridge vlan_file
+				eap_reauth_period
+
+			# radius can provide VLAN ID for clients
+			vlan_possible=1
 
 			# legacy compatibility
 			[ -n "$auth_server" ] || json_get_var auth_server server
@@ -263,21 +281,12 @@ hostapd_set_bss_options() {
 			[ -n "$auth_secret" ] || json_get_var auth_secret key
 
 			set_default auth_port 1812
-			set_default acct_port 1813
 			set_default dae_port 3799
 
-			set_default vlan_naming 1
 
 			append bss_conf "auth_server_addr=$auth_server" "$N"
 			append bss_conf "auth_server_port=$auth_port" "$N"
 			append bss_conf "auth_server_shared_secret=$auth_secret" "$N"
-
-			[ -n "$acct_server" ] && {
-				append bss_conf "acct_server_addr=$acct_server" "$N"
-				append bss_conf "acct_server_port=$acct_port" "$N"
-				[ -n "$acct_secret" ] && \
-					append bss_conf "acct_server_shared_secret=$acct_secret" "$N"
-			}
 
 			[ -n "$eap_reauth_period" ] && append bss_conf "eap_reauth_period=$eap_reauth_period" "$N"
 
@@ -289,20 +298,6 @@ hostapd_set_bss_options() {
 			[ -n "$ownip" ] && append bss_conf "own_ip_addr=$ownip" "$N"
 			append bss_conf "eapol_key_index_workaround=1" "$N"
 			append bss_conf "ieee8021x=1" "$N"
-			append wpa_key_mgmt "WPA-EAP"
-
-			[ -n "$dynamic_vlan" ] && {
-				append bss_conf "dynamic_vlan=$dynamic_vlan" "$N"
-				append bss_conf "vlan_naming=$vlan_naming" "$N"
-				[ -n "$vlan_bridge" ] && \
-					append bss_conf "vlan_bridge=$vlan_bridge" "$N"
-				[ -n "$vlan_tagged_interface" ] && \
-					append bss_conf "vlan_tagged_interface=$vlan_tagged_interface" "$N"
-				[ -n "$vlan_file" ] && {
-					[ -e "$vlan_file" ] || touch "$vlan_file"
-					append bss_conf "vlan_file=$vlan_file" "$N"
-				}
-			}
 
 			[ "$eapol_version" -ge "1" -a "$eapol_version" -le "2" ] && append bss_conf "eapol_version=$eapol_version" "$N"
 		;;
@@ -331,8 +326,8 @@ hostapd_set_bss_options() {
 	[ -n "$wps_possible" -a -n "$config_methods" ] && {
 		set_default ext_registrar 0
 		set_default wps_device_type "6-0050F204-1"
-		set_default wps_device_name "OpenWrt AP"
-		set_default wps_manufacturer "openwrt.org"
+		set_default wps_device_name "Lede AP"
+		set_default wps_manufacturer "www.lede-project.org"
 
 		wps_state=2
 		[ -n "$wps_configured" ] && wps_state=1
@@ -387,11 +382,9 @@ hostapd_set_bss_options() {
 			for kh in $r1kh; do
 				append bss_conf "r1kh=${kh//,/ }" "$N"
 			done
-
-			[ "$wpa_key_mgmt" != "${wpa_key_mgmt/EAP/}" ] && append wpa_key_mgmt "FT-EAP"
-			[ "$wpa_key_mgmt" != "${wpa_key_mgmt/PSK/}" ] && append wpa_key_mgmt "FT-PSK"
 		fi
 
+		hostapd_append_wpa_key_mgmt
 		[ -n "$wpa_key_mgmt" ] && append bss_conf "wpa_key_mgmt=$wpa_key_mgmt" "$N"
 	fi
 
@@ -408,7 +401,6 @@ hostapd_set_bss_options() {
 		[ "$auth_cache" = 0 ] && append bss_conf "disable_pmksa_caching=1" "$N"
 
 		# RSN -> allow management frame protection
-		json_get_var ieee80211w ieee80211w
 		case "$ieee80211w" in
 			[012])
 				json_get_vars ieee80211w_max_timeout ieee80211w_retry_timeout
@@ -428,6 +420,8 @@ hostapd_set_bss_options() {
 		allow)
 			append bss_conf "macaddr_acl=1" "$N"
 			append bss_conf "accept_mac_file=$_macfile" "$N"
+			# accept_mac_file can be used to set MAC to VLAN ID mapping
+			vlan_possible=1
 		;;
 		deny)
 			append bss_conf "macaddr_acl=0" "$N"
@@ -449,6 +443,21 @@ hostapd_set_bss_options() {
 			done
 			[ -n "$macfile" -a -f "$macfile" ] && cat "$macfile"
 		) > "$_macfile"
+	}
+
+	[ -n "$vlan_possible" -a -n "$dynamic_vlan" ] && {
+		json_get_vars vlan_naming vlan_tagged_interface vlan_bridge vlan_file
+		set_default vlan_naming 1
+		append bss_conf "dynamic_vlan=$dynamic_vlan" "$N"
+		append bss_conf "vlan_naming=$vlan_naming" "$N"
+		[ -n "$vlan_bridge" ] && \
+			append bss_conf "vlan_bridge=$vlan_bridge" "$N"
+		[ -n "$vlan_tagged_interface" ] && \
+			append bss_conf "vlan_tagged_interface=$vlan_tagged_interface" "$N"
+		[ -n "$vlan_file" ] && {
+			[ -e "$vlan_file" ] || touch "$vlan_file"
+			append bss_conf "vlan_file=$vlan_file" "$N"
+		}
 	}
 
 	append "$var" "$bss_conf" "$N"
@@ -567,11 +576,8 @@ wpa_supplicant_add_network() {
 	local network_data=
 	local T="	"
 
-	local wpa_key_mgmt="WPA-PSK"
 	local scan_ssid="scan_ssid=1"
-	local freq
-
-	[ "$ieee80211r" -gt 0 ] && wpa_key_mgmt="FT-PSK $wpa_key_mgmt"
+	local freq wpa_key_mgmt
 
 	[[ "$_w_mode" = "adhoc" ]] && {
 		append network_data "mode=1" "$N$T"
@@ -583,7 +589,7 @@ wpa_supplicant_add_network() {
 
 		scan_ssid="scan_ssid=0"
 
-		[ "$_w_driver" = "nl80211" ] ||	wpa_key_mgmt="WPA-NONE"
+		[ "$_w_driver" = "nl80211" ] ||	append wpa_key_mgmt "WPA-NONE"
 	}
 
 	[[ "$_w_mode" = "mesh" ]] && {
@@ -595,7 +601,7 @@ wpa_supplicant_add_network() {
 			freq="$(get_freq "$phy" "$channel")"
 			append network_data "frequency=$freq" "$N$T"
 		}
-		wpa_key_mgmt="SAE"
+		append wpa_key_mgmt "SAE"
 		scan_ssid=""
 	}
 
@@ -611,7 +617,12 @@ wpa_supplicant_add_network() {
 		psk)
 			local passphrase
 
+			if [ "$_w_mode" != "mesh" ]; then
+				hostapd_append_wpa_key_mgmt
+			fi
+
 			key_mgmt="$wpa_key_mgmt"
+
 			if [ ${#key} -eq 64 ]; then
 				passphrase="psk=${key}"
 			else
@@ -620,8 +631,8 @@ wpa_supplicant_add_network() {
 			append network_data "$passphrase" "$N$T"
 		;;
 		eap)
-			key_mgmt='WPA-EAP'
-		        [ "$ieee80211r" -gt 0 ] && key_mgmt="FT-EAP $key_mgmt"
+			hostapd_append_wpa_key_mgmt
+			key_mgmt="$wpa_key_mgmt"
 
 			json_get_vars eap_type identity anonymous_identity ca_cert
 			[ -n "$ca_cert" ] && append network_data "ca_cert=\"$ca_cert\"" "$N$T"

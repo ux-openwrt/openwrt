@@ -3,7 +3,7 @@
  *
  * swconfig interface based on ar8216.c
  *
- * Copyright (c) 2008 Felix Fietkau <nbd@openwrt.org>
+ * Copyright (c) 2008 Felix Fietkau <nbd@nbd.name>
  * VLAN support Copyright (c) 2010, 2011 Peter Lebbing <peter@digitalbrains.com>
  * Copyright (c) 2013 Hauke Mehrtens <hauke@hauke-m.de>
  * Copyright (c) 2014 Matti Laakso <malaakso@elisanet.fi>
@@ -1052,6 +1052,11 @@ static int adm6996_read_status(struct phy_device *phydev)
 	phydev->speed = SPEED_100;
 	phydev->duplex = DUPLEX_FULL;
 	phydev->link = 1;
+
+	phydev->state = PHY_RUNNING;
+	netif_carrier_on(phydev->attached_dev);
+	phydev->adjust_link(phydev->attached_dev);
+
 	return 0;
 }
 

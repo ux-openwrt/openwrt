@@ -299,7 +299,7 @@
  			ptr--;
  		}
  		if (tunnel->parms.o_flags&GRE_KEY) {
-@@ -836,7 +836,7 @@ static inline int ip6gre_xmit_ipv6(struc
+@@ -838,7 +838,7 @@ static inline int ip6gre_xmit_ipv6(struc
  
  	dsfield = ipv6_get_dsfield(ipv6h);
  	if (t->parms.flags & IP6_TNL_F_USE_ORIG_TCLASS)
@@ -310,7 +310,7 @@
  	if (t->parms.flags & IP6_TNL_F_USE_ORIG_FWMARK)
 --- a/net/ipv6/ip6_tunnel.c
 +++ b/net/ipv6/ip6_tunnel.c
-@@ -1396,7 +1396,7 @@ ip6ip6_tnl_xmit(struct sk_buff *skb, str
+@@ -1397,7 +1397,7 @@ ip6ip6_tnl_xmit(struct sk_buff *skb, str
  
  	dsfield = ipv6_get_dsfield(ipv6h);
  	if (t->parms.flags & IP6_TNL_F_USE_ORIG_TCLASS)
@@ -370,7 +370,7 @@
  	return neigh_create(&arp_tbl, pkey, dev);
 --- a/net/ipv4/tcp_output.c
 +++ b/net/ipv4/tcp_output.c
-@@ -450,48 +450,53 @@ static void tcp_options_write(__be32 *pt
+@@ -451,48 +451,53 @@ static void tcp_options_write(__be32 *pt
  	u16 options = opts->options;	/* mungable copy */
  
  	if (unlikely(OPTION_MD5 & options)) {
@@ -447,7 +447,7 @@
  	}
  
  	if (unlikely(opts->num_sack_blocks)) {
-@@ -499,16 +504,17 @@ static void tcp_options_write(__be32 *pt
+@@ -500,16 +505,17 @@ static void tcp_options_write(__be32 *pt
  			tp->duplicate_sack : tp->selective_acks;
  		int this_sack;
  
@@ -471,7 +471,7 @@
  		}
  
  		tp->rx_opt.dsack = 0;
-@@ -521,13 +527,14 @@ static void tcp_options_write(__be32 *pt
+@@ -522,13 +528,14 @@ static void tcp_options_write(__be32 *pt
  
  		if (foc->exp) {
  			len = TCPOLEN_EXP_FASTOPEN_BASE + foc->len;
@@ -491,7 +491,7 @@
  		memcpy(p, foc->val, foc->len);
 --- a/net/ipv4/igmp.c
 +++ b/net/ipv4/igmp.c
-@@ -501,7 +501,7 @@ static struct sk_buff *add_grec(struct s
+@@ -500,7 +500,7 @@ static struct sk_buff *add_grec(struct s
  		if (!skb)
  			return NULL;
  		psrc = (__be32 *)skb_put(skb, sizeof(__be32));
@@ -838,7 +838,7 @@
  
 --- a/net/ipv4/tcp_input.c
 +++ b/net/ipv4/tcp_input.c
-@@ -3809,14 +3809,16 @@ static bool tcp_parse_aligned_timestamp(
+@@ -3818,14 +3818,16 @@ static bool tcp_parse_aligned_timestamp(
  {
  	const __be32 *ptr = (const __be32 *)(th + 1);
  
@@ -910,3 +910,22 @@
  
  /* Values for "flag" field in struct arpt_ip (general arp structure).
   * No flags defined yet.
+--- a/net/core/utils.c
++++ b/net/core/utils.c
+@@ -321,8 +321,14 @@ void inet_proto_csum_replace16(__sum16 *
+ 			       bool pseudohdr)
+ {
+ 	__be32 diff[] = {
+-		~from[0], ~from[1], ~from[2], ~from[3],
+-		to[0], to[1], to[2], to[3],
++		~net_hdr_word(&from[0]),
++		~net_hdr_word(&from[1]),
++		~net_hdr_word(&from[2]),
++		~net_hdr_word(&from[3]),
++		net_hdr_word(&to[0]),
++		net_hdr_word(&to[1]),
++		net_hdr_word(&to[2]),
++		net_hdr_word(&to[3]),
+ 	};
+ 	if (skb->ip_summed != CHECKSUM_PARTIAL) {
+ 		*sum = csum_fold(csum_partial(diff, sizeof(diff),

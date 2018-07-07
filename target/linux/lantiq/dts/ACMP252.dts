@@ -1,12 +1,12 @@
 /dts-v1/;
 
-/include/ "danube.dtsi"
+#include "danube.dtsi"
 
 / {
 	model = "ACMP252 - AudioCodes MediaPack MP-252";
 
 	chosen {
-		bootargs = "console=ttyLTQ0,115200 init=/etc/preinit";
+		bootargs = "console=ttyLTQ0,115200";
 	};
 
 	memory@0 {
@@ -16,7 +16,7 @@
 	sram@1F000000 {
 		vmmc@107000 {
 			status = "okay";
-			gpios = <&gpio 31 0>;
+			gpios = <&gpio 31 GPIO_ACTIVE_HIGH>;
 		};
 	};
 
@@ -29,38 +29,43 @@
 				#address-cells = <1>;
 				#size-cells = <1>;
 
-				partition@0 {
-					label = "uboot";
-					reg = <0x0 0x20000>;
-					read-only;
-				};
+				partitions {
+					compatible = "fixed-partitions";
+					#address-cells = <1>;
+					#size-cells = <1>;
 
-				partition@20000 {
-					label = "uboot_env";
-					reg = <0x20000 0x20000>;
-				};
+					partition@0 {
+						label = "uboot";
+						reg = <0x0 0x20000>;
+						read-only;
+					};
 
-				partition@40000 {
-					label = "boardconfig";
-					reg = <0x40000 0x60000>;
-					read-only;
-				};
+					partition@20000 {
+						label = "uboot_env";
+						reg = <0x20000 0x20000>;
+					};
 
-				partition@a0000 {
-					label = "firmware";
-					reg = <0xa0000 0xf20000>;
-				};
+					partition@40000 {
+						label = "boardconfig";
+						reg = <0x40000 0x60000>;
+						read-only;
+					};
 
-				partition@fc0000 {
-					label = "sysconfig";
-					reg = <0xfc0000 0x40000>;
-				};
+					partition@a0000 {
+						label = "firmware";
+						reg = <0xa0000 0xf20000>;
+					};
 
-				partition@0x1000000 {
-					label = "rootfs_data";
-					reg = <0x1000000 0x1000000>;
-				};
+					partition@fc0000 {
+						label = "sysconfig";
+						reg = <0xfc0000 0x40000>;
+					};
 
+					partition@0x1000000 {
+						label = "rootfs_data";
+						reg = <0x1000000 0x1000000>;
+					};
+				};
 			};
 		};
 
@@ -82,7 +87,7 @@
 
 		ifxhcd@E101000 {
 			status = "okay";
-			gpios = <&gpio 3 0>;
+			gpios = <&gpio 3 GPIO_ACTIVE_HIGH>;
 		};
 
 		etop@E180000 {

@@ -126,7 +126,7 @@ static int __mtdsplit_parse_uimage(struct mtd_info *master,
 		}
 		header = (struct uimage_header *)(buf + ret);
 
-		uimage_size = sizeof(*header) + be32_to_cpu(header->ih_size);
+		uimage_size = sizeof(*header) + be32_to_cpu(header->ih_size) + ret;
 		if ((offset + uimage_size) > master->size) {
 			pr_debug("uImage exceeds MTD device \"%s\"\n",
 				 master->name);
@@ -246,6 +246,7 @@ static struct mtd_part_parser uimage_generic_parser = {
 	.type = MTD_PARSER_TYPE_FIRMWARE,
 };
 
+#define FW_MAGIC_WNR2000V1	0x32303031
 #define FW_MAGIC_WNR2000V3	0x32303033
 #define FW_MAGIC_WNR2000V4	0x32303034
 #define FW_MAGIC_WNR2200	0x32323030
@@ -265,6 +266,7 @@ static ssize_t uimage_verify_wndr3700(u_char *buf, size_t len)
 	case FW_MAGIC_WNR612V2:
 	case FW_MAGIC_WNR1000V2:
 	case FW_MAGIC_WNR1000V2_VC:
+	case FW_MAGIC_WNR2000V1:
 	case FW_MAGIC_WNR2000V3:
 	case FW_MAGIC_WNR2200:
 	case FW_MAGIC_WNDR3700:
@@ -310,27 +312,21 @@ static struct mtd_part_parser uimage_netgear_parser = {
 
 static ssize_t uimage_find_edimax(u_char *buf, size_t len)
 {
-	struct uimage_header *header;
+	u32 *magic;
 
-	if (len < FW_EDIMAX_OFFSET + sizeof(*header)) {
+	if (len < FW_EDIMAX_OFFSET + sizeof(struct uimage_header)) {
 		pr_err("Buffer too small for checking Edimax header\n");
 		return -ENOSPC;
 	}
 
-	header = (struct uimage_header *)(buf + FW_EDIMAX_OFFSET);
-
-	switch be32_to_cpu(header->ih_magic) {
-	case FW_MAGIC_EDIMAX:
-		break;
-	default:
-		return -EINVAL;
-	}
-
-	if (header->ih_os != IH_OS_LINUX ||
-	    header->ih_type != IH_TYPE_FILESYSTEM)
+	magic = (u32 *)buf;
+	if (be32_to_cpu(*magic) != FW_MAGIC_EDIMAX)
 		return -EINVAL;
 
-	return FW_EDIMAX_OFFSET;
+	if (!uimage_verify_default(buf + FW_EDIMAX_OFFSET, len))
+		return FW_EDIMAX_OFFSET;
+
+	return -EINVAL;
 }
 
 static int

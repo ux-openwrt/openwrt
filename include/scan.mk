@@ -28,7 +28,7 @@ endef
 
 define PackageDir
   $(TMP_DIR)/.$(SCAN_TARGET): $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1)
-  $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1): $(SCAN_DIR)/$(2)/Makefile $(SCAN_STAMP) $(foreach DEP,$(DEPS_$(SCAN_DIR)/$(2)/Makefile) $(SCAN_DEPS),$(wildcard $(if $(filter /%,$(DEP)),$(DEP),$(SCAN_DIR)/$(2)/$(DEP))))
+  $(TMP_DIR)/info/.$(SCAN_TARGET)-$(1): $(SCAN_DIR)/$(2)/Makefile $(foreach DEP,$(DEPS_$(SCAN_DIR)/$(2)/Makefile) $(SCAN_DEPS),$(wildcard $(if $(filter /%,$(DEP)),$(DEP),$(SCAN_DIR)/$(2)/$(DEP))))
 	{ \
 		$$(call progress,Collecting $(SCAN_NAME) info: $(SCAN_DIR)/$(2)) \
 		echo Source-Makefile: $(SCAN_DIR)/$(2)/Makefile; \
@@ -40,7 +40,8 @@ define PackageDir
 			rm -f $$@; \
 		}; \
 		echo; \
-	} > $$@ || true
+	} > $$@.tmp
+	mv $$@.tmp $$@
 endef
 
 $(OVERRIDELIST):
@@ -50,7 +51,7 @@ $(OVERRIDELIST):
 ifeq ($(SCAN_NAME),target)
   GREP_STRING=BuildTarget
 else
-  GREP_STRING=(Build/DefaultTargets|BuildPackage|.+Package)
+  GREP_STRING=(Build/DefaultTargets|BuildPackage|KernelPackage)
 endif
 
 $(FILELIST): $(OVERRIDELIST)
@@ -76,14 +77,15 @@ $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk: $(FILELIST)
 			print "$$(eval $$(call PackageDir," info "," dir "," pkg "))"; \
 		} ' < $<; \
 		true; \
-	) > $@
+	) > $@.tmp
+	mv $@.tmp $@
 
 -include $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk
 
 $(TARGET_STAMP)::
 	+( \
 		$(NO_TRACE_MAKE) $(FILELIST); \
-		MD5SUM=$$(cat $(FILELIST) $(OVERRIDELIST) | (md5sum || md5) 2>/dev/null | awk '{print $$1}'); \
+		MD5SUM=$$(cat $(FILELIST) $(OVERRIDELIST) | mkhash md5 | awk '{print $$1}'); \
 		[ -f "$@.$$MD5SUM" ] || { \
 			rm -f $@.*; \
 			touch $@.$$MD5SUM; \
@@ -91,7 +93,7 @@ $(TARGET_STAMP)::
 		} \
 	)
 
-$(TMP_DIR)/.$(SCAN_TARGET): $(TARGET_STAMP) $(SCAN_STAMP)
+$(TMP_DIR)/.$(SCAN_TARGET): $(TARGET_STAMP)
 	$(call progress,Collecting $(SCAN_NAME) info: merging...)
 	-cat $(FILELIST) | awk '{gsub(/\//, "_", $$0);print "$(TMP_DIR)/info/.$(SCAN_TARGET)-" $$0}' | xargs cat > $@ 2>/dev/null
 	$(call progress,Collecting $(SCAN_NAME) info: done)

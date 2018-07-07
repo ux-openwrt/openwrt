@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2006-2010 OpenWrt.org
+# Copyright (C) 2016 LEDE Project
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -13,6 +14,11 @@ ifeq ($(DUMP),)
 endif
 include $(TOPDIR)/include/debug.mk
 include $(TOPDIR)/include/verbose.mk
+
+ifneq ($(filter check,$(MAKECMDGOALS)),)
+CHECK:=1
+DUMP:=1
+endif
 
 export TMP_DIR:=$(TOPDIR)/tmp
 
@@ -49,11 +55,14 @@ __tr_template = $(__tr_head)$$(1)$(__tr_tail)
 $(eval toupper = $(call __tr_template,$(chars_lower),$(chars_upper)))
 $(eval tolower = $(call __tr_template,$(chars_upper),$(chars_lower)))
 
+version_abbrev = $(if $(if $(CHECK),,$(DUMP)),$(1),$(shell printf '%.8s' $(1)))
+
 _SINGLE=export MAKEFLAGS=$(space);
 CFLAGS:=
 ARCH:=$(subst i486,i386,$(subst i586,i386,$(subst i686,i386,$(call qstrip,$(CONFIG_ARCH)))))
 ARCH_PACKAGES:=$(call qstrip,$(CONFIG_TARGET_ARCH_PACKAGES))
 BOARD:=$(call qstrip,$(CONFIG_TARGET_BOARD))
+SUBTARGET:=$(call qstrip,$(CONFIG_TARGET_SUBTARGET))
 TARGET_OPTIMIZATION:=$(call qstrip,$(CONFIG_TARGET_OPTIMIZATION))
 export EXTRA_OPTIMIZATION:=$(filter-out -fno-plt,$(call qstrip,$(CONFIG_EXTRA_OPTIMIZATION)))
 TARGET_SUFFIX=$(call qstrip,$(CONFIG_TARGET_SUFFIX))
@@ -93,7 +102,8 @@ ifdef CONFIG_MIPS64_ABI
 endif
 
 DL_DIR:=$(if $(call qstrip,$(CONFIG_DOWNLOAD_FOLDER)),$(call qstrip,$(CONFIG_DOWNLOAD_FOLDER)),$(TOPDIR)/dl)
-BIN_DIR:=$(if $(call qstrip,$(CONFIG_BINARY_FOLDER)),$(call qstrip,$(CONFIG_BINARY_FOLDER)),$(TOPDIR)/bin/$(BOARD))
+OUTPUT_DIR:=$(if $(call qstrip,$(CONFIG_BINARY_FOLDER)),$(call qstrip,$(CONFIG_BINARY_FOLDER)),$(TOPDIR)/bin)
+BIN_DIR:=$(OUTPUT_DIR)/targets/$(BOARD)/$(SUBTARGET)
 INCLUDE_DIR:=$(TOPDIR)/include
 SCRIPT_DIR:=$(TOPDIR)/scripts
 BUILD_DIR_BASE:=$(TOPDIR)/build_dir
@@ -137,6 +147,7 @@ PKG_INFO_DIR := $(STAGING_DIR)/pkginfo
 
 BUILD_DIR_HOST:=$(if $(IS_PACKAGE_BUILD),$(BUILD_DIR)/host,$(BUILD_DIR_BASE)/host)
 STAGING_DIR_HOST:=$(TOPDIR)/staging_dir/host
+STAGING_DIR_HOSTPKG:=$(STAGING_DIR)/host
 
 TARGET_PATH:=$(subst $(space),:,$(filter-out .,$(filter-out ./,$(subst :,$(space),$(PATH)))))
 TARGET_INIT_PATH:=$(call qstrip,$(CONFIG_TARGET_INIT_PATH))
@@ -368,12 +379,22 @@ define file_copy
 	$(CP) $(1) $(2)
 endef
 
+# Calculate sha256sum of any plain file within a given directory
+# $(1) => Input directory
+define sha256sums
+	(cd $(1); find . -maxdepth 1 -type f -not -name 'sha256sums' -printf "%P\n" | sort | \
+		xargs -r $(STAGING_DIR_HOST)/bin/mkhash -n sha256 | sed -ne 's!^\(.*\) \(.*\)$$!\1 *\2!p' > sha256sums)
+endef
+
 # file extension
 ext=$(word $(words $(subst ., ,$(1))),$(subst ., ,$(1)))
 
 all:
 FORCE: ;
 .PHONY: FORCE
+
+check: FORCE
+	@true
 
 val.%:
 	@$(if $(filter undefined,$(origin $*)),\
