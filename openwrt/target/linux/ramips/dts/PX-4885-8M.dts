@@ -3,6 +3,7 @@
 #include "PX-4885.dtsi"
 
 / {
+	compatible = "7links,px-4885-8m", "7links,px-4885", "ralink,rt5350-soc";
 	model = "7Links PX-4885 (8M)";
 };
 
@@ -14,7 +15,6 @@
 		#size-cells = <1>;
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		linux,modalias = "m25p80", "mx25l3205d";
 		spi-max-frequency = <10000000>;
 
 		partition@0 {

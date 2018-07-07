@@ -5,6 +5,7 @@
 #include <dt-bindings/gpio/gpio.h>
 
 / {
+	compatible = "samknows,whitebox-v8", "mediatek,mt7621-soc";
 	model = "SamKnows Whitebox 8";
 
 	memory@0 {
@@ -92,7 +93,7 @@
 			reg = <0x0000 0 0 0 0>;
 			device_type = "pci";
 			mediatek,mtd-eeprom = <&factory 0x8000>;
-			mediatek,2ghz = <0>;
+			ieee80211-freq-limit = <5000000 6000000>;
 		};
 	};
 
@@ -101,7 +102,6 @@
 			reg = <0x0000 0 0 0 0>;
 			device_type = "pci";
 			mediatek,mtd-eeprom = <&factory 0x0000>;
-			mediatek,5ghz = <0>;
 		};
 	};
 };
