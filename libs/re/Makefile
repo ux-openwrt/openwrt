@@ -1,5 +1,5 @@
 # 
-# Copyright (C) 2010-2014 OpenWrt.org
+# Copyright (C) 2010-2015 OpenWrt.org
 # Copyright (C) 2010 Alfred E. Heggestad
 #
 # This is free software, licensed under the GNU General Public License v2.
@@ -9,16 +9,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=re
-PKG_VERSION:=0.4.9
+PKG_VERSION:=0.4.12
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.creytiv.com/pub
-PKG_MD5SUM:=0957b658fd19d15d0fa5c9390619fc1e
+PKG_MD5SUM:=f065b362bc97f8eed3d3cc44767983d6
+
+PKG_LICENSE:=BSD-3-Clause
+PKG_LICENSE_FILES:=docs/COPYING
+PKG_MAINTAINER:=Jiri Slachta <slachta@cesnet.cz>
 
 include $(INCLUDE_DIR)/package.mk
 
 define Package/libre
+  SUBMENU:=Telephony
   SECTION:=libs
   CATEGORY:=Libraries
   DEPENDS:=+libopenssl +libpthread
