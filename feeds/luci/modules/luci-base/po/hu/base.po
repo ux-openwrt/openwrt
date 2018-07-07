@@ -1056,6 +1056,9 @@ msgstr "VLAN funkció engedélyezése"
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK"
 msgstr ""
 
+msgid "Enable key reinstallation (KRACK) countermeasures"
+msgstr ""
+
 msgid "Enable learning and aging"
 msgstr "Tanulás és aging engedélyezése"
 
@@ -2400,6 +2403,9 @@ msgstr ""
 
 msgid "Password successfully changed!"
 msgstr "A jelszó megváltoztatása sikeres!"
+
+msgid "Password2"
+msgstr ""
 
 msgid "Path to CA-Certificate"
 msgstr "CA tanúsítvány elérési útja"
@@ -3761,6 +3767,13 @@ msgstr "Vezetéknélküli rész újraindítva"
 
 msgid "Wireless shut down"
 msgstr "Vezetéknélküli rész leállítása"
+
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
 
 msgid "Write received DNS requests to syslog"
 msgstr "A kapott DNS kéréseket írja a rendszernaplóba"
