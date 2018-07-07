@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=asterisk-g72x
-PKG_VERSION:=1.3
-PKG_RELEASE:=2
+PKG_VERSION:=1.4.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=asterisk-g72x-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://asterisk.hosting.lv/src/
-PKG_MD5SUM:=05825dfbe4959dc5c90b2f7b91e3d4e3
+PKG_HASH:=0c6cb1a61d408c882ce3fe10db4d467407ce3863f672a91aa7d3aea082a23fbc
 
 PKG_BUILD_DIR=$(BUILD_DIR)/asterisk-g72x-$(PKG_VERSION)
 PKG_FIXUP:=autoreconf
@@ -23,75 +23,62 @@ PKG_LICENSE:=GPL-3.0
 PKG_LICENSE_FILES:=README.md
 PKG_MAINTAINER:=Alex Samorukov <samm@os2.kiev.ua>
 
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
+
 include $(INCLUDE_DIR)/package.mk
 
 define Package/asterisk-g72x/Default
   SUBMENU:=Telephony
   SECTION:=net
   CATEGORY:=Network
-  TITLE:=G.729 codec for Asterisk open source PBX
+  TITLE:=G.729 codec support
   URL:=http://asterisk.hosting.lv
-  DEPENDS:= +bcg729
-endef
-
-define Package/asterisk11-codec-g729
-$(call Package/asterisk-g72x/Default)
-  DEPENDS+= asterisk11
-  VARIANT:=asterisk11
+  DEPENDS:=+bcg729
 endef
 
 define Package/asterisk13-codec-g729
 $(call Package/asterisk-g72x/Default)
-  DEPENDS+= asterisk13
+  DEPENDS+=asterisk13
   VARIANT:=asterisk13
+endef
+
+define Package/asterisk15-codec-g729
+$(call Package/asterisk-g72x/Default)
+  DEPENDS+=asterisk15
+  VARIANT:=asterisk15
 endef
 
 define Package/description/Default
  Asterisk G.729 codec based on bcg729 implementation.
 endef
 
-Package/asterisk11-codec-g729/description = $(Package/description/Default)
 Package/asterisk13-codec-g729/description = $(Package/description/Default)
+Package/asterisk15-codec-g729/description = $(Package/description/Default)
 
-ifeq ($(BUILD_VARIANT),asterisk11)
-  MAKE_ARGS:= \
-	CC="$(TARGET_CC)" \
-	LD="$(TARGET_LD)" \
-	CFLAGS="$(TARGET_CFLAGS) -DASTERISK_VERSION_NUM=110000 -DLOW_MEMORY -D_XOPEN_SOURCE=600 $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/asterisk-11/include -DHAVE_CONFIG_H -I. -fPIC" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)"
-
-  CONFIGURE_ARGS+=\
-	--with-asterisk-includes=$(STAGING_DIR)/usr/include/asterisk-11/include \
-	--with-asterisk100 \
+CONFIGURE_ARGS+= \
 	--with-bcg729 \
-	--enable-shared \
-	$(MAKE_ARGS)
-endif
+	--enable-shared
 
 ifeq ($(BUILD_VARIANT),asterisk13)
-  MAKE_ARGS:= \
-	CC="$(TARGET_CC)" \
-	LD="$(TARGET_LD)" \
-	CFLAGS="$(TARGET_CFLAGS) -DASTERISK_VERSION_NUM=130000 -DLOW_MEMORY -D_XOPEN_SOURCE=600 $(TARGET_CPPFLAGS) -I$(STAGING_DIR)/usr/include/asterisk-13/include -DHAVE_CONFIG_H -I. -fPIC" \
-	LDFLAGS="$(TARGET_LDFLAGS)" \
-	DESTDIR="$(PKG_INSTALL_DIR)"
-
-  CONFIGURE_ARGS+=\
+CONFIGURE_ARGS+= \
 	--with-asterisk-includes=$(STAGING_DIR)/usr/include/asterisk-13/include \
-	--with-asterisk130 \
-	--with-bcg729 \
-	--enable-shared \
-	$(MAKE_ARGS)
+	--with-asterisk130
+endif
+
+ifeq ($(BUILD_VARIANT),asterisk15)
+CONFIGURE_ARGS+= \
+	--with-asterisk-includes=$(STAGING_DIR)/usr/include/asterisk-15/include \
+	--with-asterisk150
 endif
 
 define Package/Install/Default
 	$(INSTALL_DIR) $(1)/usr/lib/asterisk/modules
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/codec_g729.so $(1)/usr/lib/asterisk/modules/
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/asterisk/modules/codec_g729.so \
+		$(1)/usr/lib/asterisk/modules/
 endef
 
-Package/asterisk11-codec-g729/install = $(Package/Install/Default)
 Package/asterisk13-codec-g729/install = $(Package/Install/Default)
+Package/asterisk15-codec-g729/install = $(Package/Install/Default)
 
-$(eval $(call BuildPackage,asterisk11-codec-g729))
 $(eval $(call BuildPackage,asterisk13-codec-g729))
+$(eval $(call BuildPackage,asterisk15-codec-g729))
