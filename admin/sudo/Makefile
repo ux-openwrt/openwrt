@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=sudo
-PKG_VERSION:=1.8.12
+PKG_VERSION:=1.8.14p3
 PKG_RELEASE:=1
 PKG_LICENSE:=ISC
 PKG_LICENSE_FILES:=doc/LICENSE
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.sudo.ws/sudo/dist
-PKG_MD5SUM:=87558f3a55c62bc9244b19594f103ffa
+PKG_SOURCE_URL:=http://www.sudo.ws/dist
+PKG_MD5SUM:=93dbd1e47c136179ff1b01494c1c0e75
 
 PKG_INSTALL:=1
 
@@ -40,6 +40,7 @@ endef
 
 define Package/sudo/conffiles
 /etc/sudoers
+/etc/sudoers.d/
 endef
 
 CONFIGURE_ARGS+= \
@@ -63,8 +64,8 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin
-	$(CP) $(HOST_BUILD_DIR)/lib/util/mksig{list,name} $(STAGING_DIR_HOST)/bin/
+	$(INSTALL_DIR) $(STAGING_DIR)/host/bin
+	$(CP) $(HOST_BUILD_DIR)/lib/util/mksig{list,name} $(STAGING_DIR)/host/bin/
 endef
 
 $(eval $(call HostBuild))

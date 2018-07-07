@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2014 OpenWrt.org
+# Copyright (C) 2006-2016 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -14,12 +14,12 @@ PYTHON_VERSION:=$(PYTHON3_VERSION)
 PYTHON_VERSION_MICRO:=$(PYTHON3_VERSION_MICRO)
 
 PKG_NAME:=python3
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 PKG_VERSION:=$(PYTHON_VERSION).$(PYTHON_VERSION_MICRO)
 
 PKG_SOURCE:=Python-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=http://www.python.org/ftp/python/$(PKG_VERSION)
-PKG_MD5SUM:=36fc7327c02c6f12fa24fc9ba78039e3
+PKG_SOURCE_URL:=https://www.python.org/ftp/python/$(PKG_VERSION)
+PKG_MD5SUM:=e9ea6f2623fffcdd871b7b19113fde80
 
 PKG_LICENSE:=PSF
 PKG_LICENSE_FILES:=LICENSE Modules/_ctypes/libffi_msvc/LICENSE Modules/_ctypes/darwin/LICENSE Modules/_ctypes/libffi/LICENSE Modules/_ctypes/libffi_osx/LICENSE Tools/pybench/LICENSE
@@ -31,7 +31,8 @@ HOST_BUILD_PARALLEL:=1
 PKG_BUILD_DIR:=$(BUILD_DIR)/Python-$(PKG_VERSION)
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/Python-$(PKG_VERSION)
 
-PKG_BUILD_DEPENDS:=python3/host
+PKG_BUILD_DEPENDS:=libbz2/host expat/host python3/host
+HOST_BUILD_DEPENDS:=bzip2/host expat/host libffi/host
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -41,7 +42,7 @@ define Package/python3/Default
   SECTION:=lang
   CATEGORY:=Languages
   TITLE:=Python $(PYTHON_VERSION) programming language
-  URL:=http://www.python.org/
+  URL:=https://www.python.org/
   MAINTAINER:=Alexandru Ardelean <ardeleanalex@gmail.com>
 endef
 
@@ -57,7 +58,7 @@ endef
 define Package/python3-base
 $(call Package/python3/Default)
   TITLE:=Python $(PYTHON_VERSION) interpreter
-  DEPENDS:=+libpthread +zlib +libffi +libopenssl
+  DEPENDS:=+libpthread +zlib
 endef
 
 define Package/python3-base/description
@@ -65,19 +66,50 @@ define Package/python3-base/description
   for the interpreter to start.
 endef
 
+define Package/python3-light
+$(call Package/python3/Default)
+  TITLE:=Python $(PYTHON_VERSION) light installation
+  DEPENDS:=+python3-base +libffi +libbz2
+endef
+
+define Package/python3-light/description
+  This package is essentially the python3-base package plus
+  a few of the rarely used (and big) libraries stripped out
+  into separate packages.
+endef
+
+PYTHON3_LIB_FILES_DEL:=
+PYTHON3_PACKAGES:=
+PYTHON3_SO_SUFFIX:=cpython-$(PYTHON3_VERSION_MAJOR)$(PYTHON3_VERSION_MINOR).so
+define Py3BasePackage
+  PYTHON3_PACKAGES+=$(1)
+  PYTHON3_LIB_FILES_DEL+=$(2)
+  define Py3Package/$(1)/filespec
+    $(subst $(space),$(newline),$(foreach lib_file,$(2),+|$(lib_file)))
+  endef
+endef
+
+include ./files/python3-package-*.mk
+
 define Package/python3
 $(call Package/python3/Default)
-  DEPENDS:=+python3-base +libncursesw +libbz2 +libgdbm +libsqlite3 +libdb47
+  DEPENDS:=+python3-light $(foreach package,$(filter-out python3-dev python3-lib2to3,$(PYTHON3_PACKAGES)),+$(package))
 endef
 
 define Package/python3/description
   This package contains the (almost) full Python install.
+  It's python3-light + all other packages.
 endef
 
 MAKE_FLAGS+=\
 	CROSS_COMPILE=yes \
 	LD="$(TARGET_CC)" \
+	FREEZE_IMPORTLIB=_freeze_importlib \
 	PGEN=pgen3
+
+ifeq ($(ARCH),i386)
+MAKE_FLAGS+=PYTHON_DECIMAL_WITH_MACHINE=ansi32
+endif
 
 EXTRA_CFLAGS+= \
 	-DNDEBUG -fno-inline
@@ -115,7 +147,7 @@ define Build/InstallDev
 		$(PKG_INSTALL_DIR)/usr/include/python$(PYTHON_VERSION) \
 		$(1)/usr/include/
 	$(CP) \
-		$(STAGING_DIR_HOST)/lib/python$(PYTHON_VERSION) \
+		$(STAGING_DIR)/host/lib/python$(PYTHON_VERSION) \
 		$(PKG_INSTALL_DIR)/usr/lib/libpython$(PYTHON_VERSION).so* \
 		$(1)/usr/lib/
 	$(CP) \
@@ -123,31 +155,35 @@ define Build/InstallDev
 		$(1)/usr/lib/python$(PYTHON_VERSION)/
 endef
 
+PYTHON3_BASE_LIB_FILES:= \
+	/usr/lib/python$(PYTHON_VERSION)/encodings \
+	/usr/lib/python$(PYTHON_VERSION)/_collections_abc.py \
+	/usr/lib/python$(PYTHON_VERSION)/_sitebuiltins.py \
+	/usr/lib/python$(PYTHON_VERSION)/_sysconfigdata.py \
+	/usr/lib/python$(PYTHON_VERSION)/_weakrefset.py \
+	/usr/lib/python$(PYTHON_VERSION)/abc.py \
+	/usr/lib/python$(PYTHON_VERSION)/codecs.py \
+	/usr/lib/python$(PYTHON_VERSION)/genericpath.py \
+	/usr/lib/python$(PYTHON_VERSION)/io.py \
+	/usr/lib/python$(PYTHON_VERSION)/os.py \
+	/usr/lib/python$(PYTHON_VERSION)/posixpath.py \
+	/usr/lib/python$(PYTHON_VERSION)/site.py \
+	/usr/lib/python$(PYTHON_VERSION)/sysconfig.py \
+	/usr/lib/python$(PYTHON_VERSION)/stat.py
+
+PYTHON3_LIB_FILES_DEL+=$(PYTHON3_BASE_LIB_FILES)
+
 define Py3Package/python3-base/filespec
 +|/usr/bin/python$(PYTHON_VERSION)
-+|/usr/lib/python$(PYTHON_VERSION)/encodings
-+|/usr/lib/python$(PYTHON_VERSION)/_collections_abc.py
-+|/usr/lib/python$(PYTHON_VERSION)/_sitebuiltins.py
-+|/usr/lib/python$(PYTHON_VERSION)/_sysconfigdata.py
-+|/usr/lib/python$(PYTHON_VERSION)/_weakrefset.py
-+|/usr/lib/python$(PYTHON_VERSION)/abc.py
-+|/usr/lib/python$(PYTHON_VERSION)/codecs.py
-+|/usr/lib/python$(PYTHON_VERSION)/genericpath.py
-+|/usr/lib/python$(PYTHON_VERSION)/io.py
-+|/usr/lib/python$(PYTHON_VERSION)/os.py
-+|/usr/lib/python$(PYTHON_VERSION)/posixpath.py
-+|/usr/lib/python$(PYTHON_VERSION)/site.py
-+|/usr/lib/python$(PYTHON_VERSION)/sysconfig.py
-+|/usr/lib/python$(PYTHON_VERSION)/stat.py
+$(subst $(space),$(newline),$(foreach lib_file,$(PYTHON3_BASE_LIB_FILES),+|$(lib_file)))
 endef
 
-define Py3Package/python3/filespec
+define Py3Package/python3-light/filespec
 +|/usr/lib/python$(PYTHON_VERSION)
--|/usr/lib/python$(PYTHON_VERSION)/config-$(PYTHON_VERSION)
 -|/usr/lib/python$(PYTHON_VERSION)/distutils/cygwinccompiler.py
 -|/usr/lib/python$(PYTHON_VERSION)/distutils/command/wininst*
+-|/usr/lib/python$(PYTHON_VERSION)/ensurepip
 -|/usr/lib/python$(PYTHON_VERSION)/idlelib
--|/usr/lib/python$(PYTHON_VERSION)/lib2to3
 -|/usr/lib/python$(PYTHON_VERSION)/tkinter
 -|/usr/lib/python$(PYTHON_VERSION)/turtledemo
 -|/usr/lib/python$(PYTHON_VERSION)/lib-dynload/_test*.so
@@ -157,6 +193,8 @@ define Py3Package/python3/filespec
 -|/usr/lib/python$(PYTHON_VERSION)/webbrowser.py
 -|/usr/lib/python$(PYTHON_VERSION)/*/test
 -|/usr/lib/python$(PYTHON_VERSION)/*/tests
+-|/usr/lib/python$(PYTHON_VERSION)/_osx_support.py
+$(subst $(space),$(newline),$(foreach lib_file,$(PYTHON3_LIB_FILES_DEL),-|$(lib_file)))
 endef
 
 define Py3Package/python3-base/install
@@ -167,14 +205,28 @@ define Py3Package/python3-base/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpython$(PYTHON_VERSION).so* $(1)/usr/lib/
 endef
 
+define Py3Package/python3/filespec
+-|$(PYTHON3_PKG_DIR)
+endef
+
+HOST_CFLAGS+= \
+	-I/usr/include/ncursesw \
+	-I/usr/include/ncurses
+
 HOST_CONFIGURE_ARGS+= \
 	--without-cxx-main \
 	--without-pymalloc \
 	--with-threads \
-	--prefix=$(STAGING_DIR_HOST) \
+	--prefix=$(STAGING_DIR)/host \
+	--exec-prefix=$(STAGING_DIR)/host \
+	--sysconfdir=$(STAGING_DIR_HOST)/host/etc \
+	--localstatedir=$(STAGING_DIR)/host/var \
+	--sbindir=$(STAGING_DIR)/host/bin \
+	--with-system-expat=$(STAGING_DIR)/host \
+	--with-system-ffi=$(STAGING_DIR)/host \
 	--with-ensurepip=upgrade \
 	CONFIG_SITE= \
-	OPT="$(HOST_CFLAGS)"
+	CFLAGS="$(HOST_CFLAGS)"
 
 define Host/Compile
 	+$(MAKE) $(HOST_JOBS) -C $(HOST_BUILD_DIR) python Parser/pgen
@@ -182,15 +234,23 @@ define Host/Compile
 endef
 
 define Host/Install
-	$(INSTALL_DIR) $(STAGING_DIR_HOST)/bin/
+	$(INSTALL_DIR) $(STAGING_DIR)/host/bin/
 	$(MAKE) -C $(HOST_BUILD_DIR) install
-	$(INSTALL_BIN) $(HOST_BUILD_DIR)/Parser/pgen $(STAGING_DIR_HOST)/bin/pgen3
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/Parser/pgen $(STAGING_DIR)/host/bin/pgen3
+	$(INSTALL_BIN) $(HOST_BUILD_DIR)/Programs/_freeze_importlib $(STAGING_DIR)/host/bin/_freeze_importlib
 endef
 
 $(eval $(call HostBuild))
 
+$(foreach package, $(PYTHON3_PACKAGES),  \
+	$(eval $(call Py3Package,$(package))) \
+	$(eval $(call BuildPackage,$(package))) \
+)
+
 $(eval $(call Py3Package,python3-base))
+$(eval $(call Py3Package,python3-light))
 $(eval $(call Py3Package,python3))
 
 $(eval $(call BuildPackage,python3-base))
+$(eval $(call BuildPackage,python3-light))
 $(eval $(call BuildPackage,python3))
