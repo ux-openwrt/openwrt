@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=unbound
-PKG_VERSION:=1.5.10
-PKG_RELEASE:=3
+PKG_VERSION:=1.6.0
+PKG_RELEASE:=2
 
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
@@ -17,7 +17,7 @@ PKG_MAINTAINER:=Eric Luehrsen <ericluehrsen@hotmail.com>
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.unbound.net/downloads
-PKG_MD5SUM:=0a3a236811f1ab5c1dc31974fa74e047
+PKG_MD5SUM:=78409eccf7260d260b6463f85e59c66b
 
 PKG_BUILD_DEPENDS:=libexpat
 PKG_BUILD_PARALLEL:=1
@@ -120,6 +120,7 @@ CONFIGURE_ARGS += \
 	--with-user=unbound
 
 define Package/unbound/conffiles
+/etc/config/unbound
 /etc/unbound/unbound.conf
 endef
 
@@ -141,13 +142,19 @@ define Package/unbound/install
 		$(PKG_INSTALL_DIR)/etc/unbound/unbound.conf \
 		$(1)/etc/unbound/unbound.conf
 	$(INSTALL_DATA) ./files/root.key $(1)/etc/unbound/root.key
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/unbound.uci $(1)/etc/config/unbound
 	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
 	$(INSTALL_BIN) ./files/unbound.iface $(1)/etc/hotplug.d/iface/25-unbound
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/ntp
+	$(INSTALL_BIN) ./files/unbound.ntpd $(1)/etc/hotplug.d/ntp/25-unbound
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/unbound.init $(1)/etc/init.d/unbound
 	$(INSTALL_DIR) $(1)/usr/lib/unbound
-	$(INSTALL_DATA) ./files/unbound.sh $(1)/usr/lib/unbound/unbound.sh
+	$(INSTALL_DATA) ./files/dnsmasq.sh $(1)/usr/lib/unbound/dnsmasq.sh
+	$(INSTALL_DATA) ./files/iptools.sh $(1)/usr/lib/unbound/iptools.sh
 	$(INSTALL_DATA) ./files/rootzone.sh $(1)/usr/lib/unbound/rootzone.sh
+	$(INSTALL_DATA) ./files/unbound.sh $(1)/usr/lib/unbound/unbound.sh
 endef
 
 define Package/unbound-anchor/install
