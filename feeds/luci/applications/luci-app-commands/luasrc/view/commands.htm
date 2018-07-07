@@ -108,16 +108,17 @@
 
 		if (legend && output)
 		{
-			var link = location.protocol + '//' + location.hostname +
-			           (location.port ? ':' + location.port : '') +
-					   location.pathname.split(';')[0] + 'command/' +
-					   id + (args ? '/' + args : '');
-
+			var prefix = location.protocol + '//' + location.host + '<%=url('command')%>/';
+			var suffix = (args ? '/' + args : '');
+			
+			var link = prefix + id + suffix;
+			var link_nodownload = prefix + id + "s" + suffix;
+			
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
-				'<div class="alert-message"><%:Access command with%> <a href="%s">%s</a></div>',
-				link, link
+				'<div class="alert-message"><p><%:Download execution result%> <a href="%s">%s</a></p><p><%:Or display result%> <a href="%s">%s</a></p></div>',
+				link, link, link_nodownload, link_nodownload
 			);
 
 			location.hash = '#output';
@@ -133,7 +134,7 @@
 	uci:foreach("luci", "command", function(s) commands[#commands+1] = s end)
 %>
 
-<form method="get" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+<form method="get" action="<%=pcdata(FULL_REQUEST_URI)%>">
 	<div class="cbi-map">
 		<h2 name="content"><%:Custom Commands%></h2>
 

@@ -87,7 +87,7 @@ function Graph._rrdtool( self, def, rrd )
 	fs.mkdirr( dir )
 
 	-- construct commandline
-	local cmdline = "rrdtool graph"
+	local cmdline = { "rrdtool", "graph" }
 
 	-- copy default arguments to def stack
 	for i, opt in ipairs(self.args) do
@@ -102,15 +102,11 @@ function Graph._rrdtool( self, def, rrd )
 			opt = opt:gsub( "{file}", rrd )
 		end
 
-		if opt:match("[^%w]") then
-			cmdline = cmdline .. " '" .. opt .. "'"
-		else
-			cmdline = cmdline .. " " .. opt
-		end
+		cmdline[#cmdline+1] = luci.util.shellquote(opt)
 	end
 
 	-- execute rrdtool
-	local rrdtool = io.popen( cmdline )
+	local rrdtool = io.popen(table.concat(cmdline, " "))
 	rrdtool:close()
 end
 
@@ -278,7 +274,7 @@ function Graph._generic( self, opts, plugin, plugin_instance, dtype, index )
 
 		-- create line1 statement
 		_tif( _args, "LINE%d:%s_%s#%s:%s",
-			source.noarea and 2 or 1,
+			source.width or (source.noarea and 2 or 1),
 			source.sname, var, line_color, legend )
 	end
 
