@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-25 22:10+0100\n"
-"PO-Revision-Date: 2012-09-18 17:33+0200\n"
-"Last-Translator: Gyula <pro564@hotmail.com>\n"
+"PO-Revision-Date: 2012-12-30 19:18+0200\n"
+"Last-Translator: romboyco <romboyco@gmail.com>\n"
 "Language-Team: none\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -24,11 +24,11 @@ msgstr "Besorolási szabályok"
 msgid "Classification group"
 msgstr "Besorolási csoport"
 
+msgid "Comment"
+msgstr ""
+
 msgid "Destination host"
 msgstr "Cél gép"
-
-msgid "Downlink"
-msgstr ""
 
 msgid "Download speed (kbit/s)"
 msgstr "Letöltési sebesség (kbit/s)"
@@ -41,9 +41,6 @@ msgstr "Fél-duplex"
 
 msgid "Interfaces"
 msgstr "Interfészek"
-
-msgid "Internet Connection"
-msgstr "Internet kapcsolat"
 
 msgid "Number of bytes"
 msgstr "Bájtok száma"
@@ -69,9 +66,6 @@ msgstr "Forrás gép"
 msgid "Target"
 msgstr "Cél"
 
-msgid "Uplink"
-msgstr ""
-
 msgid "Upload speed (kbit/s)"
 msgstr "Feltöltési sebesség (kbit/s)"
 
@@ -79,15 +73,12 @@ msgid ""
 "With <abbr title=\"Quality of Service\">QoS</abbr> you can prioritize "
 "network traffic selected by addresses, ports or services."
 msgstr ""
-"A <abbr title=\"Quality of Service\">QoS</abbr> segítségével beállítható cím, "
-"portok vagy szolgáltatások alapján kiválasztott hálózati forgalom "
+"A <abbr title=\"Quality of Service\">QoS</abbr> segítségével beállítható "
+"cím, portok vagy szolgáltatások alapján kiválasztott hálózati forgalom "
 "prioritása."
 
 msgid "all"
 msgstr "összes"
-
-msgid "allf"
-msgstr ""
 
 msgid "default"
 msgstr "alapértelmezett"
@@ -104,5 +95,17 @@ msgstr "normál"
 msgid "priority"
 msgstr "prioritás"
 
-msgid "qos_connbytes"
-msgstr ""
+#~ msgid "Downlink"
+#~ msgstr "Downlink"
+
+#~ msgid "Internet Connection"
+#~ msgstr "Internet kapcsolat"
+
+#~ msgid "Uplink"
+#~ msgstr "Uplink"
+
+#~ msgid "allf"
+#~ msgstr "allf"
+
+#~ msgid "qos_connbytes"
+#~ msgstr "qos_connbytes"

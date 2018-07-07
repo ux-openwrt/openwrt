@@ -5,13 +5,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2009-05-27 11:15+0200\n"
-"Last-Translator: Eduard Duran <iopahopa@gmail.com>\n"
+"PO-Revision-Date: 2014-08-07 20:11+0200\n"
+"Last-Translator: Alex <alexhenrie24@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Pootle 1.1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Pootle 2.0.6\n"
 
 msgid "Action (target)"
 msgstr "Acció (objectiu)"
@@ -23,7 +25,7 @@ msgid "Add matching rule"
 msgstr "Afegeix regla coincident"
 
 msgid "Add multiple hosts separated by space."
-msgstr ""
+msgstr "Afegeix múltiples hosts separats per espai."
 
 msgid "Add notification command"
 msgstr "Afegeix ordre de notificació"
@@ -68,19 +70,19 @@ msgid "Collectd Settings"
 msgstr "Configuració Collectd"
 
 msgid ""
-"Collectd is a small daeomon for collecting data from various sources through "
+"Collectd is a small daemon for collecting data from various sources through "
 "different plugins. On this page you can change general settings for the "
 "collectd daemon."
 msgstr ""
 "Collectd és un petit dimoni per recollir dades de diverses fonts a través "
-"dels connectors. En aquesta pàgina pots canviar la configuració general pel "
-"dimoni collectd."
+"dels connectors. En aquesta pàgina podeu canviar la configuració general del "
+"dimoni Collectd."
 
 msgid "Conntrack"
-msgstr ""
+msgstr "Conntrack"
 
 msgid "Conntrack Plugin Configuration"
-msgstr ""
+msgstr "Configuració del connector Conntrack"
 
 msgid "DF Plugin Configuration"
 msgstr "Configuració del connector DF"
@@ -114,6 +116,9 @@ msgstr "Ús d'espai en disc"
 
 msgid "Disk Usage"
 msgstr "Ús de disc"
+
+msgid "Display Host »"
+msgstr "Mostra el host »"
 
 msgid "Display timespan »"
 msgstr "Mostra l'hora"
@@ -149,7 +154,7 @@ msgid "Graphs"
 msgstr "Gràfics"
 
 msgid "Group"
-msgstr ""
+msgstr "Grup"
 
 msgid ""
 "Here you can define external commands which will be started by collectd in "
@@ -175,10 +180,10 @@ msgstr ""
 "iptables monitoritzades ."
 
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 msgid "Hostname"
-msgstr "Nom de màquina"
+msgstr "Nom de host"
 
 msgid "IP or hostname where to get the txtinfo output from"
 msgstr ""
@@ -191,12 +196,6 @@ msgstr "Ignora adreces origen"
 
 msgid "Incoming interface"
 msgstr "Interfície entrant"
-
-msgid "Installed network plugins:"
-msgstr ""
-
-msgid "Installed output plugins:"
-msgstr ""
 
 msgid "Interface Plugin Configuration"
 msgstr "Configuració de connector d'interfície"
@@ -232,10 +231,10 @@ msgid "Maximum allowed connections"
 msgstr "Connexions màximes permeses"
 
 msgid "Memory"
-msgstr ""
+msgstr "Memòria"
 
 msgid "Memory Plugin Configuration"
-msgstr ""
+msgstr "Configuració del connector de memòria"
 
 msgid "Monitor all except specified"
 msgstr ""
@@ -256,7 +255,7 @@ msgid "Monitor hosts"
 msgstr "Monitoritza màquines"
 
 msgid "Monitor interfaces"
-msgstr ""
+msgstr "Monitoritza hosts"
 
 msgid "Monitor interrupts"
 msgstr "Monitoritza interrupcions"
@@ -280,7 +279,7 @@ msgid "Netlink"
 msgstr "Enllaç de xarxa"
 
 msgid "Netlink Plugin Configuration"
-msgstr "Configuració de connector d'enllaç de xarxa"
+msgstr "Configuració del connector d'enllaç de xarxa"
 
 msgid "Network"
 msgstr "Xarxa"
@@ -291,11 +290,6 @@ msgstr "Configuració del connector de xarxa"
 msgid "Network plugins"
 msgstr "Connectors de xarxa"
 
-msgid ""
-"Network plugins are used to collect information about open tcp connections, "
-"interface traffic, iptables rules etc."
-msgstr ""
-
 msgid "Network protocol"
 msgstr "Protocol de xarxa"
 
@@ -303,10 +297,10 @@ msgid "Number of threads for data collection"
 msgstr "Número de fils de recol·lecció de dades"
 
 msgid "OLSRd"
-msgstr ""
+msgstr "OLSRd"
 
 msgid "OLSRd Plugin Configuration"
-msgstr ""
+msgstr "Configuració del connector OLSRd"
 
 msgid "Only create average RRAs"
 msgstr "Crea només RRAs mitjans"
@@ -320,13 +314,6 @@ msgstr "Interfície sortint"
 msgid "Output plugins"
 msgstr "Connectors de sortida"
 
-msgid ""
-"Output plugins provide different possibilities to store collected data. It "
-"is possible to enable multiple plugin at one, for example to store collected "
-"data in rrd databases and to transmit the data over the network to other "
-"collectd instances."
-msgstr ""
-
 msgid "Ping"
 msgstr "Ping"
 
@@ -334,7 +321,7 @@ msgid "Ping Plugin Configuration"
 msgstr "Configuració del connector ping"
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Processes"
 msgstr "Processos"
@@ -385,28 +372,28 @@ msgid "Shaping class monitoring"
 msgstr "Monitoreig de classe shaping"
 
 msgid "Socket file"
-msgstr ""
+msgstr "Fitxer d'endoll"
 
 msgid "Socket group"
-msgstr ""
+msgstr "Grup d'endoll"
 
 msgid "Socket permissions"
-msgstr ""
+msgstr "Permisos d'endoll"
 
 msgid "Source ip range"
 msgstr "Rang d'IP origen"
 
 msgid "Specifies what information to collect about links."
-msgstr ""
+msgstr "Especifica què informació es recull sobre enllaços."
 
 msgid "Specifies what information to collect about routes."
-msgstr ""
+msgstr "Especifica què informació es recull sobre rutes."
 
 msgid "Specifies what information to collect about the global topology."
-msgstr ""
+msgstr "Especifica què informació es recull sobre la topologia global."
 
 msgid "Statistics"
-msgstr ""
+msgstr "Estadístiques"
 
 msgid "Storage directory"
 msgstr "Directori d'emmagatzematge"
@@ -428,11 +415,6 @@ msgstr "Càrrega de sistema"
 msgid "System plugins"
 msgstr "Connectors de sistema"
 
-msgid ""
-"System plugins collecting values about system state and ressource usage on "
-"the device.:"
-msgstr ""
-
 msgid "TCP Connections"
 msgstr "Connexions TCP"
 
@@ -447,6 +429,9 @@ msgstr "TTL per paquets ping"
 
 msgid "Table"
 msgstr "Taula"
+
+msgid "The NUT plugin reads information about Uninterruptible Power Supplies."
+msgstr ""
 
 msgid ""
 "The OLSRd plugin reads information about meshed networks from the txtinfo "
@@ -533,6 +518,8 @@ msgid ""
 "The iwinfo plugin collects statistics about wireless signal strength, noise "
 "and quality."
 msgstr ""
+"El connector iwinfo recull estadístiques sobre la força de senyal, soroll i "
+"qualitat sense fil."
 
 msgid "The load plugin collects statistics about the general system load."
 msgstr ""
@@ -540,7 +527,7 @@ msgstr ""
 "general."
 
 msgid "The memory plugin collects statistics about the memory usage."
-msgstr ""
+msgstr "El connector de memòria recull estadístiques sobre l'ús de memòria."
 
 msgid ""
 "The netlink plugin collects extended informations like qdisc-, class- and "
@@ -611,13 +598,6 @@ msgstr ""
 "dades recollides d'una instància collectd."
 
 msgid ""
-"The wireless plugin collects statistics about wireless signal strength, "
-"noise and quality."
-msgstr ""
-"El connector Wireless recull estadístiques sobre la potència del senyal "
-"sense fils, el soroll i la qualitat."
-
-msgid ""
 "This section defines on which interfaces collectd will wait for incoming "
 "connections."
 msgstr ""
@@ -633,6 +613,15 @@ msgstr ""
 msgid "Try to lookup fully qualified hostname"
 msgstr "Intenta resoldre el nom de màquina (fqdn)"
 
+msgid "UPS"
+msgstr "UPS"
+
+msgid "UPS Plugin Configuration"
+msgstr "Configuració del connector UPS"
+
+msgid "UPS name in NUT ups@host format"
+msgstr "Nom UPS en format NUT ups@host"
+
 msgid "UnixSock"
 msgstr "Sock Unix"
 
@@ -643,16 +632,13 @@ msgid "Used PID file"
 msgstr "Fitxer PID usat"
 
 msgid "User"
-msgstr ""
+msgstr "Usuari"
 
 msgid "Verbose monitoring"
 msgstr "Monitoreig detallat"
 
 msgid "Wireless"
 msgstr "Wireless"
-
-msgid "Wireless Plugin Configuration"
-msgstr "Configuració del connector Wireless"
 
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr ""
@@ -677,3 +663,13 @@ msgstr "segons; múltiples separats per espais"
 
 msgid "server interfaces"
 msgstr "interfícies de servidor"
+
+#~ msgid ""
+#~ "The wireless plugin collects statistics about wireless signal strength, "
+#~ "noise and quality."
+#~ msgstr ""
+#~ "El connector Wireless recull estadístiques sobre la potència del senyal "
+#~ "sense fils, el soroll i la qualitat."
+
+#~ msgid "Wireless Plugin Configuration"
+#~ msgstr "Configuració del connector Wireless"

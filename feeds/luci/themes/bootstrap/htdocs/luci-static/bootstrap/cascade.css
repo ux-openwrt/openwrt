@@ -13,9 +13,14 @@
 /* Reset.less
  * Props to Eric Meyer (meyerweb.com) for his CSS reset file. We're using an adapted version here	that cuts out some of the reset HTML elements we will never need here (i.e., dfn, samp, etc).
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-html, body {
+html {
 	margin: 0;
 	padding: 0;
+}
+
+body {
+	margin: 0;
+	padding: 5px;
 }
 
 h1, h2, h3, h4, h5, h6, p, pre, a, abbr, acronym, code, del, em, img, q, s,
@@ -103,9 +108,13 @@ img {
 button,
 input,
 select,
+option,
 textarea {
 	font-size: 100%;
 	margin: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 	vertical-align: baseline;
 	*vertical-align: middle;
 }
@@ -444,7 +453,7 @@ textarea {
 
 form .input,
 form .cbi-value-field {
-	margin-left: 150px;
+	margin-left: 200px;
 }
 
 form .cbi-value label.cbi-value-title {
@@ -452,7 +461,7 @@ form .cbi-value label.cbi-value-title {
 	font-size: 13px;
 	line-height: 18px;
 	float: left;
-	width: 130px;
+	width: 180px;
 	text-align: right;
 	color: #404040;
 }
@@ -467,7 +476,7 @@ select,
 .uneditable-input {
 	display: inline-block;
 	width: 210px;
-	height: 18px;
+	height: 30px;
 	padding: 4px;
 	font-size: 13px;
 	line-height: 18px;
@@ -502,6 +511,7 @@ input[type=file] {
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
 	box-shadow: none;
+	width: auto !important;
 }
 
 input[type=button], input[type=reset], input[type=submit] {
@@ -510,9 +520,7 @@ input[type=button], input[type=reset], input[type=submit] {
 }
 
 select, input[type=file] {
-	height: 27px;
 	*height: auto;
-	line-height: 27px;
 	*margin-top: 4px;
 	/* For IE7, add top margin to align select with labels */
 }
@@ -536,7 +544,7 @@ textarea {
 	cursor: not-allowed;
 }
 
-:-moz-placeholder {
+::-moz-placeholder {
 	color: #bfbfbf;
 }
 
@@ -739,7 +747,7 @@ header {
 	right: 0;
 	z-index: 10000;
 	overflow: visible;
-	color: #BFBFBF
+	color: #BFBFBF;
 }
 
 header a {
@@ -789,6 +797,7 @@ header .fill {
 	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 	-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+	padding: 0 5px;
 }
 
 header div > ul, .nav {
@@ -1328,7 +1337,8 @@ footer {
 	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
 }
 
-.cbi-input-invalid {
+.cbi-input-invalid,
+.cbi-value-error input {
 	color: #FF0000;
 	border-color: #FF0000;
 }
@@ -1451,6 +1461,18 @@ footer {
 	background-image: url('../resources/cbi/link.gif'), linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
 }
 
+.cbi-button-download,
+.cbi-input-download {
+	background-position: 6px center, left top;
+	padding-left: 28px;
+	background-image: url('../resources/cbi/download.gif'), -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+	background-image: url('../resources/cbi/download.gif'), -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: url('../resources/cbi/download.gif'), -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+	background-image: url('../resources/cbi/download.gif'), -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: url('../resources/cbi/download.gif'), -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: url('../resources/cbi/download.gif'), linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+}
+
 .btn.active, .btn:active {
 	-webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
 	-moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.25), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -1538,7 +1560,7 @@ footer {
 }
 
 :root .alert-message, :root .btn {
-	border-radius: 0 \0;
+	border-radius: 0 0;
 }
 
 button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
@@ -1742,9 +1764,27 @@ table.cbi-section-table td.cbi-section-table-cell {
 	text-align: right;
 }
 
+table.cbi-section-table td.cbi-section-table-cell select {
+	width: inherit;
+}
+
 .cbi-value-description { display: inline; }
 
 .cbi-value-description img { vertical-align: middle; }
+
+.cbi-section-error {
+	border: 1px solid #FF0000;
+	border-radius: 3px;
+	background-color: #FCE6E6;
+	padding: 5px;
+}
+
+.cbi-section-error ul { margin: 0 0 0 20px; }
+
+.cbi-section-error ul li {
+	color: #FF0000;
+	font-weight: bold;
+}
 
 .ifacebox {
 	background-color: #FFFFFF;
@@ -1815,15 +1855,14 @@ table.cbi-section-table td.cbi-section-table-cell {
 	cursor: pointer;
 }
 
-.zonebadge em,
-.zonebadge strong {
+.zonebadge > em,
+.zonebadge > strong {
 	margin: 5px;
 	display: inline-block;
 }
 
 .zonebadge input {
 	width: 6em;
-	height: 1em;
 }
 
 .zonebadge-empty {

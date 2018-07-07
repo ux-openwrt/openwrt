@@ -35,9 +35,11 @@ s:option(Flag, "overhead", translate("Calculate overhead"))
 
 s:option(Flag, "halfduplex", translate("Half-duplex"))
 
-s:option(Value, "download", translate("Download speed (kbit/s)"))
+dl = s:option(Value, "download", translate("Download speed (kbit/s)"))
+dl.datatype = "and(uinteger,min(1))"
 
-s:option(Value, "upload", translate("Upload speed (kbit/s)"))
+ul = s:option(Value, "upload", translate("Upload speed (kbit/s)"))
+ul.datatype = "and(uinteger,min(1))"
 
 s = m:section(TypedSection, "classify", translate("Classification Rules"))
 s.template = "cbi/tblsection"
@@ -93,5 +95,7 @@ ports.rmempty = true
 ports:value("", translate("all"))
 
 bytes = s:option(Value, "connbytes", translate("Number of bytes"))
+
+comment = s:option(Value, "comment", translate("Comment"))
 
 return m

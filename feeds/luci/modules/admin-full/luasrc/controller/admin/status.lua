@@ -62,7 +62,7 @@ function action_iptables()
 			luci.dispatcher.build_url("admin", "status", "iptables")
 		)
 	elseif luci.http.formvalue("restart") == "1" then
-		luci.util.exec("/etc/init.d/firewall restart")
+		luci.util.exec("/etc/init.d/firewall reload")
 		luci.http.redirect(
 			luci.dispatcher.build_url("admin", "status", "iptables")
 		)
@@ -71,10 +71,7 @@ function action_iptables()
 	end
 end
 
-function action_bandwidth()
-	local path  = luci.dispatcher.context.requestpath
-	local iface = path[#path]
-
+function action_bandwidth(iface)
 	luci.http.prepare_content("application/json")
 
 	local bwc = io.popen("luci-bwc -i %q 2>/dev/null" % iface)
@@ -92,10 +89,7 @@ function action_bandwidth()
 	end
 end
 
-function action_wireless()
-	local path  = luci.dispatcher.context.requestpath
-	local iface = path[#path]
-
+function action_wireless(iface)
 	luci.http.prepare_content("application/json")
 
 	local bwc = io.popen("luci-bwc -r %q 2>/dev/null" % iface)

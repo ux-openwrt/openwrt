@@ -13,7 +13,6 @@ You may obtain a copy of the License at
 local uci = require "luci.model.uci".cursor()
 local ipkg = require "luci.model.ipkg"
 local community = uci:get("freifunk", "community", "name")
-luci.i18n.loadc("freifunk")
 
 if community == nil then
 	luci.http.redirect(luci.dispatcher.build_url("admin", "freifunk", "profile_error"))
@@ -70,6 +69,9 @@ else
 	ipv6_prefix:depends("ipv6", 1)
 	ipv6_prefix.datatype = "ip6addr"
 	ipv6_prefix.rmempty = true
+
+	local vap = c:option(Flag, "vap", translate("VAP"), translate("Enable a virtual access point (VAP) by default if possible."))
+	vap.rmempty = true
 
 	local lat = c:option(Value, "latitude", translate("Latitude"))
 	lat.datatype = "range(-180, 180)"

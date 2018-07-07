@@ -1,20 +1,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2014-07-12 19:47+0200\n"
+"Last-Translator: koli <lukas.koluch@gmail.com>\n"
 "Language-Team: none\n"
+"Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Pootle 2.0.6\n"
 
 msgid "%s"
 msgstr "%s"
 
 msgid "'net30', 'p2p', or 'subnet'"
-msgstr ""
+msgstr "'net30', 'p2p', nebo 'subnet'"
 
 msgid "Accept options pushed from server"
-msgstr ""
+msgstr "Přijmout nastavení, přijatá ze serveru"
 
 msgid "Add"
 msgstr "Přidat"
@@ -44,10 +48,10 @@ msgid "Allowed maximum of internal"
 msgstr ""
 
 msgid "Allowed maximum of new connections"
-msgstr ""
+msgstr "Maximální povolené množství nových připojení"
 
 msgid "Append log to file"
-msgstr ""
+msgstr "Připojit log do souboru"
 
 msgid "Authenticate using username/password"
 msgstr "Ověřit prostřednictvím uživatelského jména / hesla"
@@ -62,7 +66,7 @@ msgid "Call down cmd/script before TUN/TAP close"
 msgstr ""
 
 msgid "Certificate authority"
-msgstr ""
+msgstr "Certifikační autorita"
 
 msgid "Change process priority"
 msgstr "Změnit prioritu procesu"
@@ -77,10 +81,10 @@ msgid "Chroot to directory after initialization"
 msgstr ""
 
 msgid "Client is disabled"
-msgstr ""
+msgstr "Klient je zakázáný"
 
 msgid "Configuration category"
-msgstr ""
+msgstr "Konfigurace kategorie"
 
 msgid "Configure client mode"
 msgstr ""
@@ -101,7 +105,7 @@ msgid "Connection retry interval"
 msgstr ""
 
 msgid "Cryptography"
-msgstr ""
+msgstr "Šifrování"
 
 msgid "Daemonize after initialization"
 msgstr ""
@@ -113,10 +117,10 @@ msgid "Delay tun/tap open and up script execution"
 msgstr ""
 
 msgid "Diffie Hellman parameters"
-msgstr ""
+msgstr "Parametry Diffie Hellman"
 
 msgid "Directory for custom client config files"
-msgstr ""
+msgstr "Adresář s uživatelskými konfiguračními soubory"
 
 msgid "Disable Paging"
 msgstr ""
@@ -167,28 +171,28 @@ msgid "Empirically measure MTU"
 msgstr ""
 
 msgid "Enable OpenSSL hardware crypto engines"
-msgstr ""
+msgstr "Povolit hardwarovou akceleraci OpenSSL"
 
 msgid "Enable Path MTU discovery"
-msgstr ""
+msgstr "Povolit Path MTU discovery (PMTUD)"
 
 msgid "Enable Static Key encryption mode (non-TLS)"
 msgstr ""
 
 msgid "Enable TLS and assume client role"
-msgstr ""
+msgstr "Povolit TLS a převzít roli klienta"
 
 msgid "Enable TLS and assume server role"
-msgstr ""
+msgstr "Povolit TLS a převzít roli serveru"
 
 msgid "Enable internal datagram fragmentation"
-msgstr ""
+msgstr "Povolit interní fragmentaci datagramů"
 
 msgid "Enable management interface on <em>IP</em> <em>port</em>"
 msgstr ""
 
 msgid "Enabled"
-msgstr ""
+msgstr "Povoleno"
 
 msgid "Encryption cipher for packets"
 msgstr ""
@@ -230,10 +234,10 @@ msgid "If hostname resolve fails, retry"
 msgstr ""
 
 msgid "Instance \"%s\""
-msgstr ""
+msgstr "Instance \"%s\""
 
 msgid "Invalid"
-msgstr ""
+msgstr "Neplatné"
 
 msgid "Keep local IP address on restart"
 msgstr ""
@@ -251,13 +255,13 @@ msgid "Limit repeated log messages"
 msgstr ""
 
 msgid "Local certificate"
-msgstr ""
+msgstr "Lokální certifikát"
 
 msgid "Local host name or ip address"
 msgstr ""
 
 msgid "Local private key"
-msgstr ""
+msgstr "Lokální soukromý klíč"
 
 msgid "Major mode"
 msgstr ""
@@ -284,10 +288,10 @@ msgid "Only process ping timeouts if routes exist"
 msgstr ""
 
 msgid "OpenVPN"
-msgstr ""
+msgstr "OpenVPN"
 
 msgid "OpenVPN instances"
-msgstr ""
+msgstr "OpenVPN instance"
 
 msgid "Optimize TUN/TAP/UDP writes"
 msgstr ""
@@ -296,7 +300,7 @@ msgid "Output to syslog and do not daemonize"
 msgstr ""
 
 msgid "Overview"
-msgstr ""
+msgstr "Přehled"
 
 msgid "PKCS#12 file containing keys"
 msgstr ""
@@ -317,10 +321,10 @@ msgid "Policy level over usage of external programs and scripts"
 msgstr ""
 
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 msgid "Protocol"
-msgstr ""
+msgstr "Protokol"
 
 msgid "Proxy timeout in seconds"
 msgstr ""
@@ -386,10 +390,10 @@ msgid "Run as an inetd or xinetd server"
 msgstr ""
 
 msgid "Run script cmd on client connection"
-msgstr ""
+msgstr "Spustit skript cmd pro připojení klienta"
 
 msgid "Run script cmd on client disconnection"
-msgstr ""
+msgstr "Spustit skript cmd pro odpojení klienta"
 
 msgid "Run up/down scripts for all restarts"
 msgstr ""
@@ -398,7 +402,7 @@ msgid "Send notification to peer on disconnect"
 msgstr ""
 
 msgid "Service"
-msgstr ""
+msgstr "Služba"
 
 msgid "Set GID to group"
 msgstr ""
@@ -458,7 +462,7 @@ msgid "Silence the output of replay warnings"
 msgstr ""
 
 msgid "Size of cipher key"
-msgstr ""
+msgstr "Velikost šifrovacího klíče"
 
 msgid "Specify a default gateway for routes"
 msgstr ""
@@ -467,16 +471,16 @@ msgid "Start OpenVPN in a hibernating state"
 msgstr ""
 
 msgid "Start/Stop"
-msgstr ""
+msgstr "Start/Stop"
 
 msgid "Started"
-msgstr ""
+msgstr "Spuštěno"
 
 msgid "Status file format version"
 msgstr ""
 
 msgid "Switch to advanced configuration »"
-msgstr ""
+msgstr "Přepnout na pokročilou konfiguraci »"
 
 msgid "TCP/UDP port # for both local and remote"
 msgstr ""
@@ -488,7 +492,7 @@ msgid "TCP/UDP port # for remote (default=1194)"
 msgstr ""
 
 msgid "TLS cipher"
-msgstr ""
+msgstr "TLS šifra"
 
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr ""
@@ -518,7 +522,7 @@ msgid "Use username as common name"
 msgstr ""
 
 msgid "VPN"
-msgstr ""
+msgstr "VPN"
 
 msgid "Write log to file"
 msgstr ""
@@ -530,7 +534,7 @@ msgid "Write status to file every n seconds"
 msgstr ""
 
 msgid "no"
-msgstr ""
+msgstr "ne"
 
 msgid "tun/tap device"
 msgstr ""
@@ -539,7 +543,7 @@ msgid "tun/tap inactivity timeout"
 msgstr ""
 
 msgid "yes (%i)"
-msgstr ""
+msgstr "ano (%i)"
 
 msgid "« Switch to basic configuration"
-msgstr ""
+msgstr "« Přepnout na základní konfiguraci"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2012-06-30 22:25+0200\n"
-"Last-Translator: h0nzZik <jenda.tusil@gmail.com>\n"
+"PO-Revision-Date: 2014-08-08 21:21+0200\n"
+"Last-Translator: koli <lukas.koluch@gmail.com>\n"
 "Language-Team: none\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -13,6 +13,9 @@ msgstr ""
 
 msgid "BSSID"
 msgstr "BSSID"
+
+msgid "Bad (ETX > 10)"
+msgstr "Špatné (ETX > 10)"
 
 msgid "Basic Settings"
 msgstr "Základní nastavení"
@@ -50,7 +53,6 @@ msgstr "Komunitní profil"
 msgid "Community settings"
 msgstr "Nastavení komunity"
 
-#, fuzzy
 msgid "Confirm Upgrade"
 msgstr "Potvrďte upgrade"
 
@@ -85,6 +87,12 @@ msgstr "ESSID"
 msgid "Edit index page"
 msgstr ""
 
+msgid "Enable IPv6"
+msgstr "Povolit IPv6"
+
+msgid "Enable a virtual access point (VAP) by default if possible."
+msgstr ""
+
 msgid "Error"
 msgstr "Chyba"
 
@@ -106,6 +114,12 @@ msgstr "Brána"
 msgid "Go to"
 msgstr "Jít na"
 
+msgid "Good (2 < ETX < 4)"
+msgstr "Dobré (2 < ETX < 4)"
+
+msgid "Green"
+msgstr "Zelený"
+
 msgid "Hello and welcome in the network of"
 msgstr "Dobrý den, vítejte v síti"
 
@@ -116,6 +130,15 @@ msgid "Homepage"
 msgstr "Domovská stránka"
 
 msgid "Hostname"
+msgstr "Hostname"
+
+msgid "IPv6 Config"
+msgstr "Konfigurace IPv6"
+
+msgid "IPv6 Prefix"
+msgstr "IPv6 Prefix"
+
+msgid "IPv6 network in CIDR notation."
 msgstr ""
 
 msgid "If selected then the default content element is not shown."
@@ -146,6 +169,9 @@ msgstr "Uchovat nastavení"
 msgid "Latitude"
 msgstr "Zeměpisná šířka"
 
+msgid "Legend"
+msgstr "Legenda"
+
 msgid "Load"
 msgstr ""
 
@@ -168,10 +194,10 @@ msgid "Memory"
 msgstr "Paměť"
 
 msgid "Mesh prefix"
-msgstr ""
+msgstr "Mesh prefix"
 
 msgid "Metric"
-msgstr ""
+msgstr "Metrika"
 
 msgid "Mode"
 msgstr "Režim"
@@ -196,6 +222,9 @@ msgstr "OLSR"
 
 msgid "Operator"
 msgstr "Operátor"
+
+msgid "Orange"
+msgstr "Oranžový"
 
 msgid "Overview"
 msgstr "Přehled"
@@ -227,6 +256,9 @@ msgstr "Profil (Expert)"
 msgid "Realname"
 msgstr "Skutečné jméno"
 
+msgid "Red"
+msgstr "Červený"
+
 msgid "SSID"
 msgstr "SSID"
 
@@ -250,7 +282,7 @@ msgid "Splash"
 msgstr ""
 
 msgid "Start Upgrade"
-msgstr ""
+msgstr "Spustit aktualizaci"
 
 msgid "Statistics"
 msgstr "Statistiky"
@@ -258,16 +290,21 @@ msgstr "Statistiky"
 msgid "Status"
 msgstr "Stav"
 
+msgid "Still usable (4 < ETX < 10)"
+msgstr "Stále použitelné (4 < ETX < 10)"
+
 msgid "System"
 msgstr "Systém"
 
 msgid "TX"
-msgstr ""
+msgstr "TX"
 
 msgid ""
 "The <em>libiwinfo</em> package is not installed. You must install this "
 "component for working wireless configuration!"
 msgstr ""
+"Balíček <em>libiwinfo</em> není nainstalován. Je třeba ho nainstalovat, aby "
+"byla funkční konfigurace bezdrátové sítě!"
 
 msgid ""
 "The OLSRd service is not configured to capture position data from the "
@@ -276,7 +313,7 @@ msgid ""
 msgstr ""
 
 msgid "The installed firmware is the most recent version."
-msgstr ""
+msgstr "Nainstalovaný firmware je aktuální."
 
 msgid ""
 "These are the basic settings for your local wireless community. These "
@@ -293,19 +330,25 @@ msgid ""
 msgstr ""
 
 msgid "This is the access point"
-msgstr ""
+msgstr "To je přístupový bod (AP)"
 
 msgid "Update Settings"
-msgstr ""
+msgstr "Nastavení aktualizace"
 
 msgid "Update available!"
-msgstr ""
+msgstr "Aktualizace dostupná!"
 
 msgid "Uptime"
-msgstr ""
+msgstr "Doba provozu"
+
+msgid "VAP"
+msgstr "VAP"
 
 msgid "Verify downloaded images"
 msgstr ""
+
+msgid "Very good (ETX < 2)"
+msgstr "Velmi dobré (ETX < 2)"
 
 msgid ""
 "We are an initiative to establish a free, independent and open wireless mesh "
@@ -314,6 +357,9 @@ msgstr ""
 
 msgid "Wireless Overview"
 msgstr ""
+
+msgid "Yellow"
+msgstr "Žlutý"
 
 msgid ""
 "You can display additional content on the public index page by inserting "
@@ -343,7 +389,7 @@ msgid "cached"
 msgstr ""
 
 msgid "e.g."
-msgstr ""
+msgstr "např."
 
 msgid "free"
 msgstr ""
@@ -355,4 +401,4 @@ msgid "used"
 msgstr ""
 
 msgid "wireless settings"
-msgstr ""
+msgstr "nastavení bezdrátové sítě"

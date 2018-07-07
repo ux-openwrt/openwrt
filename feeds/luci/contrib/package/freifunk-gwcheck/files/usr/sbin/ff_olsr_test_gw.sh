@@ -1,21 +1,41 @@
 #!/bin/sh
+# Copyright 2013 Manuel Munz <freifunk at somakoma dot de>
+# Licensed under the GNU General Public License (GPL) v3
+# This script monitors the local internet gateway
 
-#check if dyngw_plain is installed and enabled, else exit
-dyngwplainlib=`uci show olsrd |grep dyn_gw_plain |awk {' FS="."; print $1"."$2 '}`
-if [ -n "$dyngwplainlib" ]; then
-	if [ "$(uci -q get $dyngwplainlib.ignore)" == 1 ]; then
-		exit 1
+. /lib/functions.sh
+. /lib/functions/network.sh
+
+# exit if dyngw_plain is not enabled or RtTable is not (254 or unset)
+config_load olsrd
+
+check_dyngw_plain()
+{
+        local cfg="$1"
+	config_get library "$cfg" library
+	if [ "${library#olsrd_dyn_gw_plain}" != "$library" ]; then
+		config_get ignore "$cfg" ignore
+		config_get RtTable "$cfg" RtTable
+		if [ "$ignore" != "1" ] && [ -z "$RtTable" -o "$RtTable" = "254" ]; then
+			exit=0
+		fi
 	fi
-else
-	echo "dyngw_plain not found in olsrd config, exit"
+}
+
+exit=1
+config_foreach check_dyngw_plain LoadPlugin
+[ "$exit" = "1" ] && exit 1
+
+#Exit if this script is already running
+pid="$(pidof ff_olsr_test_gw.sh)"
+if [ ${#pid} -gt 5 ]; then
+	logger -p debug -t gwcheck "Gateway check script is already running, exit now"
 	exit 1
 fi
 
-
-# check if we have a defaultroute with metric=0 in one of these tables: main table and gw-check table.
-# If not exit here.
-defroutemain="$(ip r s |grep default |grep -v metric)"
-defroutegwcheck="$(ip r s t gw-check |grep default |grep -v metric)"
+# exit if there is no defaultroute with metric=0 in main or gw-check table.
+defroutemain="$(ip route show |grep default |grep -v metric)"
+defroutegwcheck="$(ip route show table gw-check |grep default |grep -v metric)"
 if [ -z "$defroutegwcheck" -a -z "$defroutemain" ]; then
 	exit 1
 fi
@@ -47,36 +67,65 @@ check_internet() {
 			echo 0
 			break
 		else
-			logger -t gw-check "Could not get test file from http://$t/conntest.html"
+			logger -p debug -t gw-check "Could not fetch http://$t/conntest.html"
 		fi
 	done
+}
+
+resolve() {
+	echo "$(nslookup $1 2>/dev/null |grep 'Address' |grep -v '127.0.0.1' |awk '{ print $3 }')"
+}
+
+get_dnsservers() {
+	# this gets all dns servers for the interface which has the default route
+
+	dns=""
+	if [ ! -x /bin/ubus ]; then
+		# ubus not present (versions before Attitude): fallback to get these from /var/state/network.
+		# We always assume that wan is the default route interface here
+		dns="$(grep network.wan.resolv_dns /var/state/network | cut -d "=" -f 2)"
+	else
+		network_find_wan wan
+		network_get_dnsserver dns $wan
+	fi
 }
 
 iw=$(check_internet)
 
 if [ "$iw" == 0 ]; then
-	# check if we have a seperate routing table for our tests.
-	# If yes, move defaultroute to normal table and delete table gw-check
+	# Internet available again, restore default route and remove ip rules
 	if [ -n "$defroutegwcheck" ]; then
-		ip r a $defroutegwcheck
-		ip r d $defroutegwcheck t gw-check
-		ip ru del fwmark 0x2 lookup gw-check
+		ip route add $defroutegwcheck
+		ip route del $defroutegwcheck table gw-check
 		for host in $testserver; do
-			iptables -t mangle -D OUTPUT -d $host -p tcp --dport 80 -j MARK --set-mark 0x2
+			ips="$(resolve $host)"
+			for ip in $ips; do
+				[ -n "$(ip rule show | grep "to $ip lookup gw-check")" ] && ip rule del to $ip table gw-check
+			done
 		done
-		logger -t gw-check "Internet is available again, restoring default route ( $defroutegwcheck)"
+		get_dnsservers
+		for d in $dns; do
+			[ -n "$(ip rule show | grep "to $d lookup gw-check")" ] && ip rule del to $d table gw-check
+		done
+		logger -p err -t gw-check "Internet is available again, default route restored ( $defroutegwcheck)"
 	fi
 
 else
-	# Check failed. If we have a defaultroute with metric=0 and it is already in table gw-check then do nothing.
-	# If there is a defaultroute with metric=0 then remove it from the main routing table and add to table gw-check.
-	if [ -z "$(ip ru s | grep gw-check)" -a -n "$defroutemain" ]; then
-		ip rule add fwmark 0x2 lookup gw-check
-		for host in $testserver; do
-			iptables -t mangle -I OUTPUT -d $host -p tcp --dport 80 -j MARK --set-mark 0x2
-		done
-		ip r a $defroutemain table gw-check
-		ip r d $defroutemain
-		logger -t gw-check "Internet is not available, deactivating the default route ( $defroutemain)"
+	# Check failed. Move default route to table gw-check and setup ip rules.
+	if [ -z "$(ip rule show | grep gw-check)" -a -n "$defroutemain" ]; then
+		ip route add $defroutemain table gw-check
+		ip route del $defroutemain
+		logger -p err -t gw-check "Internet is not available, default route deactivated ( $defroutemain)"
 	fi
+	for host in $testserver; do
+		ips="$(resolve $host)"
+		for ip in $ips; do
+			[ -z "$(ip rule show | grep "to $ip lookup gw-check")" ] && ip rule add to $ip table gw-check
+		done
+	done
+	get_dnsservers
+	for d in $dns; do
+		[ -z "$(ip rule show | grep "to $d lookup gw-check")" ] && ip rule add to $d table gw-check
+	done
+	logger -p err -t gw-check "Check your internet connection!"
 fi
