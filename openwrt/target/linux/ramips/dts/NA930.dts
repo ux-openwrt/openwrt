@@ -1,6 +1,8 @@
 /dts-v1/;
 
-/include/ "mt7620a.dtsi"
+#include "mt7620a.dtsi"
+
+#include <dt-bindings/input/input.h>
 
 / {
 	compatible = "ralink,mt7620a-eval-board", "ralink,mt7620a-soc";
@@ -8,34 +10,6 @@
 
 	chosen {
 		bootargs = "console=ttyS1,57600";
-	};
-
-	pinctrl {
-		state_default: pinctrl0 {
-			gpio {
-				ralink,group = "i2c", "rgmii2", "spi", "ephy";
-				ralink,function = "gpio";
-			};
-
-			uartf_gpio {
-				ralink,group = "uartf";
-				ralink,function = "gpio uartf";
-			};
-		};
-	};
-
-	palmbus@10000000 {
-		uart@500 {
-			status = "okay";
-		};
-
-		gpio@638 {
-			status = "okay";
-		};
-
-		gpio@660 {
-			status = "okay";
-		};
 	};
 
 	nand {
@@ -67,39 +41,6 @@
 		};
 	};
 
-	ethernet@10100000 {
-		status = "okay";
-		pinctrl-names = "default";
-		pinctrl-0 = <&rgmii1_pins &mdio_pins>;
-		mediatek,portmap = "llllw";
-
-		port@4 {
-			status = "okay";
-			phy-handle = <&phy4>;
-			phy-mode = "rgmii";
-		};
-
-		port@5 {
-			status = "okay";
-			phy-handle = <&phy5>;
-			phy-mode = "rgmii";
-		};
-
-		mdio-bus {
-			status = "okay";
-
-			phy4: ethernet-phy@4 {
-				reg = <4>;
-				phy-mode = "rgmii";
-			};
-
-			phy5: ethernet-phy@5 {
-				reg = <5>;
-				phy-mode = "rgmii";
-			};
-		};
-	};
-
 	gpio-keys-polled {
 		compatible = "gpio-keys-polled";
 		#address-cells = <1>;
@@ -109,19 +50,19 @@
 		reset {
 			label = "reset";
 			gpios = <&gpio0 11 1>;
-			linux,code = <0x198>;
+			linux,code = <KEY_RESTART>;
 		};
 
 		zwave {
 			label = "zwave";
 			gpios = <&gpio0 12 1>;
-			linux,code = <0x100>;
+			linux,code = <BTN_0>;
 		};
 
 		wps {
 			label = "wps";
 			gpios = <&gpio0 14 1>;
-			linux,code = <0x211>;
+			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
 
@@ -159,16 +100,75 @@
 			gpios = <&gpio0 13 0>;
 		};
 	};
+};
 
-	gsw@10110000 {
-		mediatek,port4 = "gmac";
+&pinctrl {
+	state_default: pinctrl0 {
+		gpio {
+			ralink,group = "i2c", "rgmii2", "spi", "ephy";
+			ralink,function = "gpio";
+		};
+
+		uartf_gpio {
+			ralink,group = "uartf";
+			ralink,function = "gpio uartf";
+		};
 	};
+};
 
-	ehci@101c0000 {
+&uart {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+&gpio2 {
+	status = "okay";
+};
+
+&ethernet {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&rgmii1_pins &mdio_pins>;
+	mediatek,portmap = "llllw";
+
+	port@4 {
 		status = "okay";
+		phy-handle = <&phy4>;
+		phy-mode = "rgmii";
 	};
 
-	ohci@101c1000 {
+	port@5 {
 		status = "okay";
+		phy-handle = <&phy5>;
+		phy-mode = "rgmii";
 	};
+
+	mdio-bus {
+		status = "okay";
+
+		phy4: ethernet-phy@4 {
+			reg = <4>;
+			phy-mode = "rgmii";
+		};
+
+		phy5: ethernet-phy@5 {
+			reg = <5>;
+			phy-mode = "rgmii";
+		};
+	};
+};
+
+&gsw {
+	mediatek,port4 = "gmac";
+};
+
+&ehci {
+	status = "okay";
+};
+
+&ohci {
+	status = "okay";
 };

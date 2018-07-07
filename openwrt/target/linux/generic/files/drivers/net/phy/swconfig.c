@@ -1,7 +1,7 @@
 /*
  * swconfig.c: Switch configuration API
  *
- * Copyright (C) 2008 Felix Fietkau <nbd@openwrt.org>
+ * Copyright (C) 2008 Felix Fietkau <nbd@nbd.name>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 
 #include "swconfig_leds.c"
 
-MODULE_AUTHOR("Felix Fietkau <nbd@openwrt.org>");
+MODULE_AUTHOR("Felix Fietkau <nbd@nbd.name>");
 MODULE_LICENSE("GPL");
 
 static int swdev_id;
@@ -506,7 +506,7 @@ swconfig_lookup_attr(struct switch_dev *dev, struct genl_info *info,
 	struct genlmsghdr *hdr = nlmsg_data(info->nlhdr);
 	const struct switch_attrlist *alist;
 	const struct switch_attr *attr = NULL;
-	int attr_id;
+	unsigned int attr_id;
 
 	/* defaults */
 	struct switch_attr *def_list;
@@ -590,10 +590,12 @@ swconfig_parse_ports(struct sk_buff *msg, struct nlattr *head,
 	val->len = 0;
 	nla_for_each_nested(nla, head, rem) {
 		struct nlattr *tb[SWITCH_PORT_ATTR_MAX+1];
-		struct switch_port *port = &val->value.ports[val->len];
+		struct switch_port *port;
 
 		if (val->len >= max)
 			return -EINVAL;
+
+		port = &val->value.ports[val->len];
 
 		if (nla_parse_nested(tb, SWITCH_PORT_ATTR_MAX, nla,
 				port_policy))
@@ -634,6 +636,9 @@ swconfig_set_attr(struct sk_buff *skb, struct genl_info *info)
 	struct switch_dev *dev;
 	struct switch_val val;
 	int err = -EINVAL;
+
+	if (!capable(CAP_NET_ADMIN))
+		return -EPERM;
 
 	dev = swconfig_get_dev(info);
 	if (!dev)
@@ -1022,16 +1027,19 @@ static struct genl_ops swconfig_ops[] = {
 	},
 	{
 		.cmd = SWITCH_CMD_SET_GLOBAL,
+		.flags = GENL_ADMIN_PERM,
 		.doit = swconfig_set_attr,
 		.policy = switch_policy,
 	},
 	{
 		.cmd = SWITCH_CMD_SET_VLAN,
+		.flags = GENL_ADMIN_PERM,
 		.doit = swconfig_set_attr,
 		.policy = switch_policy,
 	},
 	{
 		.cmd = SWITCH_CMD_SET_PORT,
+		.flags = GENL_ADMIN_PERM,
 		.doit = swconfig_set_attr,
 		.policy = switch_policy,
 	},
@@ -1104,6 +1112,11 @@ register_switch(struct switch_dev *dev, struct net_device *netdev)
 			dev->alias = netdev->name;
 	}
 	BUG_ON(!dev->alias);
+
+	/* Make sure swdev_id doesn't overflow */
+	if (swdev_id == INT_MAX) {
+		return -ENOMEM;
+	}
 
 	if (dev->ports > 0) {
 		dev->portbuf = kzalloc(sizeof(struct switch_port) *
@@ -1221,4 +1234,3 @@ swconfig_exit(void)
 
 module_init(swconfig_init);
 module_exit(swconfig_exit);
-

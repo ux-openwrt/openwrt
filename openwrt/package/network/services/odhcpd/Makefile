@@ -8,16 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=odhcpd
-PKG_VERSION:=2015-11-19
-PKG_RELEASE=$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_URL:=git://github.com/sbyx/odhcpd.git
+PKG_SOURCE_URL:=git://git.lede-project.org/project/odhcpd.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=01d3f9d64486ac1daa144848944e877e7f0cb762
+PKG_SOURCE_DATE:=2017-01-06
+PKG_SOURCE_VERSION:=ef3c5632c100fda0fa463a3ed56ff926f3f86b20
+PKG_MIRROR_HASH:=a870ae200dd4b0776f18f19051f75a6654108e8f25044d37c6d0856193c3ccf0
 
-PKG_MAINTAINER:=Steven Barth <steven@midlink.org>
+PKG_MAINTAINER:=Hans Dedecker <dedeckeh@gmail.com>
 PKG_LICENSE:=GPL-2.0
 
 include $(INCLUDE_DIR)/package.mk

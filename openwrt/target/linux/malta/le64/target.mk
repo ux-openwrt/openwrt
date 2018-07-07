@@ -1,5 +1,5 @@
 ARCH:=mips64el
-ARCH_PACKAGES:=malta_mipsel64
+CPU_TYPE:=mips64
 SUBTARGET:=le64
 BOARDNAME:=Little Endian (64-bits)
 FEATURES:=ramdisk

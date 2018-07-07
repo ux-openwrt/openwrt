@@ -13,15 +13,15 @@ FEATURES:=fpu ramdisk
 CFLAGS:=-Os -pipe -fno-caller-saves
 MAINTAINER:=Florian Fainelli <florian@openwrt.org>
 
-KERNEL_PATCHVER:=4.1
+KERNEL_PATCHVER:=4.4
 
 DEVICE_TYPE:=developerboard
-
-include $(INCLUDE_DIR)/target.mk
 
 define Target/Description
 	Build multi-platform images for the ARMv8 instruction set architecture
 endef
+
+include $(INCLUDE_DIR)/target.mk
 
 KERNELNAME:=Image dtbs
 

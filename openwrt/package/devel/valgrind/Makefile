@@ -8,20 +8,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=valgrind
-PKG_VERSION:=3.10.1
+PKG_VERSION:=3.12.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://valgrind.org/downloads/
-PKG_MD5SUM:=60ddae962bc79e7c95cfc4667245707f
+PKG_HASH:=67ca4395b2527247780f36148b084f5743a68ab0c850cb43e4a5b4b012cf76a1
 
-PKG_MAINTAINER:=Felix Fietkau <nbd@openwrt.org>
+PKG_MAINTAINER:=Felix Fietkau <nbd@nbd.name>
 PKG_LICENSE:=GPL-2.0+
 
 PKG_FIXUP = autoreconf
 PKG_INSTALL := 1
 PKG_BUILD_PARALLEL := 1
 PKG_USE_MIPS16:=0
+PKG_SSP:=0
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk

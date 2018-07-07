@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gdb
-PKG_VERSION:=7.11
+PKG_VERSION:=7.11.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/gdb
-PKG_MD5SUM:=b5c784685e1cde65ba135feea86b6d75
+PKG_HASH:=e9216da4e3755e9f414c1aa0026b626251dfc57ffe572a266e98da4f6988fc70
 
 PKG_BUILD_PARALLEL:=1
 PKG_INSTALL:=1
@@ -24,7 +24,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/gdb/Default
   SECTION:=devel
   CATEGORY:=Development
-  DEPENDS:=+!USE_MUSL:libthread-db +PACKAGE_zlib:zlib
+  DEPENDS:=+!USE_MUSL:libthread-db +PACKAGE_zlib:zlib @!arc
   URL:=http://www.gnu.org/software/gdb/
 endef
 

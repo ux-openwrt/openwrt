@@ -198,6 +198,7 @@ nand_do_upgrade_success() {
 	sync
 	[ -f "$conf_tar" ] && nand_restore_config "$conf_tar"
 	echo "sysupgrade successful"
+	umount -a
 	reboot -f
 }
 
@@ -213,6 +214,7 @@ nand_upgrade_ubinized() {
 
 	if [ ! "$mtdnum" ]; then
 		echo "cannot find mtd device $CI_UBIPART"
+		umount -a
 		reboot -f
 	fi
 
@@ -237,9 +239,18 @@ nand_upgrade_ubifs() {
 	nand_do_upgrade_success
 }
 
+nand_board_name() {
+	if type 'platform_nand_board_name' >/dev/null 2>/dev/null; then
+		platform_nand_board_name
+		return
+	fi
+
+	cat /tmp/sysinfo/board_name
+}
+
 nand_upgrade_tar() {
 	local tar_file="$1"
-	local board_name="$(cat /tmp/sysinfo/board_name)"
+	local board_name="$(nand_board_name)"
 	local kernel_mtd="$(find_mtd_index $CI_KERNPART)"
 
 	local kernel_length=`(tar xf $tar_file sysupgrade-$board_name/kernel -O | wc -c) 2> /dev/null`

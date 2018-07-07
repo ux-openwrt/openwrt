@@ -1,178 +1,179 @@
 /dts-v1/;
 
-/include/ "danube.dtsi"
+#include "danube.dtsi"
+
+#include <dt-bindings/input/input.h>
 
 / {
-        model = "ARV8539PW22 - Speedport W 504V Typ A";
+	model = "ARV8539PW22 - Speedport W 504V Typ A";
 
-	    chosen {
-		    leds {
-                boot = &power_green;
-                failsafe = &power_red;
-                running = &power_green;
+	chosen {
+		bootargs = "console=ttyLTQ0,115200";
+	};
 
-			    dsl = &dsl_green;
-			    internet = &online_green;
-			    wifi = &wireless_green;
-		    };
-	    };
+	aliases {
+		led-boot = &power_green;
+		led-failsafe = &power_red;
+		led-running = &power_green;
 
-        memory@0 {
-                reg = <0x0 0x4000000>;
-        };
+		led-dsl = &dsl_green;
+		led-internet = &online_green;
+		led-wifi = &wireless_green;
+	};
 
-        sram@1F000000 {
-                vmmc@107000 {
-                        status = "okay";
-                        gpios = <&gpio 31 0>;
-                };
-        };
+	memory@0 {
+		reg = <0x0 0x4000000>;
+	};
 
-        fpi@10000000 {
-                localbus@0 {
-                        nor-boot@0 {
-                                compatible = "lantiq,nor";
-                                bank-width = <2>;
-                                reg = <0 0x0 0x800000>;
-                                #address-cells = <1>;
-                                #size-cells = <1>;
+	sram@1F000000 {
+		vmmc@107000 {
+			status = "okay";
+			gpios = <&gpio 31 GPIO_ACTIVE_HIGH>;
+		};
+	};
 
-                                partition@0 {
-                                        label = "uboot";
-                                        reg = <0x00000 0x30000>;        /* 192 KiB */
-                                        read-only;
-                                };
+	fpi@10000000 {
+		localbus@0 {
+			nor-boot@0 {
+				compatible = "lantiq,nor";
+				bank-width = <2>;
+				reg = <0 0x0 0x800000>;
+				#address-cells = <1>;
+				#size-cells = <1>;
 
-                                partition@30000 {
-                                        label = "uboot";
-                                        reg = <0x30000 0x10000>;        /* 64 KiB */
-                                        read-only;
-                                };
+				partitions {
+					compatible = "fixed-partitions";
+					#address-cells = <1>;
+					#size-cells = <1>;
 
-                                partition@40000 {
-                                        label = "firmware";
-                                        reg = <0x40000 0x7B0000>;       /* 7872 KiB */
-                                };
+					partition@0 {
+						label = "uboot";
+						reg = <0x00000 0x30000>;	/* 192 KiB */
+						read-only;
+					};
 
-                                partition@7F0000 {
-                                        label = "art";
-                                        reg = <0x7F0000 0x10000>;       /* 64 KiB*/
-                                        read-only;
-                                };
-                        };
+					partition@30000 {
+						label = "uboot";
+						reg = <0x30000 0x10000>;	/* 64 KiB */
+						read-only;
+					};
 
-                        mac_addr {
-                                compatible = "lantiq,eth-mac";
-                                reg = <0 0x7f0016 0x6>;
-                                mac-increment = <2>;
-                        };
+					partition@40000 {
+						label = "firmware";
+						reg = <0x40000 0x7B0000>;       /* 7872 KiB */
+					};
 
-                        ath9k_eep {
-                                compatible = "ath9k,eeprom";
-                                reg = <0 0x7f0400 0x1000
-                                        0 0x7f0016 0x6>;
-                                ath,mac-increment = <1>;
-                                ath,pci-slot = <14>;
-                                ath,eep-endian;
-                                ath,arv-ath9k-fix;
-                        };
-                };
+					art: partition@7F0000 {
+						label = "art";
+						reg = <0x7F0000 0x10000>;       /* 64 KiB*/
+						read-only;
+					};
+				};
+			};
+		};
 
-                gpio: pinmux@E100B10 {
-                        pinctrl-names = "default";
-                        pinctrl-0 = <&state_default>;
+		gpio: pinmux@E100B10 {
+			pinctrl-names = "default";
+			pinctrl-0 = <&state_default>;
 
-                        state_default: pinmux {
+			state_default: pinmux {
+				pci_in {
+					lantiq,groups = "req1";
+					lantiq,function = "pci";
+					lantiq,open-drain = <1>;
+					lantiq,pull = <2>;
+					lantiq,output = <0>;
+				};
+				pci_out {
+					lantiq,groups = "gnt1";
+					lantiq,function = "pci";
+					lantiq,output = <1>;
+				};
+				pci_rst {
+					lantiq,pins = "io21";
+					lantiq,pull = <2>;
+					lantiq,output = <1>;
+				};
+				relay {
+					lantiq,pins = "io31";
+					lantiq,output = <1>;
+				};
+			};
+		};
 
-                                pci_in {
-                                        lantiq,groups = "req1";
-                                        lantiq,function = "pci";
-                                        lantiq,open-drain = <1>;
-                                        lantiq,pull = <2>;
-                                        lantiq,output = <0>;
-                                };
-                                pci_out {
-                                        lantiq,groups = "gnt1";
-                                        lantiq,function = "pci";
-                                        lantiq,output = <1>;
-                                };
-                                pci_rst {
-                                        lantiq,pins = "io21";
-                                        lantiq,pull = <2>;
-                                        lantiq,output = <1>;
-                                };
-                                relay {
-                                        lantiq,pins = "io31";
-                                        lantiq,output = <1>;
-                                };
-                        };
-                };
+		etop@E180000 {
+			phy-mode = "mii";
+			mtd-mac-address = <&art 0x16>;
+		};
 
-                etop@E180000 {
-                        phy-mode = "mii";
-                };
+		ifxhcd@E101000 {
+			status = "okay";
+			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
+			lantiq,portmask = <0x3>;
+		};
+	};
 
-                pci@E105400 {
-                        status = "okay";
-                        gpio-reset = <&gpio 21 0>;
-                };
+	gpio-keys-polled {
+		compatible = "gpio-keys-polled";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		poll-interval = <100>;
 
-                ifxhcd@E101000 {
-                        status = "okay";
-                        gpios = <&gpio 14 0>;
-                        lantiq,portmask = <0x3>;
-                };
+		wlan {
+			label = "wlan";
+			gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_WPS_BUTTON>;
+		};
+		reset {
+			label = "reset";
+			gpios = <&gpio 30 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_RESTART>;
+		};
+		/* key DECT is missing */
+	};
 
-        };
+	gpio-leds {
+		compatible = "gpio-leds";
 
-        gpio-keys-polled {
-                compatible = "gpio-keys-polled";
-                #address-cells = <1>;
-                #size-cells = <0>;
-                poll-interval = <100>;
+		power_green: power-green {
+			label = "arv8539pw22:green:power";
+			gpios = <&gpio 24 GPIO_ACTIVE_LOW>;
+			default-state = "keep";
+		};
+		power_red: power-red {
+			label = "arv8539pw22:red:power";
+			gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
+		};
 
-                wlan {
-                        label = "wlan";
-                        gpios = <&gpio 29 1>;
-                        linux,code = <0x211>;
-                };
-                reset {
-                        label = "reset";
-                        gpios = <&gpio 30 1>;
-                        linux,code = <0x198>;
-                };
-        };
+		dsl_green: dsl-green {
+			label = "arv8539pw22:green:dsl";
+			gpios = <&gpio 5 GPIO_ACTIVE_LOW>;
+		};
 
-        gpio-leds {
-                compatible = "gpio-leds";
+		online_green: online-green {
+			label = "arv8539pw22:green:online";
+			gpios = <&gpio 6 GPIO_ACTIVE_LOW>;
+		};
 
-                power_green: power-green {
-                        label = "arv8539pw22:green:power";
-                        gpios = <&gpio 24 1>;
-                        default-state = "keep";
-                };
-                power_red: power-red {
-                        label = "arv8539pw22:red:power";
-                        gpios = <&gpio 4 1>;
-                };
-
-                dsl_green: dsl-green {
-                        label = "arv8539pw22:green:dsl";
-                        gpios = <&gpio 5 1>;
-                };
-
-                online_green: online-green {
-                        label = "arv8539pw22:green:online";
-                        gpios = <&gpio 6 1>;
-                };
-
-                wireless_green: wireless-green {
-                        label = "arv8539pw22:green:wlan";
-                        gpios = <&gpio 8 1>;
-                };
-                /*
-                        telefonie green is missing
-                */
-        };
+		wireless_green: wireless-green {
+			label = "arv8539pw22:green:wlan";
+			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
+		};
+		/*
+			telefonie green is missing
+		*/
+	};
 };
 
+&pci0 {
+	status = "okay";
+	gpio-reset = <&gpio 21 GPIO_ACTIVE_HIGH>;
+
+	wifi@168c,0029 {
+		compatible = "pci168c,0029";
+		reg = <0x7000 0 0 0 0>;
+		qca,no-eeprom; /* load from ath9k-eeprom-pci-0000:00:0e.0.bin */
+		mtd-mac-address = <&art 0x16>;
+		mtd-mac-address-increment = <1>;
+	};
+};

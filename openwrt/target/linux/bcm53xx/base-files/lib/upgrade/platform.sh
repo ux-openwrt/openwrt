@@ -31,6 +31,7 @@ platform_expected_image() {
 		"netgear,r7900")	echo "chk U12H315T30_NETGEAR"; return;;
 		"netgear,r8000")	echo "chk U12H315T00_NETGEAR"; return;;
 		"netgear,r8500")	echo "chk U12H334T00_NETGEAR"; return;;
+		"tplink,archer-c9-v1")	echo "safeloader"; return;;
 	esac
 }
 
@@ -58,6 +59,11 @@ platform_identify() {
 		echo "cybertan"
 		return
 	}
+
+	if osafeloader info "$1" > /dev/null; then
+		echo "safeloader"
+		return
+	fi
 
 	echo "unknown"
 }
@@ -102,6 +108,8 @@ platform_check_image() {
 				error=1
 			fi
 		;;
+		"safeloader")
+		;;
 		"seama")
 			local img_signature=$(oseama info "$1" | grep "Meta entry:.*signature=" | sed "s/.*=//")
 			local dev_signature=$(platform_expected_image)
@@ -118,6 +126,13 @@ platform_check_image() {
 			}
 		;;
 		"trx")
+			local expected=$(platform_expected_image)
+
+			[ "$expected" == "safeloader" ] && {
+				echo "This device expects SafeLoader format and may not work with TRX"
+				error=1
+			}
+
 			if ! otrx check "$1"; then
 				echo "Invalid (corrupted?) TRX firmware"
 				error=1
@@ -132,22 +147,12 @@ platform_check_image() {
 	return $error
 }
 
-platform_pre_upgrade() {
-	export RAMFS_COPY_BIN="${RAMFS_COPY_BIN} /usr/bin/oseama /bin/sed"
-
-	local file_type=$(platform_identify "$1")
+# $(1): image for upgrade (with possible extra header)
+# $(2): offset of trx in image
+platform_pre_upgrade_trx() {
 	local dir="/tmp/sysupgrade-bcm53xx"
 	local trx="$1"
-	local offset
-
-	[ "$(platform_flash_type)" != "nand" ] && return
-
-	# Find trx offset
-	case "$file_type" in
-		"chk")		offset=$((0x$(get_magic_long_at "$1" 4)));;
-		"cybertan")	offset=32;;
-		"seama")	return;;
-	esac
+	local offset="$2"
 
 	# Extract partitions from trx
 	rm -fR $dir
@@ -207,6 +212,69 @@ platform_pre_upgrade() {
 	nand_do_upgrade /tmp/root.ubi
 }
 
+platform_pre_upgrade_seama() {
+	local dir="/tmp/sysupgrade-bcm53xx"
+	local seama="$1"
+	local tmp
+
+	# Extract Seama entity from Seama seal
+	rm -fR $dir
+	mkdir -p $dir
+	oseama extract "$seama" \
+		-e 0 \
+		-o $dir/seama.entity
+	[ $? -ne 0 ] && {
+		echo "Failed to extract Seama entity."
+		return
+	}
+	local entity_size=$(wc -c $dir/seama.entity | cut -d ' ' -f 1)
+
+	local ubi_offset=0
+	tmp=0
+	while [ 1 ]; do
+		[ $tmp -ge $entity_size ] && break
+		[ "$(dd if=$dir/seama.entity skip=$tmp bs=1 count=4 2>/dev/null)" = "UBI#" ] && {
+			ubi_offset=$tmp
+			break
+		}
+		tmp=$(($tmp + 131072))
+	done
+	[ $ubi_offset -eq 0 ] && {
+		echo "Failed to find UBI in Seama entity."
+		return
+	}
+
+	local ubi_length=0
+	while [ "$(dd if=$dir/seama.entity skip=$(($ubi_offset + $ubi_length)) bs=1 count=4 2>/dev/null)" = "UBI#" ]; do
+		ubi_length=$(($ubi_length + 131072))
+	done
+
+	dd if=$dir/seama.entity of=$dir/kernel.seama bs=131072 count=$(($ubi_offset / 131072)) 2>/dev/null
+	dd if=$dir/seama.entity of=$dir/root.ubi bs=131072 skip=$(($ubi_offset / 131072)) count=$(($ubi_length / 131072)) 2>/dev/null
+
+	# Flash
+	local kernel_size=$(sed -n 's/mtd[0-9]*: \([0-9a-f]*\).*"\(kernel\|linux\)".*/\1/p' /proc/mtd)
+	mtd write $dir/kernel.seama firmware
+	mtd ${kernel_size:+-c 0x$kernel_size} fixseama firmware
+	nand_do_upgrade $dir/root.ubi
+}
+
+platform_pre_upgrade() {
+	export RAMFS_COPY_BIN="${RAMFS_COPY_BIN} /usr/bin/osafeloader /usr/bin/oseama /bin/sed"
+
+	local file_type=$(platform_identify "$1")
+
+	[ "$(platform_flash_type)" != "nand" ] && return
+
+	# Find trx offset
+	case "$file_type" in
+		"chk")		platform_pre_upgrade_trx "$1" $((0x$(get_magic_long_at "$1" 4)));;
+		"cybertan")	platform_pre_upgrade_trx "$1" 32;;
+		"seama")	platform_pre_upgrade_seama "$1";;
+		"trx")		platform_pre_upgrade_trx "$1";;
+	esac
+}
+
 platform_trx_from_chk_cmd() {
 	local header_len=$((0x$(get_magic_long_at "$1" 4)))
 
@@ -215,6 +283,24 @@ platform_trx_from_chk_cmd() {
 
 platform_trx_from_cybertan_cmd() {
 	echo -n dd bs=32 skip=1
+}
+
+platform_img_from_safeloader() {
+	local dir="/tmp/sysupgrade-bcm53xx"
+
+	# Extract partitions from SafeLoader
+	rm -fR $dir
+	mkdir -p $dir
+	osafeloader extract "$1" \
+		-p "os-image" \
+		-o $dir/os-image
+	osafeloader extract "$1" \
+		-p "file-system" \
+		-o $dir/file-system
+
+	mtd write $dir/file-system rootfs
+
+	echo -n $dir/os-image
 }
 
 platform_img_from_seama() {
@@ -245,6 +331,7 @@ platform_do_upgrade() {
 	case "$file_type" in
 		"chk")		cmd=$(platform_trx_from_chk_cmd "$trx");;
 		"cybertan")	cmd=$(platform_trx_from_cybertan_cmd "$trx");;
+		"safeloader")	trx=$(platform_img_from_safeloader "$trx");;
 		"seama")	trx=$(platform_img_from_seama "$trx");;
 	esac
 

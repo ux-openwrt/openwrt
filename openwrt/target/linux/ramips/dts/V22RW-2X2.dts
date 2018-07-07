@@ -1,19 +1,12 @@
 /dts-v1/;
 
-/include/ "rt3050.dtsi"
+#include "rt3050.dtsi"
+
+#include <dt-bindings/input/input.h>
 
 / {
 	compatible = "V22RW-2X2", "ralink,rt3052-soc";
 	model = "Ralink AP-RT3052-V22RW-2X2";
-
-	pinctrl {
-		state_default: pinctrl0 {
-			gpio {
-				ralink,group = "spi", "i2c", "jtag", "rgmii", "mdio", "uartf";
-				ralink,function = "gpio";
-			};
-		};
-	};
 
 	cfi@1f000000 {
 		compatible = "cfi-flash";
@@ -47,14 +40,6 @@
 		};
 	};
 
-	esw@10110000 {
-		mediatek,portmap = <0x2f>;
-	};
-
-	wmac@10180000 {
-		ralink,mtd-eeprom = <&factory 0>;
-	};
-
 	gpio-leds {
 		compatible = "gpio-leds";
 
@@ -78,17 +63,34 @@
 		reset {
 			label = "reset";
 			gpios = <&gpio0 10 1>;
-			linux,code = <0x198>;
+			linux,code = <KEY_RESTART>;
 		};
 
 		wps {
 			label = "wps";
 			gpios = <&gpio0 0 1>;
-			linux,code = <0x211>;
+			linux,code = <KEY_WPS_BUTTON>;
 		};
 	};
+};
 
-	otg@101c0000 {
-		status = "okay";
+&pinctrl {
+	state_default: pinctrl0 {
+		gpio {
+			ralink,group = "spi", "i2c", "jtag", "rgmii", "mdio", "uartf";
+			ralink,function = "gpio";
+		};
 	};
+};
+
+&esw {
+	mediatek,portmap = <0x2f>;
+};
+
+&wmac {
+	ralink,mtd-eeprom = <&factory 0>;
+};
+
+&otg {
+	status = "okay";
 };

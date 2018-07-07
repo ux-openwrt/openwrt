@@ -220,7 +220,6 @@ mac80211_hostapd_setup_base() {
 			vht_max_a_mpdu_len_exp:7 \
 			vht_max_mpdu:11454 \
 			rx_stbc:4 \
-			tx_stbc:4 \
 			vht_link_adapt:3 \
 			vht160:2
 
@@ -232,13 +231,13 @@ mac80211_hostapd_setup_base() {
 
 		cap_rx_stbc=$((($vht_cap >> 8) & 7))
 		[ "$rx_stbc" -lt "$cap_rx_stbc" ] && cap_rx_stbc="$rx_stbc"
-		ht_cap_mask="$(( ($vht_cap & ~(0x700)) | ($cap_rx_stbc << 8) ))"
+		vht_cap="$(( ($vht_cap & ~(0x700)) | ($cap_rx_stbc << 8) ))"
 
 		mac80211_add_capabilities vht_capab $vht_cap \
 			RXLDPC:0x10::$rxldpc \
 			SHORT-GI-80:0x20::$short_gi_80 \
 			SHORT-GI-160:0x40::$short_gi_160 \
-			TX-STBC-2BY1:0x80::$tx_stbc \
+			TX-STBC-2BY1:0x80::$tx_stbc_2by1 \
 			SU-BEAMFORMER:0x800::$su_beamformer \
 			SU-BEAMFORMEE:0x1000::$su_beamformee \
 			MU-BEAMFORMER:0x80000::$mu_beamformer \
@@ -247,10 +246,10 @@ mac80211_hostapd_setup_base() {
 			HTC-VHT:0x400000::$htc_vht \
 			RX-ANTENNA-PATTERN:0x10000000::$rx_antenna_pattern \
 			TX-ANTENNA-PATTERN:0x20000000::$tx_antenna_pattern \
-			RX-STBC1:0x700:0x100:1 \
-			RX-STBC12:0x700:0x200:1 \
-			RX-STBC123:0x700:0x300:1 \
-			RX-STBC1234:0x700:0x400:1 \
+			RX-STBC-1:0x700:0x100:1 \
+			RX-STBC-12:0x700:0x200:1 \
+			RX-STBC-123:0x700:0x300:1 \
+			RX-STBC-1234:0x700:0x400:1 \
 
 		# supported Channel widths
 		vht160_hw=0
@@ -612,7 +611,42 @@ mac80211_setup_vif() {
 				mcval=
 				[ -n "$mcast_rate" ] && wpa_supplicant_add_rate mcval "$mcast_rate"
 
-				iw dev "$ifname" mesh join "$mesh_id" ${mcval:+mcast-rate $mcval}
+				case "$htmode" in
+					VHT20|HT20) mesh_htmode=HT20;;
+					HT40*|VHT40)
+						case "$hwmode" in
+							a)
+								case "$(( ($channel / 4) % 2 ))" in
+									1) mesh_htmode="HT40+" ;;
+									0) mesh_htmode="HT40-";;
+								esac
+							;;
+							*)
+								case "$htmode" in
+									HT40+) mesh_htmode="HT40+";;
+									HT40-) mesh_htmode="HT40-";;
+									*)
+										if [ "$channel" -lt 7 ]; then
+											mesh_htmode="HT40+"
+										else
+											mesh_htmode="HT40-"
+										fi
+									;;
+								esac
+							;;
+						esac
+					;;
+					VHT80)
+						mesh_htmode="80Mhz"
+					;;
+					VHT160)
+						mesh_htmode="160Mhz"
+					;;
+					*) mesh_htmode="NOHT" ;;
+				esac
+
+				freq="$(get_freq "$phy" "$channel")"
+				iw dev "$ifname" mesh join "$mesh_id" freq $freq $mesh_htmode ${mcval:+mcast-rate $mcval}
 			fi
 
 			for var in $MP_CONFIG_INT $MP_CONFIG_BOOL $MP_CONFIG_STRING; do

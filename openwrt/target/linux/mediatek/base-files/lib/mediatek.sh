@@ -13,6 +13,12 @@ mediatek_board_detect() {
 	"MediaTek MT7623 evaluation board")
 		name="mt7623_evb"
 		;;
+	"MediaTek MT7623 eMMC evaluation board")
+		name="eMMC"
+		;;
+	"MediaTek MT7623 NAND evaluation board")
+		name="NAND"
+		;;
 	esac
 
 	[ -z "$name" ] && name="unknown"

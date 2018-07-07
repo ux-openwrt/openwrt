@@ -1,8 +1,8 @@
-From d5cb475205138f9df1fdbb74d8810ab1928696ea Mon Sep 17 00:00:00 2001
+From c68809400f149d3f176e03a3ab36e576a4d5ae79 Mon Sep 17 00:00:00 2001
 From: popcornmix <popcornmix@gmail.com>
 Date: Wed, 18 Jun 2014 13:42:01 +0100
-Subject: [PATCH 003/170] vmstat: Workaround for issue where dirty page count
- goes negative
+Subject: [PATCH] vmstat: Workaround for issue where dirty page count goes
+ negative
 
 See:
 https://github.com/raspberrypi/linux/issues/617

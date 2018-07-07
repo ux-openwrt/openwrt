@@ -114,23 +114,8 @@ endef
 $(eval $(call KernelPackage,bluetooth_6lowpan))
 
 
-define KernelPackage/bluetooth-hci-h4p
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=HCI driver with H4 Nokia extensions
-  DEPENDS:=@TARGET_omap24xx +kmod-bluetooth
-  KCONFIG:=CONFIG_BT_HCIH4P
-  FILES:=$(LINUX_DIR)/drivers/bluetooth/hci_h4p/hci_h4p.ko
-  AUTOLOAD:=$(call AutoProbe,hci_h4p)
-endef
-
-define KernelPackage/bluetooth-hci-h4p/description
- HCI driver with H4 Nokia extensions
-endef
-
-$(eval $(call KernelPackage,bluetooth-hci-h4p))
-
-
 define KernelPackage/dma-buf
+  SUBMENU:=$(OTHER_MENU)
   TITLE:=DMA shared buffer support
   HIDDEN:=1
   KCONFIG:=CONFIG_DMA_SHARED_BUFFER
@@ -383,7 +368,7 @@ define KernelPackage/sdhci
 	$(LINUX_DIR)/drivers/mmc/host/sdhci.ko \
 	$(LINUX_DIR)/drivers/mmc/host/sdhci-pltfm.ko
 
-  AUTOLOAD:=$(call AutoProbe,sdhci sdhci-pltfm,1)
+  AUTOLOAD:=$(call AutoProbe,sdhci-pltfm,1)
 endef
 
 define KernelPackage/sdhci/description
@@ -398,10 +383,9 @@ define KernelPackage/rfkill
   TITLE:=RF switch subsystem support
   DEPENDS:=@USE_RFKILL +kmod-input-core
   KCONFIG:= \
-    CONFIG_RFKILL \
+    CONFIG_RFKILL_FULL \
     CONFIG_RFKILL_INPUT=y \
-    CONFIG_RFKILL_LEDS=y \
-    CONFIG_RFKILL_GPIO=y
+    CONFIG_RFKILL_LEDS=y
   FILES:= \
     $(LINUX_DIR)/net/rfkill/rfkill.ko
   AUTOLOAD:=$(call AutoLoad,20,rfkill)
@@ -482,54 +466,6 @@ endef
 $(eval $(call KernelPackage,bcma))
 
 
-define KernelPackage/wdt-omap
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=OMAP Watchdog timer
-  DEPENDS:=@(TARGET_omap24xx||TARGET_omap35xx)
-  KCONFIG:=CONFIG_OMAP_WATCHDOG
-  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/omap_wdt.ko
-  AUTOLOAD:=$(call AutoLoad,50,omap_wdt,1)
-endef
-
-define KernelPackage/wdt-omap/description
- Kernel module for TI omap watchdog timer
-endef
-
-$(eval $(call KernelPackage,wdt-omap))
-
-
-define KernelPackage/wdt-orion
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Marvell Orion Watchdog timer
-  DEPENDS:=@TARGET_orion||TARGET_kirkwood||TARGET_mvebu
-  KCONFIG:=CONFIG_ORION_WATCHDOG
-  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/orion_wdt.ko
-  AUTOLOAD:=$(call AutoLoad,50,orion_wdt,1)
-endef
-
-define KernelPackage/wdt-orion/description
- Kernel module for Marvell Orion, Kirkwood and Armada XP/370 watchdog timer
-endef
-
-$(eval $(call KernelPackage,wdt-orion))
-
-
-define KernelPackage/booke-wdt
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=PowerPC Book-E Watchdog Timer
-  DEPENDS:=@(TARGET_mpc85xx||TARGET_ppc40x||TARGET_ppc44x)
-  KCONFIG:=CONFIG_BOOKE_WDT
-  FILES:=$(LINUX_DIR)/drivers/$(WATCHDOG_DIR)/booke_wdt.ko
-  AUTOLOAD:=$(call AutoLoad,50,booke_wdt,1)
-endef
-
-define KernelPackage/booke-wdt/description
- Kernel module for PowerPC Book-E Watchdog Timer
-endef
-
-$(eval $(call KernelPackage,booke-wdt))
-
-
 define KernelPackage/rtc-ds1307
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Dallas/Maxim DS1307 (and compatible) RTC support
@@ -546,6 +482,24 @@ define KernelPackage/rtc-ds1307/description
 endef
 
 $(eval $(call KernelPackage,rtc-ds1307))
+
+
+define KernelPackage/rtc-ds1374
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Dallas/Maxim DS1374 RTC support
+  DEPENDS:=@RTC_SUPPORT +kmod-i2c-core
+  KCONFIG:=CONFIG_RTC_DRV_DS1374 \
+	CONFIG_RTC_DRV_DS1374_WDT=n \
+	CONFIG_RTC_CLASS=y
+  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-ds1374.ko
+  AUTOLOAD:=$(call AutoProbe,rtc-ds1374)
+endef
+
+define KernelPackage/rtc-ds1374/description
+ Kernel module for Dallas/Maxim DS1374.
+endef
+
+$(eval $(call KernelPackage,rtc-ds1374))
 
 
 define KernelPackage/rtc-ds1672
@@ -580,40 +534,6 @@ define KernelPackage/rtc-isl1208/description
 endef
 
 $(eval $(call KernelPackage,rtc-isl1208))
-
-
-define KernelPackage/rtc-marvell
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Marvell SoC built-in RTC support
-  DEPENDS:=@RTC_SUPPORT @TARGET_kirkwood||TARGET_orion||TARGET_mvebu
-  KCONFIG:=CONFIG_RTC_DRV_MV \
-	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-mv.ko
-  AUTOLOAD:=$(call AutoProbe,rtc-mv)
-endef
-
-define KernelPackage/rtc-marvell/description
- Kernel module for Marvell SoC built-in RTC.
-endef
-
-$(eval $(call KernelPackage,rtc-marvell))
-
-
-define KernelPackage/rtc-armada38x
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Marvell Armada 38x SoC built-in RTC support
-  DEPENDS:=@RTC_SUPPORT @TARGET_mvebu
-  KCONFIG:=CONFIG_RTC_DRV_ARMADA38X \
-	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-armada38x.ko
-  AUTOLOAD:=$(call AutoProbe,rtc-armada38x)
-endef
-
-define KernelPackage/rtc-armada38x/description
- Kernel module for Marvell Armada 38x SoC built-in RTC.
-endef
-
-$(eval $(call KernelPackage,rtc-armada38x))
 
 
 define KernelPackage/rtc-pcf8563
@@ -666,21 +586,21 @@ endef
 
 $(eval $(call KernelPackage,rtc-pt7c4338))
 
-define KernelPackage/rtc-snvs
+define KernelPackage/rtc-rs5c372a
   SUBMENU:=$(OTHER_MENU)
-  TITLE:=Freescale SNVS RTC support
-  DEPENDS:=@TARGET_imx6 @RTC_SUPPORT
-  KCONFIG:=CONFIG_RTC_DRV_SNVS \
+  TITLE:=Ricoh R2025S/D, RS5C372A/B, RV5C386, RV5C387A
+  DEPENDS:=@RTC_SUPPORT +kmod-i2c-core
+  KCONFIG:=CONFIG_RTC_DRV_RS5C372 \
 	CONFIG_RTC_CLASS=y
-  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-snvs.ko
-  AUTOLOAD:=$(call AutoLoad,50,rtc-snvs,1)
+  FILES:=$(LINUX_DIR)/drivers/rtc/rtc-rs5c372.ko
+  AUTOLOAD:=$(call AutoLoad,50,rtc-rs5c372,1)
 endef
 
-define KernelPackage/rtc-snvs/description
- Kernel module for Freescale SNVS RTC on chip module
+define KernelPackage/rtc-rs5c372a/description
+ Kernel module for Ricoh R2025S/D, RS5C372A/B, RV5C386, RV5C387A RTC on chip module
 endef
 
-$(eval $(call KernelPackage,rtc-snvs))
+$(eval $(call KernelPackage,rtc-rs5c372a))
 
 
 define KernelPackage/mtdtests
@@ -791,22 +711,6 @@ endef
 $(eval $(call KernelPackage,zram))
 
 
-define KernelPackage/mvsdio
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Marvell SDIO support
-  DEPENDS:=@TARGET_orion||TARGET_kirkwood||TARGET_mvebu +kmod-mmc
-  KCONFIG:=CONFIG_MMC_MVSDIO
-  FILES:=$(LINUX_DIR)/drivers/mmc/host/mvsdio.ko
-  AUTOLOAD:=$(call AutoProbe,mvsdio)
-endef
-
-define KernelPackage/mvsdio/description
- Kernel support for the Marvell SDIO controller
-endef
-
-$(eval $(call KernelPackage,mvsdio))
-
-
 define KernelPackage/pps
   SUBMENU:=$(OTHER_MENU)
   TITLE:=PPS support
@@ -842,6 +746,23 @@ endef
 $(eval $(call KernelPackage,pps-gpio))
 
 
+define KernelPackage/pps-ldisc
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=PPS line discipline
+  DEPENDS:=+kmod-pps
+  KCONFIG:=CONFIG_PPS_CLIENT_LDISC
+  FILES:=$(LINUX_DIR)/drivers/pps/clients/pps-ldisc.ko
+  AUTOLOAD:=$(call AutoLoad,18,pps-ldisc,1)
+endef
+
+define KernelPackage/pps-ldisc/description
+ Support for a PPS source connected with the CD (Carrier
+ Detect) pin of your serial port.
+endef
+
+$(eval $(call KernelPackage,pps-ldisc))
+
+
 define KernelPackage/ptp
   SUBMENU:=$(OTHER_MENU)
   TITLE:=PTP clock support
@@ -864,7 +785,7 @@ $(eval $(call KernelPackage,ptp))
 define KernelPackage/ptp-gianfar
   SUBMENU:=$(OTHER_MENU)
   TITLE:=Freescale Gianfar PTP support
-  DEPENDS:=@TARGET_mpc85xx +kmod-gianfar +kmod-ptp
+  DEPENDS:=@TARGET_mpc85xx +kmod-ptp
   KCONFIG:=CONFIG_PTP_1588_CLOCK_GIANFAR
   FILES:=$(LINUX_DIR)/drivers/net/ethernet/freescale/gianfar_ptp.ko
   AUTOLOAD:=$(call AutoProbe,gianfar_ptp)
@@ -891,6 +812,21 @@ endef
 
 $(eval $(call KernelPackage,random-core))
 
+define KernelPackage/random-omap
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=Hardware Random Number Generator OMAP support
+  KCONFIG:=CONFIG_HW_RANDOM_OMAP
+  FILES:=$(LINUX_DIR)/drivers/char/hw_random/omap-rng.ko
+  DEPENDS:=@TARGET_omap24xx +kmod-random-core
+  AUTOLOAD:=$(call AutoProbe,random-omap)
+endef
+
+define KernelPackage/random-omap/description
+ Kernel module for the OMAP Random Number Generator
+ found on OMAP16xx, OMAP2/3/4/5 and AM33xx/AM43xx multimedia processors.
+endef
+
+$(eval $(call KernelPackage,random-omap))
 
 define KernelPackage/thermal
   SUBMENU:=$(OTHER_MENU)
@@ -900,6 +836,7 @@ define KernelPackage/thermal
   KCONFIG:= \
 	CONFIG_THERMAL \
 	CONFIG_THERMAL_OF=y \
+	CONFIG_CPU_THERMAL=y \
 	CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y \
 	CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE=n \
 	CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE=n \
@@ -919,61 +856,6 @@ define KernelPackage/thermal/description
 endef
 
 $(eval $(call KernelPackage,thermal))
-
-
-define KernelPackage/thermal-armada
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Armada 370/XP thermal management
-  DEPENDS:=@TARGET_mvebu +kmod-thermal
-  KCONFIG:=CONFIG_ARMADA_THERMAL
-  FILES:=$(LINUX_DIR)/drivers/thermal/armada_thermal.ko
-  AUTOLOAD:=$(call AutoProbe,armada_thermal)
-endef
-
-define KernelPackage/thermal-armada/description
- Enable this module if you want to have support for thermal management
- controller present in Armada 370 and Armada XP SoC.
-endef
-
-$(eval $(call KernelPackage,thermal-armada))
-
-
-define KernelPackage/thermal-imx
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Temperature sensor driver for Freescale i.MX SoCs
-  DEPENDS:=@TARGET_imx6 +kmod-thermal
-  KCONFIG:= \
-	CONFIG_CPU_THERMAL=y \
-	CONFIG_IMX_THERMAL
-  FILES:=$(LINUX_DIR)/drivers/thermal/imx_thermal.ko
-  AUTOLOAD:=$(call AutoProbe,imx_thermal)
-endef
-
-define KernelPackage/thermal-imx/description
- Support for Temperature Monitor (TEMPMON) found on Freescale i.MX SoCs.
- It supports one critical trip point and one passive trip point. The
- cpufreq is used as the cooling device to throttle CPUs when the
- passive trip is crossed.
-endef
-
-$(eval $(call KernelPackage,thermal-imx))
-
-
-define KernelPackage/thermal-kirkwood
-  SUBMENU:=$(OTHER_MENU)
-  TITLE:=Temperature sensor on Marvell Kirkwood SoCs
-  DEPENDS:=@TARGET_kirkwood +kmod-thermal
-  KCONFIG:=CONFIG_KIRKWOOD_THERMAL
-  FILES:=$(LINUX_DIR)/drivers/thermal/kirkwood_thermal.ko
-  AUTOLOAD:=$(call AutoProbe,kirkwood_thermal)
-endef
-
-define KernelPackage/thermal-kirkwood/description
- Support for the Kirkwood thermal sensor driver into the Linux thermal
- framework. Only kirkwood 88F6282 and 88F6283 have this sensor.
-endef
-
-$(eval $(call KernelPackage,thermal-kirkwood))
 
 
 define KernelPackage/gpio-beeper
@@ -1009,3 +891,51 @@ define KernelPackage/echo/description
 endef
 
 $(eval $(call KernelPackage,echo))
+
+
+define KernelPackage/bmp085
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=BMP085/BMP18x pressure sensor
+  DEPENDS:= +kmod-regmap @!LINUX_3_18 @!LINUX_4_1
+  KCONFIG:= CONFIG_BMP085
+  FILES:= $(LINUX_DIR)/drivers/misc/bmp085.ko
+endef
+
+define KernelPackage/bmp085/description
+ This driver adds support for Bosch Sensortec's digital pressure
+ sensors BMP085 and BMP18x.
+endef
+
+$(eval $(call KernelPackage,bmp085))
+
+
+define KernelPackage/bmp085-i2c
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=BMP085/BMP18x pressure sensor I2C
+  DEPENDS:= +kmod-bmp085
+  KCONFIG:= CONFIG_BMP085_I2C
+  FILES:= $(LINUX_DIR)/drivers/misc/bmp085-i2c.ko
+  AUTOLOAD:=$(call AutoProbe,bmp085-i2c)
+endef
+define KernelPackage/bmp085-i2c/description
+ This driver adds support for Bosch Sensortec's digital pressure
+ sensor connected via I2C.
+endef
+
+$(eval $(call KernelPackage,bmp085-i2c))
+
+
+define KernelPackage/bmp085-spi
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=BMP085/BMP18x pressure sensor SPI
+  DEPENDS:= +kmod-bmp085
+  KCONFIG:= CONFIG_BMP085_SPI
+  FILES:= $(LINUX_DIR)/drivers/misc/bmp085-spi.ko
+  AUTOLOAD:=$(call AutoProbe,bmp085-spi)
+endef
+define KernelPackage/bmp085-spi/description
+ This driver adds support for Bosch Sensortec's digital pressure
+ sensor connected via SPI.
+endef
+
+$(eval $(call KernelPackage,bmp085-spi))

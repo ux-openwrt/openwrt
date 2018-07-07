@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=e2fsprogs
-PKG_VERSION:=1.42.12
-PKG_MD5SUM:=68255f51be017a93f2f6402fab06c2bf
-PKG_RELEASE:=1
+PKG_VERSION:=1.43.3
+PKG_HASH:=ce8ef1bbb0d4730f170167284fda156ac9d6bf18db2750eb94af619a81b19927
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/e2fsprogs
@@ -44,6 +44,7 @@ define Package/libext2fs
 $(call Package/e2fsprogs/Default)
   SECTION:=libs
   CATEGORY:=Libraries
+  DEPENDS:=+libuuid
   TITLE:=ext2/3/4 filesystem library
 endef
 
@@ -131,12 +132,16 @@ define Build/Compile
 		CFLAGS="" \
 		CPPFLAGS="" \
 		LDFLAGS="" \
+		V=$(if $(findstring c,$(OPENWRT_VERBOSE)),1,) \
 		subst
 	+$(MAKE) $(PKG_JOBS) -C $(PKG_BUILD_DIR) \
 		LDFLAGS=-Wl,--gc-sections \
 		BUILDCC="$(HOSTCC)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		LIBBLKID="$(PKG_BUILD_DIR)/lib/libblkid.a -luuid" \
+		ELF_OTHER_LIBS="$(TARGET_LDFLAGS) -luuid" \
+		SYSLIBS="$(TARGET_LDFLAGS) -ldl -L$(PKG_BUILD_DIR)/lib/ -l:libcom_err.so.0.0" \
+		V=$(if $(findstring c,$(OPENWRT_VERBOSE)),1,) \
 		all
 endef
 

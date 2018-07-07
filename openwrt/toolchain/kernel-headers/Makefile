@@ -19,7 +19,7 @@ PKG_VERSION:=$(LINUX_VERSION)
 PKG_SOURCE:=$(LINUX_SOURCE)
 PKG_SOURCE_URL:=$(LINUX_SITE)
 HOST_BUILD_DIR:=$(KERNEL_BUILD_DIR)/linux-$(LINUX_VERSION)
-PKG_MD5SUM:=$(LINUX_KERNEL_MD5SUM)
+PKG_HASH:=$(LINUX_KERNEL_HASH)
 LINUX_DIR := $(HOST_BUILD_DIR)
 FILES_DIR := 
 PATCH_DIR := ./patches$(if $(wildcard ./patches-$(LINUX_VERSION)),-$(LINUX_VERSION))
@@ -72,7 +72,8 @@ endef
 
 define Host/Prepare
 	$(call Kernel/Prepare/Default)
-	ln -sf linux-$(LINUX_VERSION) $(BUILD_DIR_TOOLCHAIN)/linux
+	rm -f $(BUILD_DIR_TOOLCHAIN)/linux
+	ln -s linux-$(LINUX_VERSION) $(BUILD_DIR_TOOLCHAIN)/linux
 	$(SED) 's/@expr length/@-expr length/' $(HOST_BUILD_DIR)/Makefile
 endef
 

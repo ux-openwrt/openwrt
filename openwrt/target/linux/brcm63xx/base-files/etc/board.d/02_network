@@ -11,6 +11,7 @@ board_config_update
 case "$(brcm63xx_board_name)" in
 
 cvg834g |\
+evg2000 |\
 rta770bw |\
 rta770w |\
 spw303v |\
@@ -126,6 +127,10 @@ vg50)
 bcm963268bu_p300)
 	ucidef_add_switch "switch0" \
 		"0:lan" "3:lan" "4:lan" "5:lan" "6:lan" "7:lan" "8t@eth0"
+	;;
+
+livebox1)
+	ucidef_set_interfaces_lan_wan "eth0" "eth1"
 	;;
 
 *)

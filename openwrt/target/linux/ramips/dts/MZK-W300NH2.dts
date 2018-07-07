@@ -1,19 +1,12 @@
 /dts-v1/;
 
-/include/ "rt3050.dtsi"
+#include "rt3050.dtsi"
+
+#include <dt-bindings/input/input.h>
 
 / {
 	compatible = "MZK-W300NH2", "ralink,rt3052-soc";
 	model = "Planex MZK-W300NH2";
-
-	pinctrl {
-		state_default: pinctrl0 {
-			gpio {
-				ralink,group = "spi", "i2c", "jtag", "rgmii", "mdio", "uartf";
-				ralink,function = "gpio";
-			};
-		};
-	};
 
 	cfi@1f000000 {
 		compatible = "cfi-flash";
@@ -53,18 +46,6 @@
 		};
 	};
 
-	ethernet@10100000 {
-		mtd-mac-address = <&factory 0x4>;
-	};
-
-	esw@10110000 {
-		mediatek,portmap = <0x2f>;
-	};
-
-	wmac@10180000 {
-		ralink,mtd-eeprom = <&factory 0>;
-	};
-
 	gpio-leds {
 		compatible = "gpio-leds";
 
@@ -93,19 +74,40 @@
 		wps {
 			label = "wps";
 			gpios = <&gpio0 12 1>;
-			linux,code = <0x211>;
+			linux,code = <KEY_WPS_BUTTON>;
 		};
 
 		reset {
 			label = "reset";
 			gpios = <&gpio0 0 1>;
-			linux,code = <0x198>;
+			linux,code = <KEY_RESTART>;
 		};
 
 		rt {
 			label = "rt";
 			gpios = <&gpio0 13 1>;
-			linux,code = <0x100>;
+			linux,code = <BTN_0>;
 		};
 	};
+};
+
+&pinctrl {
+	state_default: pinctrl0 {
+		gpio {
+			ralink,group = "spi", "i2c", "jtag", "rgmii", "mdio", "uartf";
+			ralink,function = "gpio";
+		};
+	};
+};
+
+&ethernet {
+	mtd-mac-address = <&factory 0x4>;
+};
+
+&esw {
+	mediatek,portmap = <0x2f>;
+};
+
+&wmac {
+	ralink,mtd-eeprom = <&factory 0>;
 };

@@ -11,29 +11,27 @@ include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/version.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=168
+PKG_RELEASE:=171
+PKG_FLAGS:=nonshared
 
 PKG_FILE_DEPENDS:=$(PLATFORM_DIR)/ $(GENERIC_PLATFORM_DIR)/base-files/
 PKG_BUILD_DEPENDS:=usign/host
 PKG_LICENSE:=GPL-2.0
 
-PKG_CONFIG_DEPENDS := CONFIG_SIGNED_PACKAGES CONFIG_TARGET_INIT_PATH
+PKG_CONFIG_DEPENDS := CONFIG_SIGNED_PACKAGES CONFIG_TARGET_INIT_PATH CONFIG_TARGET_PREINIT_DISABLE_FAILSAFE
 
 include $(INCLUDE_DIR)/package.mk
 
 ifneq ($(DUMP),1)
-  STAMP_CONFIGURED:=$(strip $(STAMP_CONFIGURED))_$(shell $(SH_FUNC) echo $(CONFIG_TARGET_INIT_PATH) | md5s)
+  STAMP_CONFIGURED:=$(strip $(STAMP_CONFIGURED))_$(shell echo $(CONFIG_TARGET_INIT_PATH) | mkhash md5)
   TARGET:=-$(BOARD)
-  ifneq ($(wildcard $(PLATFORM_DIR)/base-files-$(PROFILE) $(PLATFORM_SUBDIR)/base-files-$(PROFILE)),)
-    TARGET:=$(TARGET)-$(PROFILE)
-  endif
 endif
 
 define Package/base-files
   SECTION:=base
   CATEGORY:=Base system
-  DEPENDS:=+netifd +libc +procd +jsonfilter +SIGNED_PACKAGES:usign +fstools
-  TITLE:=Base filesystem for OpenWrt
+  DEPENDS:=+netifd +libc +procd +jsonfilter +SIGNED_PACKAGES:usign +SIGNED_PACKAGES:lede-keyring +fstools +fwtool
+  TITLE:=Base filesystem for Lede
   URL:=http://openwrt.org/
   VERSION:=$(PKG_RELEASE)-$(REVISION)
 endef
@@ -66,7 +64,6 @@ define Package/base-files/description
  This package contains a base filesystem and system scripts for OpenWrt.
 endef
 
-ifneq ($(CONFIG_PREINITOPT),)
 define ImageConfigOptions
 	mkdir -p $(1)/lib/preinit
 	echo 'pi_suppress_stderr="$(CONFIG_TARGET_PREINIT_SUPPRESS_STDERR)"' >$(1)/lib/preinit/00_preinit.conf
@@ -81,8 +78,8 @@ define ImageConfigOptions
 	echo 'pi_broadcast=$(if $(CONFIG_TARGET_PREINIT_BROADCAST),$(CONFIG_TARGET_PREINIT_BROADCAST),"192.168.1.255")' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_preinit_net_messages="$(CONFIG_TARGET_PREINIT_SHOW_NETMSG)"' >>$(1)/lib/preinit/00_preinit.conf
 	echo 'pi_preinit_no_failsafe_netmsg="$(CONFIG_TARGET_PREINIT_SUPPRESS_FAILSAFE_NETMSG)"' >>$(1)/lib/preinit/00_preinit.conf
+	echo 'pi_preinit_no_failsafe="$(CONFIG_TARGET_PREINIT_DISABLE_FAILSAFE)"' >>$(1)/lib/preinit/00_preinit.conf
 endef
-endif
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
@@ -116,31 +113,21 @@ define Package/base-files/install
 	if [ -d $(PLATFORM_DIR)/base-files/. ]; then \
 		$(CP) $(PLATFORM_DIR)/base-files/* $(1)/; \
 	fi
-	if [ -d $(PLATFORM_DIR)/base-files-$(PROFILE)/. ]; then \
-		$(CP) $(PLATFORM_DIR)/base-files-$(PROFILE)/* $(1)/; \
-	fi
-	if [ -d $(PLATFORM_DIR)/$(PROFILE)/base-files/. ]; then \
-		$(CP) $(PLATFORM_DIR)/$(PROFILE)/base-files/* $(1)/; \
-	fi
 	$(if $(filter-out $(PLATFORM_DIR),$(PLATFORM_SUBDIR)), \
 		if [ -d $(PLATFORM_SUBDIR)/base-files/. ]; then \
 			$(CP) $(PLATFORM_SUBDIR)/base-files/* $(1)/; \
 		fi; \
-		if [ -d $(PLATFORM_SUBDIR)/base-files-$(PROFILE)/. ]; then \
-			$(CP) $(PLATFORM_SUBDIR)/base-files-$(PROFILE)/* $(1)/; \
-		fi; \
-		if [ -d $(PLATFORM_SUBDIR)/$(PROFILE)/base-files/. ]; then \
-			$(CP) $(PLATFORM_SUBDIR)/$(PROFILE)/base-files/* $(1)/; \
-		fi \
 	)
 
 	$(VERSION_SED) \
 		$(1)/etc/banner \
-		$(1)/etc/openwrt_version
+		$(1)/etc/openwrt_version \
+		$(1)/usr/lib/os-release
 
 	$(VERSION_SED_SCRIPT) \
 		$(1)/etc/openwrt_release \
-		$(1)/etc/device_info
+		$(1)/etc/device_info \
+		$(1)/usr/lib/os-release
 
 	$(SED) "s#%PATH%#$(TARGET_INIT_PATH)#g" \
 		$(1)/sbin/hotplug-call \
@@ -167,7 +154,7 @@ define Package/base-files/install
 	rm -f $(1)/var
 	$(LN) /tmp $(1)/var
 	mkdir -p $(1)/etc
-	$(LN) /tmp/resolv.conf /tmp/fstab /tmp/TZ /tmp/localtime $(1)/etc/
+	$(LN) /tmp/resolv.conf /tmp/TZ /tmp/localtime $(1)/etc/
 
 	chmod 0600 $(1)/etc/shadow
 	chmod 1777 $(1)/tmp
@@ -184,6 +171,7 @@ endef
 
 ifneq ($(DUMP),1)
   -include $(PLATFORM_DIR)/base-files.mk
+  -include $(PLATFORM_SUBDIR)/base-files.mk
 endif
 
 $(eval $(call BuildPackage,base-files))

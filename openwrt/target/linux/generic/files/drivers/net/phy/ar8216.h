@@ -1,7 +1,7 @@
 /*
  * ar8216.h: AR8216 switch driver
  *
- * Copyright (C) 2009 Felix Fietkau <nbd@openwrt.org>
+ * Copyright (C) 2009 Felix Fietkau <nbd@nbd.name>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,6 +154,7 @@
 #define   AR8216_PORT_STATUS_LINK_UP	BIT(8)
 #define   AR8216_PORT_STATUS_LINK_AUTO	BIT(9)
 #define   AR8216_PORT_STATUS_LINK_PAUSE	BIT(10)
+#define   AR8216_PORT_STATUS_FLOW_CONTROL  BIT(12)
 
 #define AR8216_REG_PORT_CTRL(_i)	(AR8216_PORT_OFFSET(_i) + 0x0004)
 

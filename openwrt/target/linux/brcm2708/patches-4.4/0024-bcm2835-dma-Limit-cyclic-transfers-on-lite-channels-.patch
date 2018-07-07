@@ -1,8 +1,7 @@
-From 305370f7caaecafbabb77b630380dbc0c436bb4c Mon Sep 17 00:00:00 2001
+From c9b92657b415bc1b855c394284efa0e33119ef61 Mon Sep 17 00:00:00 2001
 From: Matthias Reichl <hias@horus.com>
 Date: Sun, 11 Oct 2015 12:28:30 +0200
-Subject: [PATCH 024/170] bcm2835-dma: Limit cyclic transfers on lite channels
- to 32k
+Subject: [PATCH] bcm2835-dma: Limit cyclic transfers on lite channels to 32k
 
 Transfers larger than 32k cause repeated clicking with I2S soundcards.
 The exact reason is yet unknown, so limit to 32k as bcm2708-dmaengine
