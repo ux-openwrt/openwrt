@@ -117,10 +117,10 @@ msgstr "<abbr title=\"maximal\">Max.</abbr> Anzahl gleichzeitiger Abfragen"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Paarweise: %s / Gruppe: %s'>%s - %s</abbr>"
 
-msgid "ADSL"
+msgid "xDSL"
 msgstr ""
 
-msgid "ADSL Status"
+msgid "xDSL Status"
 msgstr ""
 
 msgid "AICCU (SIXXS)"
@@ -632,6 +632,9 @@ msgstr "Standard %d"
 
 msgid "Default gateway"
 msgstr "Default Gateway"
+
+msgid "Default is stateless + stateful"
+msgstr ""
 
 msgid "Default route"
 msgstr ""
@@ -1491,7 +1494,7 @@ msgstr ""
 msgid "Localise queries"
 msgstr "Lokalisiere Anfragen"
 
-msgid "Locked to channel %d used by: %s"
+msgid "Locked to channel %s used by: %s"
 msgstr ""
 
 msgid "Log output level"
