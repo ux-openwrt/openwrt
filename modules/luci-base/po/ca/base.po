@@ -152,6 +152,11 @@ msgstr "Consultes concurrents <abbr title=\"màximes\">max.</abbr>"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Parella: %s / Grup: %s'>%s - %s</abbr>"
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -418,9 +423,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr "Controlador sense fils d'Atheros 802.11%s"
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1459,6 +1461,9 @@ msgstr "Longitud de prefix IPv6"
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr "Adreça IPv6"
 
@@ -1565,6 +1570,9 @@ msgstr "Paquets instal·lats"
 msgid "Interface"
 msgstr "Interfície"
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr "Configuració d'interfície"
 
@@ -1619,6 +1627,9 @@ msgstr ""
 "si us plau verifica el fitxer d'imatge!"
 
 msgid "Java Script required!"
+msgstr ""
+
+msgid "JavaScript required!"
 msgstr "Es requereix JavaScript!"
 
 msgid "Join Network"
@@ -1686,9 +1697,6 @@ msgstr "Duració de validitat d'arrendament"
 
 msgid "Leasefile"
 msgstr "Fitxer d'arrendament"
-
-msgid "Leasetime"
-msgstr "Duració d'arrendament"
 
 msgid "Leasetime remaining"
 msgstr "Duració d'arrendament restant"
@@ -2197,12 +2205,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3668,7 +3680,11 @@ msgstr ""
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
 msgstr ""
-"Has d'activar el Java Script al teu navegador o LuCI no funcionarà "
+
+msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr ""
+"Has d'activar el JavaScript al teu navegador o LuCI no funcionarà "
 "correctament."
 
 msgid ""
@@ -3682,10 +3698,6 @@ msgstr "qualsevol"
 
 msgid "auto"
 msgstr "auto"
-
-#, fuzzy
-msgid "automatic"
-msgstr "estàtic"
 
 msgid "baseT"
 msgstr ""
@@ -3763,9 +3775,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr "no"
 
@@ -3797,12 +3806,6 @@ msgid "routed"
 msgstr "encaminat"
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3840,6 +3843,13 @@ msgstr "sí"
 
 msgid "« Back"
 msgstr "« Enrere"
+
+#~ msgid "Leasetime"
+#~ msgstr "Duració d'arrendament"
+
+#, fuzzy
+#~ msgid "automatic"
+#~ msgstr "estàtic"
 
 #~ msgid "An additional network will be created if you leave this unchecked."
 #~ msgstr "Es crearà una xarxa addicional si deixes això sense marcar."

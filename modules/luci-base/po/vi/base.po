@@ -146,6 +146,11 @@ msgstr ""
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr ""
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -406,9 +411,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr ""
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1432,6 +1434,9 @@ msgstr ""
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr ""
 
@@ -1537,6 +1542,9 @@ msgstr ""
 msgid "Interface"
 msgstr "Giao diện "
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr ""
 
@@ -1591,6 +1599,9 @@ msgstr ""
 "vui lòng xác minh các tập tin hình ảnh!"
 
 msgid "Java Script required!"
+msgstr ""
+
+msgid "JavaScript required!"
 msgstr ""
 
 msgid "Join Network"
@@ -1658,9 +1669,6 @@ msgstr ""
 
 msgid "Leasefile"
 msgstr "Leasefile"
-
-msgid "Leasetime"
-msgstr "Leasetime"
 
 msgid "Leasetime remaining"
 msgstr "Leasetime còn lại"
@@ -2169,12 +2177,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3624,6 +3636,10 @@ msgid ""
 msgstr ""
 
 msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr ""
+
+msgid ""
 "Your Internet Explorer is too old to display this page correctly. Please "
 "upgrade it to at least version 7 or use another browser like Firefox, Opera "
 "or Safari."
@@ -3634,10 +3650,6 @@ msgstr ""
 
 msgid "auto"
 msgstr "tự động"
-
-#, fuzzy
-msgid "automatic"
-msgstr "thống kê"
 
 msgid "baseT"
 msgstr ""
@@ -3715,9 +3727,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr ""
 
@@ -3749,12 +3758,6 @@ msgid "routed"
 msgstr ""
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3792,3 +3795,10 @@ msgstr ""
 
 msgid "« Back"
 msgstr ""
+
+#~ msgid "Leasetime"
+#~ msgstr "Leasetime"
+
+#, fuzzy
+#~ msgid "automatic"
+#~ msgstr "thống kê"
