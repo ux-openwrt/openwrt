@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ffmpeg
-PKG_VERSION:=2.5.4
+PKG_VERSION:=2.6.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ffmpeg.org/releases/
-PKG_MD5SUM:=af92a816b642d32134a764d2d7f55b75
+PKG_MD5SUM:=e75d598921285d6775f20164a91936ac
 PKG_MAINTAINER:=Ted Hess <thess@kitschensync.net>
 
 PKG_LICENSE:=LGPL-2.1+ GPL-2+ LGPL-3
@@ -108,7 +108,7 @@ FFMPEG_CUSTOM_PARSERS:= \
 	mpegvideo \
 
 FFMPEG_CUSTOM_PROTOCOLS:= \
-	file http pipe rtp tcp udp
+	file http icecast pipe rtp tcp udp
 
 FFMPEG_MINI_DECODERS:= \
 	aac \
@@ -202,7 +202,7 @@ FFMPEG_AUDIO_PARSERS:= \
 	mpegaudio \
 
 FFMPEG_AUDIO_PROTOCOLS:= \
-	file http rtp tcp udp
+	file http icecast rtp tcp udp
 
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
@@ -395,6 +395,7 @@ FFMPEG_CONFIGURE:= \
 	--disable-mipsfpu \
 	\
 	--disable-dxva2 \
+	--disable-lzma \
 	--disable-vaapi \
 	--disable-vda \
 	--disable-vdpau \

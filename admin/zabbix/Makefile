@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2014 OpenWrt.org
+# Copyright (C) 2006-2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zabbix
-PKG_VERSION:=2.4.4
+PKG_VERSION:=2.4.6
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/zabbix
-PKG_MD5SUM:=400a3e2ebec80e2f1fe86d1b32bfd2e1
+PKG_MD5SUM:=06ad8d5808a0eddf2b9f0a256b6a5fde
 
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
