@@ -623,6 +623,32 @@ function get_status_by_route(self, addr, mask)
 	end
 end
 
+function get_status_by_address(self, addr)
+	local _, object
+	for _, object in ipairs(_ubus:objects()) do
+		local net = object:match("^network%.interface%.(.+)")
+		if net then
+			local s = _ubus:call(object, "status", {})
+			if s and s['ipv4-address'] then
+				local a
+				for _, a in ipairs(s['ipv4-address']) do
+					if a.address == addr then
+						return net, s
+					end
+				end
+			end
+			if s and s['ipv6-address'] then
+				local a
+				for _, a in ipairs(s['ipv6-address']) do
+					if a.address == addr then
+						return net, s
+					end
+				end
+			end
+		end
+	end
+end
+
 function get_wannet(self)
 	local net = self:get_status_by_route("0.0.0.0", 0)
 	return net and network(net)
@@ -1138,31 +1164,24 @@ function interface.is_bridgeport(self)
 	return self.dev and self.dev.bridge and true or false
 end
 
-local function uint(x)
-	if x then
-		return (x < 0) and ((2^32) + x) or x
-	end
-	return 0
-end
-
 function interface.tx_bytes(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.tx_bytes) or 0
+	return stat and stat.tx_bytes or 0
 end
 
 function interface.rx_bytes(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.rx_bytes) or 0
+	return stat and stat.rx_bytes or 0
 end
 
 function interface.tx_packets(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.tx_packets) or 0
+	return stat and stat.tx_packets or 0
 end
 
 function interface.rx_packets(self)
 	local stat = self:_ubus("statistics")
-	return stat and uint(stat.rx_packets) or 0
+	return stat and stat.rx_packets or 0
 end
 
 function interface.get_network(self)
