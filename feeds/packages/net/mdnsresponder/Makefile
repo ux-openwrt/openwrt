@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mDNSResponder
-PKG_VERSION:=561.1.1
+PKG_VERSION:=576.30.4
 PKG_RELEASE:=1
 
 PKG_SOURCE:=mDNSResponder-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://opensource.apple.com/tarballs/mDNSResponder/
-PKG_MD5SUM:=d4b56e22798d6f45e29b42cd6720ab6e
+PKG_MD5SUM:=940057ac8b513b00e8e9ca12ef796762
 PKG_MAINTAINER:=Steven Barth <cyrus@openwrt.org>
 PKG_LICENSE:=Apache-2.0
 
@@ -85,6 +85,7 @@ endef
 # I have no idea why -lc is required, but without it, C library symbols are
 # not found:
 MAKE_FLAGS += \
+	LD="$(TARGET_CC)"  \
 	CFLAGS_DEBUG="$(TARGET_CFLAGS)" \
 	LINKOPTS=-lc \
 	LDCONFIG= \

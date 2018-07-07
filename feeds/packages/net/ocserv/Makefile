@@ -8,13 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ocserv
-PKG_VERSION:=0.9.2
-PKG_RELEASE:=2
+PKG_VERSION:=0.11.2
+PKG_RELEASE:=1
+PKG_USE_MIPS16:=0
 
 PKG_BUILD_DIR :=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL :=ftp://ftp.infradead.org/pub/ocserv/
-PKG_MD5SUM:=9697c37cc81b30be2b178258ee595d97
+PKG_SOURCE_URL:=ftp://ftp.infradead.org/pub/ocserv/
+PKG_MD5SUM:=6731f4d9a85ff0476ae37fa7a4d57ee2
 
 PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=COPYING
@@ -38,7 +39,7 @@ define Package/ocserv
   TITLE:=OpenConnect VPN server
   URL:=http://www.infradead.org/ocserv/
   MAINTAINER:=Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
-  DEPENDS:= +OCSERV_HTTP_PARSER:libhttp-parser +OCSERV_SECCOMP:libseccomp +libgnutls +certtool +libncurses +libreadline +OCSERV_PAM:libpam +OCSERV_PROTOBUF:libprotobuf-c +kmod-tun
+  DEPENDS:= +OCSERV_RADIUS:libradcli +OCSERV_HTTP_PARSER:libhttp-parser +OCSERV_SECCOMP:libseccomp +libgnutls +certtool +libncurses +libreadline +OCSERV_PAM:libpam +OCSERV_PROTOBUF:libprotobuf-c +libev +kmod-tun
   USERID:=ocserv=72:ocserv=72
 endef
 
@@ -55,13 +56,19 @@ EXTRA_CPPFLAGS+=-I$(STAGING_DIR)/usr/include/readline/
 EXTRA_LDFLAGS+=-lncurses
 
 CONFIGURE_ARGS+= \
+	--with-pager="" \
 	--enable-local-libopts \
 	--with-libreadline-prefix="$(STAGING_DIR)/" \
 	--without-libnl \
+	--without-gssapi \
 	--with-libcrypt-prefix="$(STAGING_DIR)/" \
 
 ifneq ($(CONFIG_OCSERV_PAM),y)
 CONFIGURE_ARGS += --without-pam
+endif
+
+ifneq ($(CONFIG_OCSERV_RADIUS),y)
+CONFIGURE_ARGS += --without-radius
 endif
 
 ifneq ($(CONFIG_OCSERV_SECCOMP),y)
@@ -84,9 +91,9 @@ define Package/ocserv/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ocserv $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ocpasswd $(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/occtl $(1)/usr/bin/
-	$(INSTALL_BIN) ./files/ocserv-script $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ocserv-fw $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/ocpasswd/ocpasswd $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/occtl/occtl $(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/ocserv.init $(1)/etc/init.d/ocserv
 	$(INSTALL_DIR) $(1)/etc/ocserv

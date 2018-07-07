@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2010 OpenWrt.org
+# Copyright (C) 2005-2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=3.3.13
-PKG_RELEASE:=3
+PKG_VERSION:=3.4.11
+PKG_RELEASE:=1
 PKG_USE_MIPS16:=0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3
-PKG_MD5SUM:=a7387fe8bf3e604bf518a6da9ab2a4e6
+PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4
+PKG_MD5SUM:=4da148b5a0048aaac4961e2d9ba95798
+#PKG_FIXUP:=autoreconf gettext-version
 PKG_MAINTAINER:=Nikos Mavrogiannopoulos <nmav@gnutls.org>
+PKG_LICENSE:=LGPLv2.1+
 
 PKG_INSTALL:=1
 PKG_LIBTOOL_PATHS:=. lib
@@ -91,7 +93,7 @@ endef
 define Package/libgnutls
 $(call Package/gnutls/Default)
   TITLE+= (library)
-  DEPENDS+= +libnettle +!LIBNETTLE_MINI:libgmp +GNUTLS_EXT_LIBTASN1:libtasn1 +GNUTLS_PKCS11:p11-kit
+  DEPENDS+= +libnettle +!LIBNETTLE_MINI:libgmp +GNUTLS_EXT_LIBTASN1:libtasn1 +GNUTLS_PKCS11:p11-kit +GNUTLS_CRYPTODEV:kmod-cryptodev
 endef
 
 define Package/libgnutls/description
@@ -99,17 +101,6 @@ $(call Package/gnutls/Default/description)
  This package contains the GnuTLS shared library, needed by other programs.
 endef
 
-
-define Package/libgnutls-openssl
-$(call Package/gnutls/Default)
-  TITLE+= (OpenSSL compat library)
-  DEPENDS+= +libgnutls
-endef
-
-define Package/libgnutls-openssl/description
-$(call Package/gnutls/Default/description)
- This package contains the GnuTLS OpenSSL compatibility layer shared library.
-endef
 
 CONFIGURE_ARGS+= \
 	--enable-shared \
@@ -122,10 +113,9 @@ CONFIGURE_ARGS+= \
 	--enable-local-libopts \
 	--disable-doc \
 	--disable-tests \
-	--disable-rsa-export \
 	--with-default-trust-store-dir=/etc/ssl/certs/ \
 	--disable-crywrap \
-	--with-librt-prefix="$(STAGING_DIR)/"
+	--with-librt-prefix="$(LIBRT_ROOT_DIR)/"
 
 ifneq ($(CONFIG_GNUTLS_EXT_LIBTASN1),y)
 CONFIGURE_ARGS += --with-included-libtasn1
@@ -180,15 +170,16 @@ TARGET_CFLAGS += $(FPIC)
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib/pkgconfig
 	$(CP) \
+		$(PKG_INSTALL_DIR)/usr/lib/libgnutls.so* \
+		$(1)/usr/lib/
+	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/include/gnutls \
 		$(1)/usr/include/
-	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/lib/libgnutls{,-openssl}.{a,so*} \
-		$(1)/usr/lib/
 	$(CP) \
 		$(PKG_INSTALL_DIR)/usr/lib/pkgconfig/gnutls.pc \
 		$(1)/usr/lib/pkgconfig/
 endef
+
 
 define Package/certtool/conffiles
 /etc/gnutls/certtool.cfg
@@ -238,13 +229,6 @@ define Package/libgnutls/install
 endef
 
 
-define Package/libgnutls-openssl/install
-	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgnutls-openssl.so.* $(1)/usr/lib/
-endef
-
-
 $(eval $(call BuildPackage,certtool))
 $(eval $(call BuildPackage,gnutls-utils))
 $(eval $(call BuildPackage,libgnutls))
-$(eval $(call BuildPackage,libgnutls-openssl))
