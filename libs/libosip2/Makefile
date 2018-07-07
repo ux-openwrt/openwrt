@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 OpenWrt.org
+# Copyright (C) 2014 - 2018 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libosip2
-PKG_VERSION:=4.1.0
-PKG_RELEASE:=1
+PKG_VERSION:=5.0.0
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@GNU/osip
-PKG_MD5SUM:=756423628683c07f817432f046a26516
+PKG_HASH:=18a13c954f7297978e7bf1a0cdadde7c531e519d61a045dae304e054f3b2df03
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -37,7 +37,8 @@ define Package/libosip2/description
  GNU oSIP library, a Session Initiation Protocol (SIP) implementation.
 endef
 
-TARGET_CFLAGS += $(FPIC)
+# toolchain __arc__ define conflicts with libosip2 source
+TARGET_CFLAGS += $(if $(CONFIG_arc),-U__arc__)
 
 CONFIGURE_ARGS += \
 	--enable-shared \
@@ -67,7 +68,7 @@ endef
 
 define Package/libosip2/install
 	$(INSTALL_DIR) $(1)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libosip{,parser}2.so $(PKG_INSTALL_DIR)/usr/lib/libosip{,parser}2.so.* $(1)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libosip{,parser}2.so* $(1)/usr/lib/
 endef
 
 $(eval $(call BuildPackage,libosip2))
