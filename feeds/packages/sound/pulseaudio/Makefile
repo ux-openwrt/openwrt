@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2011 OpenWrt.org
+# Copyright (C) 2011-2014 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,14 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pulseaudio
-PKG_VERSION:=5.0
+PKG_VERSION:=6.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=http://freedesktop.org/software/pulseaudio/releases/
-PKG_MD5SUM:=c43749838612f4860465e83ed62ca38e
+PKG_MD5SUM:=b691e83b7434c678dffacfa3a027750e
+PKG_LICENSE:=LGPL-2.1+
+PKG_LICENSE_FILES:=GPL LICENSE
 
-PKG_BUILD_DIR=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=intltool/host
 
 PKG_FIXUP:=autoreconf
@@ -36,6 +37,7 @@ define Package/pulseaudio/Default
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>
   URL:=http://www.pulseaudio.org
   PROVIDES:=pulseaudio
+  USERID:=pulse=51:pulse=51
 endef
 
 define Package/pulseaudio-daemon

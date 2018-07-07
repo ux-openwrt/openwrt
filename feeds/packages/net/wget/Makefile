@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2014 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,13 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=wget
-PKG_VERSION:=1.15
+PKG_VERSION:=1.16.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/$(PKG_NAME)
-PKG_MD5SUM:=7a279d5ac5594919124d5526e7143e28
+PKG_MD5SUM:=50b67a11971ecc6d142e634e8436fc0f
 PKG_MAINTAINER:=Maxim Storchak <m.storchak@gmail.com>
+PKG_LICENSE:=GPL-3.0+
+PKG_LICENSE_FILES:=COPYING
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(BUILD_VARIANT)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -64,7 +66,8 @@ endef
 
 CONFIGURE_ARGS+= \
 	--disable-rpath \
-	--disable-iri
+	--disable-iri \
+	--without-libuuid
 
 CONFIGURE_VARS += \
 	ac_cv_header_uuid_uuid_h=no

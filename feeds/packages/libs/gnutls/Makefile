@@ -8,17 +8,32 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gnutls
-PKG_VERSION:=3.2.15
-PKG_RELEASE:=1
+PKG_VERSION:=3.3.13
+PKG_RELEASE:=3
+PKG_USE_MIPS16:=0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2
-PKG_MD5SUM:=ec3b06f80e312137386c5d322183ca5a
+PKG_SOURCE_URL:=ftp://ftp.gnutls.org/gcrypt/gnutls/v3.3
+PKG_MD5SUM:=a7387fe8bf3e604bf518a6da9ab2a4e6
 PKG_MAINTAINER:=Nikos Mavrogiannopoulos <nmav@gnutls.org>
 
 PKG_INSTALL:=1
 PKG_LIBTOOL_PATHS:=. lib
 PKG_CHECK_FORMAT_SECURITY:=0
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_GNUTLS_ALPN \
+	CONFIG_GNUTLS_ANON \
+	CONFIG_GNUTLS_CRYPTODEV \
+	CONFIG_GNUTLS_DTLS_SRTP \
+	CONFIG_GNUTLS_EXT_LIBTASN1 \
+	CONFIG_GNUTLS_HEARTBEAT \
+	CONFIG_GNUTLS_OCSP \
+	CONFIG_GNUTLS_OPENPGP \
+	CONFIG_GNUTLS_PKCS11 \
+	CONFIG_GNUTLS_PSK \
+	CONFIG_GNUTLS_SRP \
+	CONFIG_LIBNETTLE_MINI \
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -99,6 +114,7 @@ endef
 CONFIGURE_ARGS+= \
 	--enable-shared \
 	--enable-static \
+	--disable-rpath \
 	--disable-libdane \
 	--disable-guile \
 	--disable-nls \
@@ -107,7 +123,9 @@ CONFIGURE_ARGS+= \
 	--disable-doc \
 	--disable-tests \
 	--disable-rsa-export \
-	--disable-crywrap
+	--with-default-trust-store-dir=/etc/ssl/certs/ \
+	--disable-crywrap \
+	--with-librt-prefix="$(STAGING_DIR)/"
 
 ifneq ($(CONFIG_GNUTLS_EXT_LIBTASN1),y)
 CONFIGURE_ARGS += --with-included-libtasn1
@@ -158,13 +176,6 @@ CONFIGURE_ARGS += --enable-cryptodev
 endif
 
 TARGET_CFLAGS += $(FPIC)
-TARGET_LDFLAGS += -Wl,-rpath-link=$(STAGING_DIR)/usr/lib
-
-define Build/Configure
-	$(SED) 's,-I$$$${includedir},,g' $(PKG_BUILD_DIR)/configure
-	$(SED) 's,-L$$$${libdir},,g' $(PKG_BUILD_DIR)/configure
-	$(call Build/Configure/Default)
-endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include $(1)/usr/lib/pkgconfig

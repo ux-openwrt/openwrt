@@ -8,17 +8,22 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ocserv
-PKG_VERSION:=0.8.2
-PKG_RELEASE:=1
+PKG_VERSION:=0.9.2
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR :=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL :=ftp://ftp.infradead.org/pub/ocserv/
-PKG_MD5SUM:=fd890e121445dfe8bb514da67c91c675
+PKG_MD5SUM:=9697c37cc81b30be2b178258ee595d97
 
-PKG_LICENSE:=GPLv3
+PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=COPYING
 PKG_FIXUP:=autoreconf
+
+PKG_CONFIG_DEPENDS:= \
+	CONFIG_OCSERV_PAM \
+	CONFIG_OCSERV_SECCOMP \
+	CONFIG_OCSERV_PROTOBUF \
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -33,7 +38,8 @@ define Package/ocserv
   TITLE:=OpenConnect VPN server
   URL:=http://www.infradead.org/ocserv/
   MAINTAINER:=Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
-  DEPENDS:= +libgnutls +certtool +libncurses +libreadline +OCSERV_PAM:libpam +OCSERV_PROTOBUF:libprotobuf-c
+  DEPENDS:= +OCSERV_HTTP_PARSER:libhttp-parser +OCSERV_SECCOMP:libseccomp +libgnutls +certtool +libncurses +libreadline +OCSERV_PAM:libpam +OCSERV_PROTOBUF:libprotobuf-c +kmod-tun
+  USERID:=ocserv=72:ocserv=72
 endef
 
 define Package/ocserv/description
@@ -52,13 +58,22 @@ CONFIGURE_ARGS+= \
 	--enable-local-libopts \
 	--with-libreadline-prefix="$(STAGING_DIR)/" \
 	--without-libnl \
+	--with-libcrypt-prefix="$(STAGING_DIR)/" \
 
 ifneq ($(CONFIG_OCSERV_PAM),y)
 CONFIGURE_ARGS += --without-pam
 endif
 
+ifneq ($(CONFIG_OCSERV_SECCOMP),y)
+CONFIGURE_ARGS += --disable-seccomp
+endif
+
 ifneq ($(CONFIG_OCSERV_PROTOBUF),y)
 CONFIGURE_ARGS += --without-protobuf
+endif
+
+ifneq ($(CONFIG_OCSERV_HTTP_PARSER),y)
+CONFIGURE_ARGS += --without-http-parser
 endif
 
 define Package/ocserv/conffiles
@@ -78,6 +93,8 @@ define Package/ocserv/install
 	$(INSTALL_CONF) ./files/ocserv.conf.template $(1)/etc/ocserv/ocserv.conf.template
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_CONF) ./files/config $(1)/etc/config/ocserv
+	$(INSTALL_DIR) $(1)/lib/upgrade/keep.d
+	$(INSTALL_DATA) ./files/ocserv.upgrade $(1)/lib/upgrade/keep.d/ocserv
 endef
 
 $(eval $(call BuildPackage,ocserv))

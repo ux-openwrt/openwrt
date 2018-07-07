@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=git
-PKG_VERSION:=2.0.0
+PKG_VERSION:=2.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@KERNEL/software/scm/git/
-PKG_MD5SUM:=0646202ae979e4339f3e47f2375b5773
+PKG_MD5SUM:=e5880760d1f43f4f49b3bf94b9046eee
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -24,7 +24,7 @@ define Package/git
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Version Control Systems
-  DEPENDS:=+libopenssl +libpthread
+  DEPENDS:=+libopenssl +libpthread +librt
   TITLE:=The fast version control system
   URL:=http://git-scm.com
   MAINTAINER:=Peter Wagner <tripolar@gmx.at>

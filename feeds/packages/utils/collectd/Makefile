@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=collectd
-PKG_VERSION:=4.10.8
-PKG_RELEASE:=3
+PKG_VERSION:=5.4.2
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://collectd.org/files/
-PKG_MD5SUM:=7a60495208b9383225493c6dd6abb2f0
+PKG_MD5SUM:=feff9fd0ed89e956d7cf12ba18cfc248
 
 PKG_FIXUP:=autoreconf
 PKG_REMOVE_FILES:=aclocal.m4 libltdl/aclocal.m4
@@ -24,12 +24,17 @@ PKG_BUILD_PARALLEL:=1
 PKG_USE_MIPS16:=0
 
 COLLECTD_PLUGINS_DISABLED:= \
+	amqp \
 	apple_sensors \
+	aquaero \
 	battery \
+	cgroups \
 	cpufreq \
 	curl_json \
+	curl_xml \
 	dbi \
 	entropy \
+	ethstat \
 	genericjmx \
 	gmond \
 	hddtemp \
@@ -37,29 +42,42 @@ COLLECTD_PLUGINS_DISABLED:= \
 	ipvs \
 	java \
 	libvirt \
+	lpar \
 	mbmon \
+	md \
 	memcachec \
 	memcached \
+	mic \
 	monitorus \
 	multimeter \
 	netapp \
 	nfs \
 	notify_desktop \
 	notify_email \
+	numa \
 	nut \
 	openvz \
 	oracle \
 	perl \
+	pf \
 	pinba \
 	python \
+	redis \
 	routeros \
 	rrdcached \
 	serial \
+	sigrok \
+	statsd \
 	swap \
 	tape \
 	tokyotyrant \
 	uuid \
+	varnish \
 	vserver \
+	write_graphite \
+	write_mongodb \
+	write_redis \
+	write_riemann \
 	xmms \
 	zfs_arc \
 
@@ -106,11 +124,11 @@ COLLECTD_PLUGINS_SELECTED:= \
 	sensors \
 	snmp \
 	syslog \
-	tail \
 	table \
-	ted \
+	tail \
 	tcpconns \
 	teamspeak2 \
+	ted \
 	thermal \
 	unixsock \
 	uptime \
@@ -295,7 +313,7 @@ $(eval $(call BuildPlugin,powerdns,PowerDNS server status input,powerdns,))
 $(eval $(call BuildPlugin,processes,process status input,processes,))
 $(eval $(call BuildPlugin,protocols,network protocols input,protocols,))
 $(eval $(call BuildPlugin,rrdtool,RRDtool output,rrdtool,+PACKAGE_collectd-mod-rrdtool:librrd1))
-$(eval $(call BuildPlugin,sensors,lm_sensors input,sensors,+PACKAGE_collectd-mod-sensors:libsensors @BROKEN))
+$(eval $(call BuildPlugin,sensors,lm_sensors input,sensors,+PACKAGE_collectd-mod-sensors:libsensors))
 $(eval $(call BuildPlugin,snmp,SNMP input,snmp,+PACKAGE_collectd-mod-snmp:libnetsnmp))
 $(eval $(call BuildPlugin,syslog,syslog output,syslog,))
 $(eval $(call BuildPlugin,tail,tail input,tail,))
