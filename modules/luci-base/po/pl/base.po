@@ -44,6 +44,9 @@ msgstr ""
 msgid "-- match by label --"
 msgstr ""
 
+msgid "-- match by uuid --"
+msgstr ""
+
 msgid "1 Minute Load:"
 msgstr "Obciążenie 1 min.:"
 
@@ -292,6 +295,9 @@ msgid ""
 msgstr ""
 "Pozwól na ruch wychodzący (odpowiedzi) z podsieci 127.0.0.0/8, np. usługi RBL"
 
+msgid "Allowed IPs"
+msgstr ""
+
 msgid ""
 "Also see <a href=\"https://www.sixxs.net/faq/connectivity/?faq=comparison"
 "\">Tunneling Comparison</a> on SIXXS"
@@ -299,10 +305,6 @@ msgstr ""
 
 msgid "Always announce default router"
 msgstr ""
-
-msgid "An additional network will be created if you leave this unchecked."
-msgstr ""
-"Zostanie utworzona dodatkowa sieć jeśli zostawisz tą opcję niezaznaczoną."
 
 msgid "Annex"
 msgstr ""
@@ -411,6 +413,9 @@ msgstr ""
 msgid "Authentication"
 msgstr "Uwierzytelnianie"
 
+msgid "Authentication Type"
+msgstr ""
+
 # Nawet M$ tego nie tłumaczy;)
 msgid "Authoritative"
 msgstr "Autorytatywny"
@@ -509,7 +514,13 @@ msgstr ""
 "Zawiera ona zmienione pliki konfiguracyjne oznaczone przez opkg, podstawowe "
 "pliki systemowe, oraz pliki oznaczone do kopiowania przez użytkownika."
 
+msgid "Bind interface"
+msgstr ""
+
 msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
+msgid "Bind the tunnel to this interface (optional)."
 msgstr ""
 
 msgid "Bitrate"
@@ -579,6 +590,9 @@ msgid "Check"
 msgstr "Sprawdź"
 
 msgid "Check fileystems before mount"
+msgstr ""
+
+msgid "Check this option to delete the existing networks from this radio."
 msgstr ""
 
 msgid "Checksum"
@@ -925,6 +939,9 @@ msgstr "Wymagana domena"
 msgid "Domain whitelist"
 msgstr "Whitelist domen (Dozwolone domeny)"
 
+msgid "Don't Fragment"
+msgstr ""
+
 msgid ""
 "Don't forward <abbr title=\"Domain Name System\">DNS</abbr>-Requests without "
 "<abbr title=\"Domain Name System\">DNS</abbr>-Name"
@@ -1000,6 +1017,9 @@ msgstr "Włącz <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
 msgid "Enable HE.net dynamic endpoint update"
 msgstr "Włącz dynamiczną aktualizację punktu końcowego sieci HE.net"
 
+msgid "Enable IPv6 negotiation"
+msgstr ""
+
 msgid "Enable IPv6 negotiation on the PPP link"
 msgstr "Włącz negocjację IPv6 na łączu PPP"
 
@@ -1030,6 +1050,9 @@ msgstr ""
 msgid "Enable mirroring of outgoing packets"
 msgstr ""
 
+msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
+msgstr ""
+
 msgid "Enable this mount"
 msgstr "Włącz ten punkt montowania"
 
@@ -1053,6 +1076,12 @@ msgstr "Sposób Enkapsulacji"
 
 msgid "Encryption"
 msgstr "Szyfrowanie"
+
+msgid "Endpoint Host"
+msgstr ""
+
+msgid "Endpoint Port"
+msgstr ""
 
 msgid "Erasing..."
 msgstr "Usuwanie..."
@@ -1214,6 +1243,11 @@ msgstr "Wolna"
 msgid "Free space"
 msgstr "Wolna przestrzeń"
 
+msgid ""
+"Further information about WireGuard interfaces and peers at <a href=\"http://"
+"wireguard.io\">wireguard.io</a>."
+msgstr ""
+
 msgid "GHz"
 msgstr "GHz"
 
@@ -1271,6 +1305,9 @@ msgid "HE.net password"
 msgstr "Hasło HE.net"
 
 msgid "HE.net username"
+msgstr ""
+
+msgid "HT mode (802.11n)"
 msgstr ""
 
 msgid "Handler"
@@ -1376,6 +1413,9 @@ msgstr "Długość prefiksu IPv4"
 
 msgid "IPv4-Address"
 msgstr "Adres IPv4"
+
+msgid "IPv4-in-IPv4 (RFC2003)"
+msgstr ""
 
 msgid "IPv6"
 msgstr "IPv6"
@@ -1590,11 +1630,11 @@ msgstr "Java Script jest wymagany!"
 msgid "Join Network"
 msgstr "Połącz z siecią"
 
-msgid "Join Network: Settings"
-msgstr "Przyłącz do sieci: Ustawienia"
-
 msgid "Join Network: Wireless Scan"
 msgstr "Przyłącz do sieci: Skanuj sieci WiFi"
+
+msgid "Joining Network: %q"
+msgstr ""
 
 msgid "Keep settings"
 msgstr "Zachowaj ustawienia"
@@ -1709,6 +1749,9 @@ msgid "List of hosts that supply bogus NX domain results"
 msgstr "Lista hostów które dostarczają zafałszowane wyniki NX domain"
 
 msgid "Listen Interfaces"
+msgstr ""
+
+msgid "Listen Port"
 msgstr ""
 
 msgid "Listen only on the given interface or, if unspecified, on all"
@@ -2146,6 +2189,36 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
+msgid "Optional."
+msgstr ""
+
+msgid ""
+"Optional. Adds in an additional layer of symmetric-key cryptography for post-"
+"quantum resistance."
+msgstr ""
+
+msgid "Optional. Create routes for Allowed IPs for this peer."
+msgstr ""
+
+msgid ""
+"Optional. Host of peer. Names are resolved prior to bringing up the "
+"interface."
+msgstr ""
+
+msgid "Optional. Maximum Transmission Unit of tunnel interface."
+msgstr ""
+
+msgid "Optional. Port of peer."
+msgstr ""
+
+msgid ""
+"Optional. Seconds between keep alive messages. Default is 0 (disabled). "
+"Recommended value if this device is behind a NAT is 25."
+msgstr ""
+
+msgid "Optional. UDP port used for outgoing and incoming packets."
+msgstr ""
+
 msgid "Options"
 msgstr "Opcje"
 
@@ -2169,6 +2242,12 @@ msgstr "Nadpisz adres MAC"
 
 msgid "Override MTU"
 msgstr "Nadpisz MTU"
+
+msgid "Override TOS"
+msgstr ""
+
+msgid "Override TTL"
+msgstr ""
 
 msgid "Override default interface name"
 msgstr ""
@@ -2290,6 +2369,9 @@ msgstr "Szczyt:"
 msgid "Peer IP address to assign"
 msgstr ""
 
+msgid "Peers"
+msgstr ""
+
 msgid "Perfect Forward Secrecy"
 msgstr ""
 
@@ -2298,6 +2380,9 @@ msgstr "Wykonaj restart"
 
 msgid "Perform reset"
 msgstr "Wykonaj reset"
+
+msgid "Persistent Keep Alive"
+msgstr ""
 
 msgid "Phy Rate:"
 msgstr "Szybkość Phy:"
@@ -2329,6 +2414,9 @@ msgstr ""
 msgid "Pre-emtive CRC errors (CRCP_P)"
 msgstr ""
 
+msgid "Preshared Key"
+msgstr ""
+
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
@@ -2336,7 +2424,7 @@ msgstr ""
 "Zakładaj że klient jest martwy po danej ilości błedów odpowiedzi echa LCP, "
 "wpisz 0 aby zignorować błędy"
 
-msgid "Prevent listening on thise interfaces."
+msgid "Prevent listening on these interfaces."
 msgstr ""
 
 msgid "Prevents client-to-client communication"
@@ -2344,6 +2432,9 @@ msgstr "Zapobiegaj komunikacji klientów pomiędzy sobą"
 
 msgid "Prism2/2.5/3 802.11b Wireless Controller"
 msgstr "Kontroler bezprzewodowy Prism2/2.5/3 802.11b"
+
+msgid "Private Key"
+msgstr ""
 
 msgid "Proceed"
 msgstr "Wykonaj"
@@ -2379,7 +2470,13 @@ msgstr "Utwórz nową sieć"
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Pseudo Ad-Hoc (ahdemo)"
 
+msgid "Public Key"
+msgstr ""
+
 msgid "Public prefix routed to this device for distribution to clients."
+msgstr ""
+
+msgid "QMI Cellular"
 msgstr ""
 
 msgid "Quality"
@@ -2524,6 +2621,9 @@ msgstr "Most przekaźnikowy"
 msgid "Remote IPv4 address"
 msgstr "Zdalny adres IPv4"
 
+msgid "Remote IPv4 address or FQDN"
+msgstr ""
+
 msgid "Remove"
 msgstr "Usuń"
 
@@ -2547,6 +2647,18 @@ msgstr ""
 
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "Wymagany dla niektórych dostawców internetu, np. Charter z DOCSIS 3"
+
+msgid "Required. Base64-encoded private key for this interface."
+msgstr ""
+
+msgid ""
+"Required. IP addresses and prefixes that this peer is allowed to use inside "
+"the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
+"routes through the tunnel."
+msgstr ""
+
+msgid "Required. Public key of peer."
+msgstr ""
 
 msgid ""
 "Requires upstream supports DNSSEC; verify unsigned domain responses really "
@@ -2590,6 +2702,12 @@ msgid "Root directory for files served via TFTP"
 msgstr "Katalog Root`a dla plików udostępnianych przez TFTP"
 
 msgid "Root preparation"
+msgstr ""
+
+msgid "Route Allowed IPs"
+msgstr ""
+
+msgid "Route type"
 msgstr ""
 
 msgid "Routed IPv6 prefix for downstream interfaces"
@@ -2775,15 +2893,14 @@ msgstr "Przepraszamy, ale żądany obiekt nie został znaleziony."
 msgid "Sorry, the server encountered an unexpected error."
 msgstr "Przepraszamy, ale serwer napotkał nieoczekiwany błąd."
 
-#, fuzzy
 msgid ""
 "Sorry, there is no sysupgrade support present; a new firmware image must be "
-"flashed manually. Please refer to the OpenWrt wiki for device specific "
-"install instructions."
+"flashed manually. Please refer to the wiki for device specific install "
+"instructions."
 msgstr ""
 "Przepraszamy, ale nie ma wsparcia dla trybu sysupgrade. Nowy firmware musi "
-"być wgrany ręcznie. Sprawdź stronę OpenWrt wiki, aby uzyskać instrukcję dla "
-"danego urządzenia."
+"być wgrany ręcznie. Sprawdź stronę wiki, aby uzyskać instrukcję dla danego "
+"urządzenia."
 
 msgid "Sort"
 msgstr "Posortuj"
@@ -2815,6 +2932,19 @@ msgid ""
 "dead"
 msgstr ""
 "Określa maksymalny czas w sekundach przed założeniem, że host jest martwy"
+
+msgid "Specify a TOS (Type of Service)."
+msgstr ""
+
+msgid ""
+"Specify a TTL (Time to Live) for the encapsulating packet other than the "
+"default (64)."
+msgstr ""
+
+msgid ""
+"Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
+"bytes)."
+msgstr ""
 
 msgid "Specify the secret encryption key here."
 msgstr "Określ tajny klucz szyfrowania."
@@ -2973,6 +3103,10 @@ msgid ""
 msgstr ""
 
 msgid ""
+"The IPv4 address or the fully-qualified domain name of the remote tunnel end."
+msgstr ""
+
+msgid ""
 "The IPv6 prefix assigned to the provider, usually ends with <code>::</code>"
 msgstr ""
 "Prefiks IPv6 przypisany do dostawcy, zazwyczaj kończy się <code>::</code>"
@@ -3042,6 +3176,9 @@ msgstr ""
 
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Długość prefiksu IPv6 w bitach"
+
+msgid "The local IPv4 address over which the tunnel is created (optional)."
+msgstr ""
 
 msgid ""
 "The network ports on this device can be combined to several <abbr title="
@@ -3320,12 +3457,12 @@ msgstr "Aktualizuj listy"
 
 msgid ""
 "Upload a sysupgrade-compatible image here to replace the running firmware. "
-"Check \"Keep settings\" to retain the current configuration (requires an "
-"OpenWrt compatible firmware image)."
+"Check \"Keep settings\" to retain the current configuration (requires a "
+"compatible firmware image)."
 msgstr ""
 "Prześlij zgodny z funkcją sysupgrade obraz tutaj, aby zastąpić aktualnie "
 "działające firmware. Zaznacz opcję \"Zachowaj ustawienia\", aby zachować "
-"bieżącą konfigurację (wymaga zgodnego obrazu firmware OpenWrt)."
+"bieżącą konfigurację (wymaga zgodnego obrazu firmware)."
 
 msgid "Upload archive..."
 msgstr "Załaduj archiwum..."
@@ -3506,6 +3643,9 @@ msgid "Whether to route only packets from delegated prefixes"
 msgstr ""
 
 msgid "Width"
+msgstr ""
+
+msgid "WireGuard VPN"
 msgstr ""
 
 msgid "Wireless"
@@ -3729,6 +3869,13 @@ msgstr "tak"
 
 msgid "« Back"
 msgstr "« Wróć"
+
+#~ msgid "An additional network will be created if you leave this unchecked."
+#~ msgstr ""
+#~ "Zostanie utworzona dodatkowa sieć jeśli zostawisz tą opcję niezaznaczoną."
+
+#~ msgid "Join Network: Settings"
+#~ msgstr "Przyłącz do sieci: Ustawienia"
 
 #~ msgid "CPU"
 #~ msgstr "CPU"
