@@ -11,6 +11,9 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.0.6\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr "(%d 分鐘訊息, %d 秒更新)"
 
@@ -236,6 +239,14 @@ msgstr ""
 msgid "Alert"
 msgstr "警示"
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "允許 <abbr title=\"Secure Shell\">SSH</abbr> 密碼驗證"
 
@@ -324,6 +335,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -471,6 +485,9 @@ msgstr ""
 "下面是待備份的檔案清單。包含了更改的設定檔案、必要的基本檔案和使用者自訂的備"
 "份檔案"
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr "傳輸速率"
 
@@ -508,9 +525,6 @@ msgstr "按鈕"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-
-msgid "CPU"
-msgstr "CPU"
 
 msgid "CPU usage (%)"
 msgstr "CPU 使用率 (%)"
@@ -710,6 +724,12 @@ msgid "DNS forwardings"
 msgstr "DNS封包轉發"
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -1000,6 +1020,9 @@ msgstr "乙太網路卡"
 msgid "Ethernet Switch"
 msgstr "乙太交換器"
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr "延伸主機"
 
@@ -1019,6 +1042,9 @@ msgstr "外部系統日誌伺服器"
 
 msgid "External system log server port"
 msgstr "外部系統日誌伺服器埠號"
+
+msgid "External system log server protocol"
+msgstr ""
 
 msgid "Extra SSH command options"
 msgstr ""
@@ -1448,6 +1474,9 @@ msgstr "介面重連"
 msgid "Interface is shutting down..."
 msgstr "介面正在關閉中..."
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr "介面尚未出線或者還沒連上"
 
@@ -1571,6 +1600,12 @@ msgstr "圖例:"
 msgid "Limit"
 msgstr "限制"
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1600,6 +1635,9 @@ msgstr "列出允許RFC1918文件虛擬IP回應的網域"
 msgid "List of hosts that supply bogus NX domain results"
 msgstr "列出供應偽裝NX網域成果的主機群"
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "只許在給予的介面上聆聽, 如果未指定, 全都允許"
 
@@ -1623,6 +1661,9 @@ msgstr "本地IPv4位址"
 
 msgid "Local IPv6 address"
 msgstr "本地IPv6位址"
+
+msgid "Local Service Only"
+msgstr ""
 
 msgid "Local Startup"
 msgstr "本地啟動"
@@ -1694,6 +1735,9 @@ msgstr ""
 
 msgid "MB/s"
 msgstr "MB/s"
+
+msgid "MD5"
+msgstr ""
 
 msgid "MHz"
 msgstr "MHz"
@@ -1926,6 +1970,9 @@ msgstr "噪音比:"
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr "無"
 
@@ -2040,6 +2087,9 @@ msgstr "覆蓋MAC位址"
 
 msgid "Override MTU"
 msgstr "覆蓋MTU數值"
+
+msgid "Override default interface name"
+msgstr ""
 
 msgid "Override the gateway in DHCP responses"
 msgstr "在DHCP回應中覆蓋匝道器"
@@ -2184,12 +2234,6 @@ msgstr "策略"
 msgid "Port"
 msgstr "埠"
 
-msgid "Port %d"
-msgstr "埠 %d"
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr "埠 %d 尚未標記在多個VLANs中!"
-
 msgid "Port status:"
 msgstr "埠狀態:"
 
@@ -2203,6 +2247,9 @@ msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
 msgstr "假若在給于多次的 LCP 呼叫失敗後終點將死, 使用0忽略失敗"
+
+msgid "Prevent listening on thise interfaces."
+msgstr ""
 
 msgid "Prevents client-to-client communication"
 msgstr "防止用戶端對用戶端的通訊"
@@ -2408,6 +2455,11 @@ msgstr ""
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "對特定的ISP需要,例如.DOCSIS 3 加速有線電視寬頻網路"
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr "重置"
 
@@ -2469,6 +2521,9 @@ msgstr "掛載這個設備前先跑系統檢查"
 
 msgid "Run filesystem check"
 msgstr "執行系統檢查"
+
+msgid "SHA256"
+msgstr ""
 
 msgid ""
 "SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
@@ -2609,6 +2664,9 @@ msgstr "插槽時間"
 msgid "Software"
 msgstr "軟體"
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr "有些欄位失效, 無法儲存數值!"
 
@@ -2705,6 +2763,12 @@ msgstr "嚴謹順序"
 msgid "Submit"
 msgstr "提交"
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2719,6 +2783,13 @@ msgstr "交換器 %q"
 
 msgid "Switch %q (%s)"
 msgstr "交換器 %q (%s)"
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
+msgstr ""
 
 msgid "Switch protocol"
 msgstr "交換器協定"
@@ -3199,9 +3270,6 @@ msgstr "虛擬電路多工器VC-Mux"
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr "VLAN介面"
-
 msgid "VLANs on %q"
 msgstr "VLAN 在 %q"
 
@@ -3297,9 +3365,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr "WIFI無線"
-
 msgid "Wireless"
 msgstr "無線網路"
 
@@ -3335,6 +3400,9 @@ msgstr "無線網路關閉"
 
 msgid "Write received DNS requests to syslog"
 msgstr "寫入已接收的DNS請求到系統日誌中"
+
+msgid "Write system log to file"
+msgstr ""
 
 msgid "XR Support"
 msgstr "支援XR無線陣列"
@@ -3514,96 +3582,14 @@ msgstr "是的"
 msgid "« Back"
 msgstr "« 倒退"
 
-#~ msgid "Delete this interface"
-#~ msgstr "刪除這個介面"
+#~ msgid "CPU"
+#~ msgstr "CPU"
 
-#~ msgid "Flags"
-#~ msgstr "旗標"
+#~ msgid "Port %d"
+#~ msgstr "埠 %d"
 
-#~ msgid "Rule #"
-#~ msgstr "規則 #"
+#~ msgid "Port %d is untagged in multiple VLANs!"
+#~ msgstr "埠 %d 尚未標記在多個VLANs中!"
 
-#~ msgid "Ignore Hosts files"
-#~ msgstr "被忽視的主機檔案"
-
-#~ msgid "Please wait: Device rebooting..."
-#~ msgstr "請稍等:設備正重開中..."
-
-#~ msgid ""
-#~ "Warning: There are unsaved changes that will be lost while rebooting!"
-#~ msgstr "警告:重開機後某些未存檔的修改將會漏失!"
-
-#~ msgid ""
-#~ "Always use 40MHz channels even if the secondary channel overlaps. Using "
-#~ "this option does not comply with IEEE 802.11n-2009!"
-#~ msgstr ""
-#~ "強制啟用40MHz頻寬並忽略輔助通道重疊。此選項不相容於IEEE 802.11n-2009!"
-
-#~ msgid "Cached"
-#~ msgstr "已快取"
-
-#~ msgid "Configures this mount as overlay storage for block-extroot"
-#~ msgstr "要採用block-extroot功能,設定這個掛載點當作覆蓋儲存"
-
-#~ msgid "Force 40MHz mode"
-#~ msgstr "強制40MHz模式"
-
-#~ msgid "Frequency Hopping"
-#~ msgstr "跳頻"
-
-#~ msgid "Locked to channel %d used by %s"
-#~ msgstr "鎖定通道 由 %s 使用的 %d "
-
-#~ msgid "Use as root filesystem"
-#~ msgstr "當作root檔案系統"
-
-#~ msgid "HE.net user ID"
-#~ msgstr "HE.net用戶識別碼ID"
-
-#~ msgid "This is the 32 byte hex encoded user ID, not the login name"
-#~ msgstr "這是32字元16進制用戶ID編碼,並非登入名稱"
-
-#~ msgid "40MHz 2nd channel above"
-#~ msgstr "40MHz的上述第二通道"
-
-#~ msgid "40MHz 2nd channel below"
-#~ msgstr "40MHz的下述第二通道"
-
-#~ msgid "Accept router advertisements"
-#~ msgstr "接收路由器通告"
-
-#~ msgid "Advertise IPv6 on network"
-#~ msgstr "在網路上通知IPv6"
-
-#~ msgid "Advertised network ID"
-#~ msgstr "通知網路ID"
-
-#~ msgid "Allowed range is 1 to 65535"
-#~ msgstr "允許範圍為1到65535"
-
-#~ msgid "HT capabilities"
-#~ msgstr "HT頻寬能力"
-
-#~ msgid "HT mode"
-#~ msgstr "HT頻寬模式"
-
-#~ msgid "Router Model"
-#~ msgstr "路由器型號Model"
-
-#~ msgid "Router Name"
-#~ msgstr "路由器名稱"
-
-#~ msgid "Send router solicitations"
-#~ msgstr "傳送路由器邀請封包"
-
-#~ msgid "Specifies the advertised preferred prefix lifetime in seconds"
-#~ msgstr "指定這個公告較愛字首的生命週期以秒表示"
-
-#~ msgid "Specifies the advertised valid prefix lifetime in seconds"
-#~ msgstr "指定這個公告有效字首的生命週期以秒表示"
-
-#~ msgid "Use preferred lifetime"
-#~ msgstr "使用首選的生命週期"
-
-#~ msgid "Use valid lifetime"
-#~ msgstr "使用正確的生命週期"
+#~ msgid "VLAN Interface"
+#~ msgstr "VLAN介面"

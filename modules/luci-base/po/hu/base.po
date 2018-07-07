@@ -11,6 +11,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.6\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr "(%d perces ablak, %d másodperces intervallum)"
 
@@ -243,6 +246,14 @@ msgstr ""
 msgid "Alert"
 msgstr "Riasztás"
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "<abbr title=\"Secure Shell\">SSH</abbr> jelszó hitelesítés engedélyezése"
@@ -336,6 +347,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -485,6 +499,9 @@ msgstr ""
 "fájlokból valamint a felhasználó által megadott mintáknak megfelelő "
 "fájlokból áll."
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr "Bitráta"
 
@@ -522,9 +539,6 @@ msgstr "Gombok"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-
-msgid "CPU"
-msgstr "Processzor"
 
 msgid "CPU usage (%)"
 msgstr "Processzor használat (%)"
@@ -732,6 +746,12 @@ msgid "DNS forwardings"
 msgstr "DNS továbbítások"
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -1031,6 +1051,9 @@ msgstr "Ethernet adapter"
 msgid "Ethernet Switch"
 msgstr "Ethernet switch"
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr "Gépek kibontása"
 
@@ -1050,6 +1073,9 @@ msgstr "Külső rendszernapló kiszolgáló"
 
 msgid "External system log server port"
 msgstr "Külső rendszernapló kiszolgáló port"
+
+msgid "External system log server protocol"
+msgstr ""
 
 msgid "Extra SSH command options"
 msgstr ""
@@ -1490,6 +1516,9 @@ msgstr "Interfész újracsatlakoztatása..."
 msgid "Interface is shutting down..."
 msgstr "Interfész leállítása..."
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr "Az interfész nincs jelen, vagy még nincs csatlakoztatva."
 
@@ -1618,6 +1647,12 @@ msgstr "Jelmagyarázat:"
 msgid "Limit"
 msgstr "Korlát"
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1649,6 +1684,9 @@ msgstr "Domain-ok listája, melyeknél az RFC1918 válaszok megengedettek"
 msgid "List of hosts that supply bogus NX domain results"
 msgstr "A hamis NX tartomány eredményeket szolgáltató gépek listája"
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Csak a megadott interfészen hallgat, vagy az összesen, amennyiben nem adja "
@@ -1674,6 +1712,9 @@ msgstr "Helyi IPv4 cím"
 
 msgid "Local IPv6 address"
 msgstr "Helyi IPv6 cím"
+
+msgid "Local Service Only"
+msgstr ""
 
 msgid "Local Startup"
 msgstr "Helyi indítóscript"
@@ -1752,6 +1793,9 @@ msgstr ""
 
 msgid "MB/s"
 msgstr "MB/s"
+
+msgid "MD5"
+msgstr ""
 
 msgid "MHz"
 msgstr "MHz"
@@ -1986,6 +2030,9 @@ msgstr "Zaj:"
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr "Nincs"
 
@@ -2101,6 +2148,9 @@ msgstr "MAC cím felülbírálása"
 
 msgid "Override MTU"
 msgstr "MTU felülbíráslás"
+
+msgid "Override default interface name"
+msgstr ""
 
 msgid "Override the gateway in DHCP responses"
 msgstr "Átjáró felülbírálása a DHCP válaszokban"
@@ -2247,12 +2297,6 @@ msgstr "Szabály"
 msgid "Port"
 msgstr "Port"
 
-msgid "Port %d"
-msgstr "Port %d"
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr "A %d port egyszerre több VLAN-ban is cimkézetlen!"
-
 msgid "Port status:"
 msgstr "Port állapot:"
 
@@ -2268,6 +2312,9 @@ msgid ""
 msgstr ""
 "A peer halottnak tekintése a megadott számú LCP echo hibák után. Használjon "
 "0-t a hibák figyelmen kívül hagyásához."
+
+msgid "Prevent listening on thise interfaces."
+msgstr ""
 
 msgid "Prevents client-to-client communication"
 msgstr "Ügyfél-ügyfél közötti kommunikáció megakadályozása"
@@ -2478,6 +2525,11 @@ msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
 "Szükséges bizonyos internetszolgáltatók esetén, pl. Charter 'DOCSIS 3'-al"
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr "Visszaállítás"
 
@@ -2541,6 +2593,9 @@ msgstr "Fájlrendszer ellenőrzés futtatása az eszköz csatolása előtt"
 
 msgid "Run filesystem check"
 msgstr "Fájlrendszer ellenőrzés futtatása"
+
+msgid "SHA256"
+msgstr ""
 
 msgid ""
 "SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
@@ -2683,6 +2738,9 @@ msgstr "Időrés"
 msgid "Software"
 msgstr "Szoftver"
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr "Néhán mező érvénytelen, az értékek nem menthetők!"
 
@@ -2785,6 +2843,12 @@ msgstr "Kötött sorrend"
 msgid "Submit"
 msgstr "Elküldés"
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2799,6 +2863,13 @@ msgstr "Kapcsoló %q"
 
 msgid "Switch %q (%s)"
 msgstr "Kapcsoló %q (%s)"
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
+msgstr ""
 
 msgid "Switch protocol"
 msgstr "Protokoll csere"
@@ -3311,9 +3382,6 @@ msgstr "VC-Mux"
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr "VLAN interfész"
-
 msgid "VLANs on %q"
 msgstr "VLAN-ok %q-n"
 
@@ -3409,9 +3477,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr "Wifi"
-
 msgid "Wireless"
 msgstr "Vezetéknélküli rész"
 
@@ -3447,6 +3512,9 @@ msgstr "Vezetéknélküli rész leállítása"
 
 msgid "Write received DNS requests to syslog"
 msgstr "A kapott DNS kéréseket írja a rendszernaplóba"
+
+msgid "Write system log to file"
+msgstr ""
 
 msgid "XR Support"
 msgstr "XR támogatás"
@@ -3630,294 +3698,14 @@ msgstr "igen"
 msgid "« Back"
 msgstr "« Vissza"
 
-#~ msgid "Delete this interface"
-#~ msgstr "Interfész törlése"
+#~ msgid "CPU"
+#~ msgstr "Processzor"
 
-#~ msgid "Flags"
-#~ msgstr "Flag-ek"
+#~ msgid "Port %d"
+#~ msgstr "Port %d"
 
-#~ msgid "Rule #"
-#~ msgstr "Szabály #"
+#~ msgid "Port %d is untagged in multiple VLANs!"
+#~ msgstr "A %d port egyszerre több VLAN-ban is cimkézetlen!"
 
-#~ msgid "Ignore Hosts files"
-#~ msgstr "A hosts fájlok figyelmen kívül hagyása"
-
-#~ msgid "Please wait: Device rebooting..."
-#~ msgstr "Kérem várjon: az eszköz újraindul..."
-
-#~ msgid ""
-#~ "Warning: There are unsaved changes that will be lost while rebooting!"
-#~ msgstr ""
-#~ "Figyelem: vannak el nem mentett változások melyek el fognak veszni az "
-#~ "újraindítás során!"
-
-#~ msgid ""
-#~ "Always use 40MHz channels even if the secondary channel overlaps. Using "
-#~ "this option does not comply with IEEE 802.11n-2009!"
-#~ msgstr ""
-#~ "40 MHz csatornaszélesség használata akkor is, ha a másodlagos csatorna "
-#~ "átfedésben van. Ezen opció használata nem felel meg az IEE 902.11n-2009 "
-#~ "szabványnak!"
-
-#~ msgid "Cached"
-#~ msgstr "Gyorsítótárban van"
-
-#~ msgid "Configures this mount as overlay storage for block-extroot"
-#~ msgstr ""
-#~ "Beállítja ezt a csatlakozási pontot block-extroot részére mint overlay "
-#~ "tároló"
-
-#~ msgid "Force 40MHz mode"
-#~ msgstr "40 MHz mód erőltetése"
-
-#~ msgid "Frequency Hopping"
-#~ msgstr "Frekvencia ugrás"
-
-#~ msgid "Locked to channel %d used by %s"
-#~ msgstr "Zárolt a %d csatornára az %s által."
-
-#~ msgid "Use as root filesystem"
-#~ msgstr "Gyökér fájlrenszerként történő használat"
-
-#~ msgid "HE.net user ID"
-#~ msgstr "HE.net felhasználói azonosító"
-
-#~ msgid "This is the 32 byte hex encoded user ID, not the login name"
-#~ msgstr ""
-#~ "Ez a 32 bájtos hexadecimálan kódolt felhasználói azonosító, nem a "
-#~ "bejelentkezési név"
-
-#~ msgid "40MHz 2nd channel above"
-#~ msgstr "40 MHz, második csatorna felette"
-
-#~ msgid "40MHz 2nd channel below"
-#~ msgstr "40 MHz, második csatorna alatta"
-
-#~ msgid "Accept router advertisements"
-#~ msgstr "Router hirdetések elfogadása"
-
-#~ msgid "Advertise IPv6 on network"
-#~ msgstr "IPv6 hirdetése a hálózaton"
-
-#~ msgid "Advertised network ID"
-#~ msgstr "Hirdetett hálózati azonosító"
-
-#~ msgid "Allowed range is 1 to 65535"
-#~ msgstr "Engedélyezett tartomány 1-től 65535-ig"
-
-#~ msgid "HT capabilities"
-#~ msgstr "HT képességek"
-
-#~ msgid "HT mode"
-#~ msgstr "HT mód"
-
-#~ msgid "Router Model"
-#~ msgstr "Router modell"
-
-#~ msgid "Router Name"
-#~ msgstr "Router név"
-
-#~ msgid "Send router solicitations"
-#~ msgstr "Router kérelmezések küldése"
-
-#~ msgid "Specifies the advertised preferred prefix lifetime in seconds"
-#~ msgstr ""
-#~ "Meghatározza a kihirdetett preferált előtag élettartamát másodpercben"
-
-#~ msgid "Specifies the advertised valid prefix lifetime in seconds"
-#~ msgstr ""
-#~ "Meghatározza a kihirdetett érvényes előtag élettartamát másodpercben"
-
-#~ msgid "Use preferred lifetime"
-#~ msgstr "Előnyben részesített élettartam használata"
-
-#~ msgid "Use valid lifetime"
-#~ msgstr "Érvényességi időtartam használata"
-
-#~ msgid "Waiting for router..."
-#~ msgstr "Várakozás a routerre..."
-
-#~ msgid "Enable builtin NTP server"
-#~ msgstr "Beépített NTP kiszolgáló engedélyezése"
-
-#~ msgid "Active Leases"
-#~ msgstr "Aktív bérletek"
-
-#~ msgid "Open"
-#~ msgstr "Megnyitás"
-
-#~ msgid "Bit Rate"
-#~ msgstr "Bit ráta"
-
-#~ msgid "Configuration / Apply"
-#~ msgstr "Beállítások / Alkalmaz"
-
-#~ msgid "Configuration / Changes"
-#~ msgstr "Beállítások / Módosítások"
-
-#~ msgid "Configuration / Revert"
-#~ msgstr "Beállítások / Visszavonás"
-
-#~ msgid "MAC"
-#~ msgstr "MAC"
-
-#~ msgid "MAC Address"
-#~ msgstr "MAC cím"
-
-#~ msgid "<abbr title=\"Encrypted\">Encr.</abbr>"
-#~ msgstr "<abbr title=\"Encrypted\">Titkosított</abbr>"
-
-#~ msgid "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scan"
-#~ msgstr "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-felderítés"
-
-#~ msgid ""
-#~ "Choose the network you want to attach to this wireless interface. Select "
-#~ "<em>unspecified</em> to not attach any network or fill out the "
-#~ "<em>create</em> field to define a new network."
-#~ msgstr ""
-#~ "Válassza ki azt a hálózatot amihez ezt a vezetéknélküli interfészt "
-#~ "csatlakoztatni akarja. Válassza a <em>nincs megadva</em> elemet ha nem "
-#~ "akarja semmilyen hálózathoz csatlakoztatni vagy töltse ki az <em>új</em> "
-#~ "mezőt új hálózat létrehozásához."
-
-#~ msgid "Create Network"
-#~ msgstr "Új hálózat"
-
-#~ msgid "Link"
-#~ msgstr "Kapcsolat"
-
-#~ msgid "Networks"
-#~ msgstr "Hálózatok"
-
-#~ msgid "Power"
-#~ msgstr "Teljesítmény"
-
-#~ msgid "Wifi networks in your local environment"
-#~ msgstr "Wifi hálózatok az Ön környezetében"
-
-#~ msgid ""
-#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: "
-#~ "address/prefix"
-#~ msgstr ""
-#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-jelölés: cím/"
-#~ "előtag"
-
-#~ msgid "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
-#~ msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-Szerver"
-
-#~ msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"
-#~ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"
-
-#~ msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"
-#~ msgstr "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-cím"
-
-#~ msgid "IP-Aliases"
-#~ msgstr "Alternatív IP címek"
-
-#~ msgid "IPv6 Setup"
-#~ msgstr "IPv6 beállítás"
-
-#~ msgid ""
-#~ "Note: If you choose an interface here which is part of another network, "
-#~ "it will be moved into this network."
-#~ msgstr ""
-#~ "Megjegyzés: ha olyan interfészt választ ami másik hálózat része, akkor az "
-#~ "ebbe a hálózatba lesz áthelyezve."
-
-#~ msgid ""
-#~ "Really delete this interface? The deletion cannot be undone!\\nYou might "
-#~ "lose access to this router if you are connected via this interface."
-#~ msgstr ""
-#~ "Biztos, hogy törölni akarja ezt az interfészt? A törlés nem "
-#~ "visszavonható! Elvesztheti a hozzáférést ehhez a routerhez, ha ezen az "
-#~ "interfészen keresztül kapcsolódik hozzá."
-
-#~ msgid ""
-#~ "Really delete this wireless network? The deletion cannot be undone!\\nYou "
-#~ "might lose access to this router if you are connected via this network."
-#~ msgstr ""
-#~ "Biztos, hogy törölni akarja ezt a vezetéknélküli hálózatot? A törlés nem "
-#~ "visszavonható! Elvesztheti a hozzáférést ehhez a routerhez, ha ezen a "
-#~ "vezetéknélküli hálózaton keresztül kapcsolódik hozzá. "
-
-#~ msgid ""
-#~ "Really shutdown interface \"%s\" ?\\nYou might lose access to this router "
-#~ "if you are connected via this interface."
-#~ msgstr ""
-#~ "Biztos, hogy leállítja a \"%s\" interfészt? Elvesztheti a hozzáféreést "
-#~ "ehhez a routerher ha ezen az interfészen kapcsolódik hozzá."
-
-#~ msgid ""
-#~ "Really shutdown network ?\\nYou might lose access to this router if you "
-#~ "are connected via this interface."
-#~ msgstr ""
-#~ "Biztos, hogy leállítja a hálózatot? Elvesztheti a hozzáférést ehhez a "
-#~ "routerhez, ha ezen a hálózaton keresztül pacsolódik hozzá."
-
-#~ msgid ""
-#~ "The network ports on your router can be combined to several <abbr title="
-#~ "\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
-#~ "communicate directly with each other. <abbr title=\"Virtual Local Area "
-#~ "Network\">VLAN</abbr>s are often used to separate different network "
-#~ "segments. Often there is by default one Uplink port for a connection to "
-#~ "the next greater network like the internet and other ports for a local "
-#~ "network."
-#~ msgstr ""
-#~ "A hálózati portok a routeren összekapcsolhatók több <abbr title=\"Virtual "
-#~ "Local Area Network\">VLAN</abbr>-ba, melyeken belül a számítógépek "
-#~ "közvetlenül tudnak kommunikálni egymással. A <abbr title=\"Virtual Local "
-#~ "Area Network\">VLAN</abbr>-okat gyakran használják különböző "
-#~ "hálózatrészek szétválasztására. Általában van egy felmenő port a "
-#~ "következő nagyobb hálózathoz mint az internet, és további portok a helyi "
-#~ "hálózathoz."
-
-#~ msgid "Enable buffering"
-#~ msgstr "Átmeneti tárazás engedélyezése"
-
-#~ msgid "IPv6-over-IPv4"
-#~ msgstr "IPv6 IPv4 felett"
-
-#~ msgid "Time Synchronisation"
-#~ msgstr "Idő szinkronizálás"
-
-#~ msgid "Client Port"
-#~ msgstr "Ügyfél port"
-
-#~ msgid "Statistics"
-#~ msgstr "Statisztikák"
-
-#~ msgid "Client Address"
-#~ msgstr "Ügyfél cím"
-
-#~ msgid "Active UPnP Redirects"
-#~ msgstr "Aktív UPnP átirányítások"
-
-#~ msgid "Age"
-#~ msgstr "Kor"
-
-#~ msgid "The AHCP Service is not running."
-#~ msgstr "Az AHCP szolgáltatás nem fut."
-
-#~ msgid "VnStat Traffic Monitor"
-#~ msgstr "VnStat forgalom figyelő"
-
-#~ msgid "AHCP Server"
-#~ msgstr "AHCP kiszolgáló"
-
-#~ msgid "The AHCP Service is running with ID %s."
-#~ msgstr "Az AHCP szolgáltatás fut, azonosítója: %s."
-
-#~ msgid "SIP devices on Network"
-#~ msgstr "SIP eszközök a hálózaton"
-
-#~ msgid "Devices on Network"
-#~ msgstr "Eszközök a hálózaton"
-
-#~ msgid "There are no active redirects."
-#~ msgstr "Nincsenek aktív átirányítások."
-
-#~ msgid "SIP Devices on Network"
-#~ msgstr "SIP eszközök a hálózaton"
-
-#~ msgid "Active AHCP Leases"
-#~ msgstr "Aktív AHCP bérletek"
+#~ msgid "VLAN Interface"
+#~ msgstr "VLAN interfész"

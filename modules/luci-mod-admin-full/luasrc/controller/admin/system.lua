@@ -21,7 +21,7 @@ function index()
 	entry({"admin", "system", "startup"}, form("admin_system/startup"), _("Startup"), 45)
 	entry({"admin", "system", "crontab"}, form("admin_system/crontab"), _("Scheduled Tasks"), 46)
 
-	if fs.access("/sbin/block") then
+	if fs.access("/sbin/block") and fs.access("/etc/config/fstab") then
 		entry({"admin", "system", "fstab"}, cbi("admin_system/fstab"), _("Mount Points"), 50)
 		entry({"admin", "system", "fstab", "mount"}, cbi("admin_system/fstab/mount"), nil).leaf = true
 		entry({"admin", "system", "fstab", "swap"},  cbi("admin_system/fstab/swap"),  nil).leaf = true
@@ -185,6 +185,10 @@ local function image_checksum(image)
 	return (luci.sys.exec("md5sum %q" % image):match("^([^%s]+)"))
 end
 
+local function image_sha256_checksum(image)
+	return (luci.sys.exec("sha256sum %q" % image):match("^([^%s]+)"))
+end
+
 local function supports_sysupgrade()
 	return nixio.fs.access("/lib/upgrade/platform.sh")
 end
@@ -268,6 +272,7 @@ function action_sysupgrade()
 		if image_supported(image_tmp) then
 			luci.template.render("admin_system/upgrade", {
 				checksum = image_checksum(image_tmp),
+				sha256ch = image_sha256_checksum(image_tmp),
 				storage  = storage_size(),
 				size     = (fs.stat(image_tmp, "size") or 0),
 				keep     = (not not http.formvalue("keep"))
