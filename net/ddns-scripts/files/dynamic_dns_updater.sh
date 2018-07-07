@@ -13,27 +13,33 @@
 # variables in big chars beginning with "__" are local defined inside functions only
 # set -vx  	#script debugger
 
-. /usr/lib/ddns/dynamic_dns_functions.sh	# global vars are also defined here
+. $(dirname $0)/dynamic_dns_functions.sh	# global vars are also defined here
 
 [ $# -lt 1 -o -n "${2//[0-3]/}" -o ${#2} -gt 1 ] && {
-	echo -e "\n  ddns-scripts Version: $VERSION"
-	echo -e "\n  USAGE:"
-	echo    "  $0 [OPTION]"
-	echo    "  [OPTION]	  '-V' or '--version' display version and exit"
-	echo -e "\n  $0 [SECTION] [VERBOSE_MODE]\n"
-	echo    "  [SECTION]      - service section as defined in /etc/config/ddns"
-	echo    "  [VERBOSE_MODE] - '0' NO output to console"
-	echo    "                   '1' output to console"
-	echo    "                   '2' output to console AND logfile"
-	echo    "                       + run once WITHOUT retry on error"
-	echo    "                   '3' output to console AND logfile"
-	echo    "                       + run once WITHOUT retry on error"
-	echo -e "                       + NOT sending update to DDNS service\n"
+	local __ME=$(basename $0)
+	cat << EOF
+ddns-scripts Version: $VERSION
+
+Usage:
+  $__ME -V         display version and exit
+  $__ME --version  display version and exit
+
+  $__ME <SECTION> <VERBOSE_MODE>
+  <SECTION>        service section as defined in /etc/config/ddns
+  <VERBOSE_MODE>   '0' NO output to console
+                   '1' output to console
+                   '2' output to console AND logfile
+                       + run once WITHOUT retry on error
+                   '3' output to console AND logfile
+                       + run once WITHOUT retry on error
+                       + NOT sending update to DDNS service
+
+EOF
 	exit 1
 }
 
 [ "$1" = "-V" -o "$1" = "--version" ] && {
-	echo -e "ddns-scripts $VERSION\n"
+	printf %s\\n "ddns-scripts $VERSION"
 	exit 0
 }
 
@@ -110,6 +116,7 @@ trap "trap_handler 15" 15	# SIGTERM	Termination
 # force_dnstcp		force communication with DNS server via TCP instead of default UDP
 # proxy			using a proxy for communication !!! ALSO used to detect local IP via web => return proxy's IP !!!
 # use_logfile		self-explanatory "/var/log/ddns/$SECTION_ID.log"
+# is_glue			the record that should be updated is a glue record
 #
 # some functionality needs
 # - GNU Wget or cURL installed for sending updates to DDNS service
@@ -130,6 +137,7 @@ ERR_LAST=$?	# save return code - equal 0 if SECTION_ID found
 [ -z "$force_ipversion" ] && force_ipversion=0	# default let system decide
 [ -z "$force_dnstcp" ]	  && force_dnstcp=0	# default UDP
 [ -z "$ip_source" ]	  && ip_source="network"
+[ -z "$is_glue" ]	  && is_glue=0		# default the ddns record is not a glue record
 [ "$ip_source" = "network" -a -z "$ip_network" -a $use_ipv6 -eq 0 ] && ip_network="wan"  # IPv4: default wan
 [ "$ip_source" = "network" -a -z "$ip_network" -a $use_ipv6 -eq 1 ] && ip_network="wan6" # IPv6: default wan6
 [ "$ip_source" = "web" -a -z "$ip_url" -a $use_ipv6 -eq 0 ] && ip_url="http://checkip.dyndns.com"
@@ -312,6 +320,8 @@ while : ; do
 			[ "$LOCAL_IP" != "$REGISTERED_IP" ] \
 				&& write_log 6 "Update successful - IP '$LOCAL_IP' send" \
 				|| write_log 6 "Forced update successful - IP: '$LOCAL_IP' send"
+		elif [ $ERR_LAST -eq 127 ]; then
+			write_log 3 "No update send to DDNS Provider"
 		else
 			write_log 3 "IP update not accepted by DDNS Provider"
 		fi

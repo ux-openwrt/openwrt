@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=squashfs-tools
 PKG_VERSION:=4.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_LICENSE:=GPL-2.0
 PKG_LICENSE_FILES:=COPYING
 
@@ -25,6 +25,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/squashfs-tools/Default
   SECTION:=utils
   CATEGORY:=Utilities
+  SUBMENU:=Filesystem
   TITLE:=squashfs-tools
   URL:=https://github.com/plougher/squashfs-tools
   DEPENDS += +libpthread +zlib \

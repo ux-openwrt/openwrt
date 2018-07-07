@@ -8,17 +8,20 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-setuptools
-PKG_VERSION:=20.7.0
+PKG_VERSION:=27.2.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=setuptools-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://pypi.python.org/packages/source/s/setuptools/
-PKG_MD5SUM:=5d12b39bf3e75e80fdce54e44b255615
+PKG_SOURCE_URL:=https://pypi.python.org/packages/87/ba/54197971d107bc06f5f3fbdc0d728a7ae0b10cafca46acfddba65a0899d8/
+PKG_MD5SUM:=b39715612fdc0372dbfd7b3fcf5d4fe5
 
 HOST_BUILD_DEPENDS:=python python/host
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/setuptools-$(PKG_VERSION)
-HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/setuptools-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
+
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)-$(PKG_VERSION)
+HOST_UNPACK=$(HOST_TAR) -C $(HOST_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
 include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
@@ -60,7 +63,7 @@ endef
 
 define Host/Compile
 	$(call Build/Compile/HostPyMod,,\
-		install --root="$(STAGING_DIR)/host" --prefix="" \
+		install --root="$(HOST_BUILD_PREFIX)" --prefix="" \
 		--single-version-externally-managed \
 	)
 endef

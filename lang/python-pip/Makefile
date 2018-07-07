@@ -8,18 +8,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-pip
-PKG_VERSION:=8.1.1
+PKG_VERSION:=8.1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=pip-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://pypi.python.org/packages/source/p/pip/
-PKG_MD5SUM:=6b86f11841e89c8241d689956ba99ed7
+PKG_SOURCE_URL:=https://pypi.python.org/packages/e7/a8/7556133689add8d1a54c0b14aeff0acb03c64707ce100ecd53934da1aa13/
+PKG_MD5SUM:=87083c0b9867963b29f7aba3613e8f4a
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/pip-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/python-pip-$(PKG_VERSION)
+PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
+HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/python-pip-$(PKG_VERSION)
+HOST_UNPACK=$(HOST_TAR) -C $(HOST_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 PKG_USE_MIPS16:=0
 
+HOST_BUILD_DEPENDS:=python python/host python-setuptools/host
+
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 $(call include_mk, python-package.mk)
+$(call include_mk, python-host.mk)
 
 define Package/python-pip
   SUBMENU:=Python
@@ -53,6 +60,17 @@ define PyPackage/python-pip/install
 	$(INSTALL_CONF) ./files/pip.conf $(1)/etc/
 endef
 
+define Host/Compile
+	$(call Build/Compile/HostPyMod,,\
+		install --root="$(STAGING_DIR)/host" --prefix="" \
+		--single-version-externally-managed \
+	)
+endef
+
+define Host/Install
+endef
+
+$(eval $(call HostBuild))
+
 $(eval $(call PyPackage,python-pip))
 $(eval $(call BuildPackage,python-pip))
-

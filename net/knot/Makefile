@@ -8,13 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=knot
-PKG_VERSION:=2.1.1
+PKG_VERSION:=2.3.0
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
-PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=https://secure.nic.cz/files/knot-dns/
-PKG_MD5SUM:=ee6a54ec8a7898579b768c66e2eaeb54
+PKG_MD5SUM:=7ca754f972fb07faa4f30e50d8a4385b
 
 PKG_MAINTAINER:=Daniel Salzman <daniel.salzman@nic.cz>
 PKG_LICENSE:=GPL-3.0 LGPL-2.0 0BSD MIT OLDAP-2.8
@@ -62,7 +61,7 @@ endef
 define Package/knot
 	$(call Package/knot/Default)
 	TITLE+= server
-	DEPENDS=+liburcu +knot-libdnssec +knot-libknot +knot-libzscanner
+	DEPENDS=+liburcu +libedit +knot-libdnssec +knot-libknot +knot-libzscanner
 endef
 
 define Package/knot-dig
@@ -89,16 +88,22 @@ define Package/knot-nsec3hash
 	DEPENDS=+knot-libdnssec
 endef
 
+define Package/knot-zonecheck
+	$(call Package/knot/Default)
+	TITLE+= zonefile check utility
+	DEPENDS=+liburcu +knot-libdnssec +knot-libknot +knot-libzscanner
+endef
+
 define Package/knot-keymgr
 	$(call Package/knot/Default)
 	TITLE+= DNSSEC key management utility
-	DEPENDS=+knot-libdnssec +knot-libzscanner
+	DEPENDS=+liburcu +knot-libdnssec +knot-libknot +knot-libzscanner
 endef
 
 define Package/knot-tests
 	$(call Package/knot/Default)
 	TITLE+= tests
-	DEPENDS=+liburcu +knot-libdnssec +knot-libknot +knot-libzscanner
+	DEPENDS=+liburcu +libedit +knot-libdnssec +knot-libknot +knot-libzscanner
 endef
 
 define Package/knot-libdnssec/description
@@ -133,6 +138,10 @@ define Package/knot-nsec3hash/description
 	Knot DNS simple NSEC3 hash utility.
 endef
 
+define Package/knot-zonecheck/description
+	Knot DNS zonefile check utility.
+endef
+
 define Package/knot-keymgr/description
 	Knot DNS DNSSEC key management utility.
 endef
@@ -161,9 +170,9 @@ endef
 define Build/Compile
 	$(MAKE) -C $(PKG_BUILD_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR)/libtap check
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/dnssec/tests check-compile-only
-	$(MAKE) -C $(PKG_BUILD_DIR)/tests check-compile-only
-	$(MAKE) -C $(PKG_BUILD_DIR)/src/zscanner check-compile-only
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/dnssec/tests check-compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/tests check-compile
+	$(MAKE) -C $(PKG_BUILD_DIR)/src/zscanner check-compile
 endef
 
 define Build/InstallDev
@@ -172,6 +181,12 @@ define Build/InstallDev
 
 	$(INSTALL_DIR)						$(1)/usr/include/libknot
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libknot/*		$(1)/usr/include/libknot/
+
+	$(INSTALL_DIR)						$(1)/usr/include/dnssec
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/dnssec/*		$(1)/usr/include/dnssec/
+
+	$(INSTALL_DIR)						$(1)/usr/include/zscanner
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/zscanner/*		$(1)/usr/include/zscanner/
 
 	$(INSTALL_DIR)							$(1)/usr/lib/pkgconfig
 	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc	$(1)/usr/lib/pkgconfig/
@@ -193,8 +208,9 @@ define Package/knot-libzscanner/install
 endef
 
 define Package/knot/install
+	$(INSTALL_DIR) 						$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/knotc	$(1)/usr/bin/
 	$(INSTALL_DIR) 						$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/knotc	$(1)/usr/sbin/
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/knotd	$(1)/usr/sbin/
 
 	$(INSTALL_DIR) 							$(1)/etc/knot
@@ -224,9 +240,14 @@ define Package/knot-nsec3hash/install
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/knsec3hash	$(1)/usr/bin/
 endef
 
+define Package/knot-zonecheck/install
+	$(INSTALL_DIR)						$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/kzonecheck	$(1)/usr/bin/
+endef
+
 define Package/knot-keymgr/install
-	$(INSTALL_DIR)						$(1)/usr/sbin
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/keymgr	$(1)/usr/sbin/
+	$(INSTALL_DIR)						$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/sbin/keymgr	$(1)/usr/bin/
 endef
 
 define Package/knot-tests/install
@@ -238,18 +259,34 @@ define Package/knot-tests/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libtap/tap/libtap.sh	$(1)/usr/share/knot/tap/
 
 	$(INSTALL_DIR)									$(1)/usr/share/knot/tests
-
-	find $(PKG_BUILD_DIR)/src/dnssec/tests -maxdepth 1 -executable -type f | \
-		xargs -I{} basename {} | \
-		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/src/dnssec/tests/{}	$(1)/usr/share/knot/tests/dnssec_test_{}
-
 	find $(PKG_BUILD_DIR)/tests/.libs -maxdepth 1 -executable -type f | \
 		xargs -I{} basename {} | \
 		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/.libs/{}		$(1)/usr/share/knot/tests/test_{}
 
+	$(INSTALL_DIR)									$(1)/usr/share/knot/tests/dnssec
+	find $(PKG_BUILD_DIR)/src/dnssec/tests -maxdepth 1 -executable -type f | \
+		xargs -I{} basename {} | \
+		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/src/dnssec/tests/{}	$(1)/usr/share/knot/tests/dnssec/test_{}
+
+	$(INSTALL_DIR)									$(1)/usr/share/knot/tests/contrib
+	find $(PKG_BUILD_DIR)/tests/contrib/.libs -maxdepth 1 -executable -type f | \
+		xargs -I{} basename {} | \
+		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/contrib/.libs/{}	$(1)/usr/share/knot/tests/contrib/{}
+
+	$(INSTALL_DIR)									$(1)/usr/share/knot/tests/libknot
+	find $(PKG_BUILD_DIR)/tests/libknot/.libs -maxdepth 1 -executable -type f | \
+		xargs -I{} basename {} | \
+		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/libknot/.libs/{}	$(1)/usr/share/knot/tests/libknot/{}
+
+	$(INSTALL_DIR)									$(1)/usr/share/knot/tests/modules
 	find $(PKG_BUILD_DIR)/tests/modules/.libs -maxdepth 1 -executable -type f | \
 		xargs -I{} basename {} | \
-		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/modules/.libs/{}	$(1)/usr/share/knot/tests/test_module_{}
+		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/modules/.libs/{}	$(1)/usr/share/knot/tests/modules/test_{}
+
+	$(INSTALL_DIR)									$(1)/usr/share/knot/tests/utils
+	find $(PKG_BUILD_DIR)/tests/utils/.libs -maxdepth 1 -executable -type f | \
+		xargs -I{} basename {} | \
+		xargs -I{} $(INSTALL_BIN) -T $(PKG_BUILD_DIR)/tests/utils/.libs/{}	$(1)/usr/share/knot/tests/utils/{}
 
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/zscanner/tests/.libs/zscanner-tool	$(1)/usr/share/knot/tests/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/zscanner/tests/unittests		$(1)/usr/share/knot/tests/test_zscanner
@@ -265,5 +302,6 @@ $(eval $(call BuildPackage,knot-dig))
 $(eval $(call BuildPackage,knot-host))
 $(eval $(call BuildPackage,knot-nsupdate))
 $(eval $(call BuildPackage,knot-nsec3hash))
+$(eval $(call BuildPackage,knot-zonecheck))
 $(eval $(call BuildPackage,knot-keymgr))
 $(eval $(call BuildPackage,knot-tests))

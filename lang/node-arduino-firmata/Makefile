@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NPM_NAME:=arduino-firmata
 PKG_NAME:=node-$(PKG_NPM_NAME)
 PKG_VERSION:=0.3.3
-PKG_RELEASE:=2
+PKG_RELEASE:=5
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/shokai/node-arduino-firmata.git
@@ -19,11 +19,11 @@ PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_SOURCE_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.gz
 
 PKG_BUILD_DEPENDS:=node/host
-PKG_NODE_VERSION:=0.12.13
+PKG_NODE_VERSION:=4.4.5
 
 PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
 PKG_LICENSE:=MIT
-PKG_LICENSE_FILE:=LICENSE.txt
+PKG_LICENSE_FILES:=LICENSE.txt
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -54,7 +54,7 @@ define Build/Compile
 	npm_config_nodedir=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/ \
 	npm_config_cache=$(BUILD_DIR)/node-v$(PKG_NODE_VERSION)/npm-cache \
 	PREFIX="$(PKG_INSTALL_DIR)/usr/" \
-	$(STAGING_DIR)/host/bin/npm install -g $(PKG_BUILD_DIR)
+	npm install -g $(PKG_BUILD_DIR)
 endef
 
 define Package/node-arduino-firmata/install
