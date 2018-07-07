@@ -10,6 +10,7 @@ local mesh_network = ip.IPv4(uci:get_first(community, "community", "mesh_network
 local community_ipv6 = uci:get_first(community, "community", "ipv6") or 0
 local community_ipv6mode = uci:get_first(community, "community", "ipv6_config") or "static"
 local meshkit_ipv6 = uci:get("meshwizard", "ipv6", "enabled") or 0
+local community_vap = uci:get_first(community, "community", "vap") or 0
 
 m = Map("meshwizard", translate("Wizard"), translate("This wizard will assist you in setting up your router for Freifunk " ..
 	"or another similar wireless community network."))
@@ -21,7 +22,7 @@ n.anonymous = true
 
 function cbi_configure(device)
 	local configure = n:taboption(device, Flag, device .. "_config", translate("Configure this interface"),
-		translate("Note: this will setup this interface for mesh operation, i.e. add to zone 'freifunk' and enable olsr."))
+		translate("Note: this will set up this interface for mesh operation, i.e. add it to zone 'freifunk' and enable olsr."))
 end
 
 function cbi_ip4addr(device)
@@ -117,7 +118,7 @@ uci:foreach("wireless", "wifi-device", function(section)
 	chan:value('default')
 
 	local iwinfo = sys.wifi.getiwinfo(device)
-	if iwinfo then
+	if iwinfo and iwinfo.freqlist then
 		for _, f in ipairs(iwinfo.freqlist) do
 			if not f.restricted then
 				chan:value(f.channel)
@@ -142,11 +143,18 @@ uci:foreach("wireless", "wifi-device", function(section)
 	end
 
 	-- Enable VAP
-	if hwtype == "atheros" then
+	local supports_vap = 0
+	if sys.call("/usr/bin/meshwizard/helpers/supports_vap.sh " .. device .. " " .. hwtype) == 0 then
+		supports_vap = 1
+	end
+	if supports_vap == 1 then
 		local vap = n:taboption(device, Flag, device .. "_vap", translate("Virtual Access Point (VAP)"),
 			translate("This will setup a new virtual wireless interface in Access Point mode."))
 		vap:depends(device .. "_dhcp", "1")
                 vap.rmempty = true
+                if community_vap == "1" then
+			vap.default = "1"
+		end
 	end
 end)
 

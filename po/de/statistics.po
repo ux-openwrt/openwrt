@@ -3,15 +3,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-04-09 15:25+0200\n"
-"Last-Translator: Jo-Philipp <xm@subsignal.org>\n"
+"PO-Revision-Date: 2013-01-28 22:20+0200\n"
+"Last-Translator: DAC324 <gerd_roethig@web.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Pootle 2.0.4\n"
+"X-Generator: Pootle 2.0.6\n"
 
 msgid "Action (target)"
 msgstr "Aktion (Ziel)"
@@ -68,7 +68,7 @@ msgid "Collectd Settings"
 msgstr "Collectd Einstellungen"
 
 msgid ""
-"Collectd is a small daeomon for collecting data from various sources through "
+"Collectd is a small daemon for collecting data from various sources through "
 "different plugins. On this page you can change general settings for the "
 "collectd daemon."
 msgstr ""
@@ -114,6 +114,9 @@ msgstr "Plattenspeicher"
 
 msgid "Disk Usage"
 msgstr "Plattenauslastung"
+
+msgid "Display Host »"
+msgstr "Anzeigeserver"
 
 msgid "Display timespan »"
 msgstr "Zeitspanne zeigen »"
@@ -193,12 +196,6 @@ msgstr "Quelladressen ignorieren"
 
 msgid "Incoming interface"
 msgstr "eingehende Schnittstelle"
-
-msgid "Installed network plugins:"
-msgstr "Installierte Netzwerk-Plugins:"
-
-msgid "Installed output plugins:"
-msgstr "Installierte Ausgabe-Plugins:"
 
 msgid "Interface Plugin Configuration"
 msgstr "Interface Plugin Konfiguration"
@@ -295,13 +292,6 @@ msgstr "Network Plugin Konfiguration"
 msgid "Network plugins"
 msgstr "Netzwerkplugins"
 
-msgid ""
-"Network plugins are used to collect information about open tcp connections, "
-"interface traffic, iptables rules etc."
-msgstr ""
-"Netzwerkplugins werden benutzt um Informationen über offene TCP-"
-"Verbindungen, Datenverkehr/Volumen, Iptables/Firewall Regeln etc. zu sammeln"
-
 msgid "Network protocol"
 msgstr "Netzwerkprotokoll"
 
@@ -325,17 +315,6 @@ msgstr "ausgehende Schnittstelle"
 
 msgid "Output plugins"
 msgstr "Ausgabeplugins"
-
-msgid ""
-"Output plugins provide different possibilities to store collected data. It "
-"is possible to enable multiple plugin at one, for example to store collected "
-"data in rrd databases and to transmit the data over the network to other "
-"collectd instances."
-msgstr ""
-"Ausgabeplugins ermöglichen es gesammelte Daten zu speichern. Mehrere Plugins "
-"können gleichzeitig aktiviert werden, z.B. um Daten in RRD-Datenbanken zu "
-"speichern und gleichzeitig über das Netzwerk an andere Collectd-Instanzen zu "
-"versenden."
 
 msgid "Ping"
 msgstr "Ping"
@@ -436,13 +415,6 @@ msgstr "Systemlast"
 msgid "System plugins"
 msgstr "Systemplugins"
 
-msgid ""
-"System plugins collecting values about system state and ressource usage on "
-"the device.:"
-msgstr ""
-"Systemplugins sammeln Daten zum Systemzustand und den Ressoursenbedarf des "
-"Gerätes"
-
 msgid "TCP Connections"
 msgstr "TCP-Verbindungen"
 
@@ -457,6 +429,11 @@ msgstr "TTL für Ping Pakete"
 
 msgid "Table"
 msgstr "Tabelle"
+
+msgid "The NUT plugin reads information about Uninterruptible Power Supplies."
+msgstr ""
+"Das NUT-Plugin liest Informationen über Unterbrechungsfreie "
+"Stromversorgungen"
 
 msgid ""
 "The OLSRd plugin reads information about meshed networks from the txtinfo "
@@ -626,13 +603,6 @@ msgstr ""
 "aus der laufenden Collectd-Instanz ausgelesen werden können."
 
 msgid ""
-"The wireless plugin collects statistics about wireless signal strength, "
-"noise and quality."
-msgstr ""
-"Das Wireless-Plugin sammelt Statistiken über die drahtlose Signalstärke, den "
-"Störpegel und die Signalqualität."
-
-msgid ""
 "This section defines on which interfaces collectd will wait for incoming "
 "connections."
 msgstr ""
@@ -647,6 +617,15 @@ msgstr ""
 
 msgid "Try to lookup fully qualified hostname"
 msgstr "automatisch vollen Hostnamen herausfinden"
+
+msgid "UPS"
+msgstr "USV"
+
+msgid "UPS Plugin Configuration"
+msgstr "Einstellungen des USV-Plugins"
+
+msgid "UPS name in NUT ups@host format"
+msgstr "Name der USV in NUT im Format usv@host "
 
 msgid "UnixSock"
 msgstr "UnixSock"
@@ -665,9 +644,6 @@ msgstr "Schnittstellen detailliert überwachen"
 
 msgid "Wireless"
 msgstr "Drahtlos"
-
-msgid "Wireless Plugin Configuration"
-msgstr "Wireless Plugin Konfiguration"
 
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr "Wireless-iwinfo Plugin Konfiguration"
@@ -692,3 +668,44 @@ msgstr "mehrere mit Leerzeichen trennen"
 
 msgid "server interfaces"
 msgstr "Server-Schnittstellen"
+
+#~ msgid "Installed network plugins:"
+#~ msgstr "Installierte Netzwerk-Plugins:"
+
+#~ msgid "Installed output plugins:"
+#~ msgstr "Installierte Ausgabe-Plugins:"
+
+#~ msgid ""
+#~ "Network plugins are used to collect information about open tcp "
+#~ "connections, interface traffic, iptables rules etc."
+#~ msgstr ""
+#~ "Netzwerkplugins werden benutzt um Informationen über offene TCP-"
+#~ "Verbindungen, Datenverkehr/Volumen, Iptables/Firewall Regeln etc. zu sammeln"
+
+#~ msgid ""
+#~ "Output plugins provide different possibilities to store collected data. "
+#~ "It is possible to enable multiple plugin at one, for example to store "
+#~ "collected data in rrd databases and to transmit the data over the network "
+#~ "to other collectd instances."
+#~ msgstr ""
+#~ "Ausgabeplugins ermöglichen es gesammelte Daten zu speichern. Mehrere Plugins "
+#~ "können gleichzeitig aktiviert werden, z.B. um Daten in RRD-Datenbanken zu "
+#~ "speichern und gleichzeitig über das Netzwerk an andere Collectd-Instanzen zu "
+#~ "versenden."
+
+#~ msgid ""
+#~ "System plugins collecting values about system state and ressource usage "
+#~ "on the device.:"
+#~ msgstr ""
+#~ "Systemplugins sammeln Daten zum Systemzustand und den Ressoursenbedarf des "
+#~ "Gerätes"
+
+#~ msgid ""
+#~ "The wireless plugin collects statistics about wireless signal strength, "
+#~ "noise and quality."
+#~ msgstr ""
+#~ "Das Wireless-Plugin sammelt Statistiken über die drahtlose Signalstärke, den "
+#~ "Störpegel und die Signalqualität."
+
+#~ msgid "Wireless Plugin Configuration"
+#~ msgstr "Wireless Plugin Konfiguration"

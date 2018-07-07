@@ -13,7 +13,6 @@ You may obtain a copy of the License at
 local fs = require "nixio.fs"
 local uci = require "luci.model.uci".cursor()
 local community = uci:get("freifunk", "community", "name")
-luci.i18n.loadc("freifunk")
 
 if community == nil then
         luci.http.redirect(luci.dispatcher.build_url("admin", "freifunk", "profile_error"))
@@ -32,7 +31,7 @@ else
 	function f.handle(self, state, data)
 		if state == FORM_VALID then
 			if data.cop then
-				fs.writefile(cop, data.rcs:gsub("\r\n", "\n"))
+				fs.writefile(community, data.cop:gsub("\r\n", "\n"))
 			end
 		end
 		return true

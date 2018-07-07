@@ -12,7 +12,7 @@
 . /lib/functions.sh
 
 echo "
-/* Meshwizard 0.0.8 */
+/* Meshwizard 0.2.0 */
 "
 
 # config
@@ -71,6 +71,10 @@ if [ "$wan_proto" == "dhcp" ]; then
 	$dir/helpers/setup_wan_dhcp.sh
 fi
 
+if [ -n "$wan_down" -a -n "$wan_up" ]; then
+	$dir/helpers/setup_qos.sh
+fi
+
 if [ "$lan_proto" == "static" ] && [ -n "$lan_ip4addr" ] && [ -n "$lan_netmask" ]; then
 	$dir/helpers/setup_lan_static.sh
 fi
@@ -95,10 +99,21 @@ for net in $networks; do
 	# radioX devices need to be renamed
 	netrenamed="${net/radio/wireless}"
 	export netrenamed
-	$dir/helpers/setup_network.sh $net
+
 	if [ ! "$net" == "wan" ] && [ ! "$net" == "lan" ]; then
 		$dir/helpers/setup_wifi.sh $net
+		# check if this net supports vap
+		/sbin/wifi # wifi needs to be up for the check
+		export supports_vap="0"
+		type="$(uci -q get wireless.$net.type)"
+		[ -n "$type" ] && $dir/helpers/supports_vap.sh $net $type && export supports_vap=1
+		if [ "$supports_vap" = 1 ]; then
+			$dir/helpers/setup_wifi_vap.sh $net
+		fi
 	fi
+
+	$dir/helpers/setup_network.sh $net
+
 	$dir/helpers/setup_olsrd_interface.sh $net
 
 	net_dhcp=$(uci -q get meshwizard.netconfig.${net}_dhcp)
@@ -113,6 +128,11 @@ for net in $networks; do
 		$dir/helpers/setup_auto-ipv6-interface.sh $net
 	fi
 done
+
+##### postinstall script
+
+[ -f /etc/rc.local.meshkitpostinstall ] && /etc/rc.local.meshkitpostinstall
+
 
 ##### Reboot the router (because simply restarting services gave errors)
 

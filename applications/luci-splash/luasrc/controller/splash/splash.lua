@@ -1,28 +1,25 @@
 module("luci.controller.splash.splash", package.seeall)
-luci.i18n.loadc("splash")
 
 local uci = luci.model.uci.cursor()
 local util = require "luci.util"
 
 function index()
-	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90).i18n = "freifunk"
+	entry({"admin", "services", "splash"}, cbi("splash/splash"), _("Client-Splash"), 90)
 	entry({"admin", "services", "splash", "splashtext" }, form("splash/splashtext"), _("Splashtext"), 10)
 
 	local e
 	
 	e = node("splash")
 	e.target = call("action_dispatch")
-	e.i18n = "freifunk"
 
 	node("splash", "activate").target = call("action_activate")
 	node("splash", "splash").target   = template("splash_splash/splash")
 	node("splash", "blocked").target  = template("splash/blocked")
 
-	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash")).i18n = "freifunk"
+	entry({"admin", "status", "splash"}, call("action_status_admin"), _("Client-Splash"))
 
 	local page  = node("splash", "publicstatus")
 	page.target = call("action_status_public")
-	page.i18n   = "freifunk"
 	page.leaf   = true
 end
 
@@ -56,6 +53,7 @@ end
 function action_activate()
 	local ip = luci.http.getenv("REMOTE_ADDR") or "127.0.0.1"
 	local mac = luci.sys.net.ip4mac(ip:match("^[\[::ffff:]*(%d+.%d+%.%d+%.%d+)\]*$"))
+	local uci_state = require "luci.model.uci".cursor_state()
 	local blacklisted = false
 	if mac and luci.http.formvalue("accept") then
 		uci:foreach("luci_splash", "blacklist",
@@ -64,8 +62,16 @@ function action_activate()
 		if blacklisted then	
 			luci.http.redirect(luci.dispatcher.build_url("splash" ,"blocked"))
 		else
+			local redirect_url = uci:get("luci_splash", "general", "redirect_url")
+			if not redirect_url then
+				redirect_url = uci_state:get("luci_splash_locations", mac:gsub(':', ''):lower(), "location")
+			end
+			if not redirect_url then
+				redirect_url = luci.model.uci.cursor():get("freifunk", "community", "homepage") or 'http://www.freifunk.net'
+			end
+			remove_redirect(mac:gsub(':', ''):lower())
 			os.execute("luci-splash lease "..mac.." >/dev/null 2>&1")
-			luci.http.redirect(luci.model.uci.cursor():get("freifunk", "community", "homepage"))
+			luci.http.redirect(redirect_url)
 		end
 	else
 		luci.http.redirect(luci.dispatcher.build_url())
@@ -121,4 +127,25 @@ end
 
 function action_status_public()
 	luci.template.render("admin_status/splash", { is_admin = false })
+end
+
+function remove_redirect(mac)
+	local mac = mac:lower()
+	mac = mac:gsub(":", "")
+	local uci = require "luci.model.uci".cursor_state()
+	local redirects = uci:get_all("luci_splash_locations")
+	--uci:load("luci_splash_locations")
+	uci:revert("luci_splash_locations")
+	-- For all redirects
+	for k, v in pairs(redirects) do
+		if v[".type"] == "redirect" then
+			if v[".name"] ~= mac then
+				-- Rewrite state
+				uci:section("luci_splash_locations", "redirect", v[".name"], {
+					location = v.location
+				})
+			end
+		end
+	end
+	uci:save("luci_splash_redirects")
 end
