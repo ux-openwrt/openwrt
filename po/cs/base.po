@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2012-08-26 23:10+0200\n"
-"Last-Translator: jhenner <jhenner@redhat.com>\n"
+"PO-Revision-Date: 2013-01-12 09:08+0200\n"
+"Last-Translator: sleepwalker <sleepwalker@atlas.sk>\n"
 "Language-Team: none\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "Nejvyšší počet souběžných dotazů"
 
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr ""
+msgstr " <abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 
 msgid "APN"
 msgstr "APN"
@@ -242,6 +242,11 @@ msgstr "Povolit upstream odpovědi na 127.0.0.0/8 rozsah, např. pro RBL služby
 
 msgid "Allowed range is 1 to 65535"
 msgstr "Hodnota musí ležet v intervalu 1 až 65535"
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
+msgstr ""
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "Pokud není zaškrtnuto, bude vytvořena dodatečná síť"
@@ -854,6 +859,9 @@ msgstr "Nahrávám..."
 
 msgid "Force"
 msgstr "Vynutit"
+
+msgid "Force 40MHz mode"
+msgstr ""
 
 msgid "Force CCMP (AES)"
 msgstr "Vynutit CCMP (AES)"
@@ -1581,6 +1589,9 @@ msgstr ""
 msgid "On-State Delay"
 msgstr ""
 
+msgid "One of hostname or mac address must be specified!"
+msgstr ""
+
 msgid "One or more fields contain invalid values!"
 msgstr "Jedno nebo více polí obsahuje neplatné hodnoty!"
 
@@ -2290,8 +2301,8 @@ msgid ""
 "samp>)"
 msgstr ""
 "Souborový systém, který byl použit pro formátování paměti (<abbr title="
-"\"například\">napři.</abbr> <samp><abbr title=\"Souborový systém Ext3"
-"\">ext3</abbr></samp>)"
+"\"například\">napři.</abbr> <samp><abbr title=\"Souborový systém "
+"Ext3\">ext3</abbr></samp>)"
 
 msgid ""
 "The flash image was uploaded. Below is the checksum and file size listed, "
@@ -2674,9 +2685,6 @@ msgstr ""
 msgid "Waiting for command to complete..."
 msgstr ""
 
-msgid "Waiting for router..."
-msgstr "Čekám na router.."
-
 msgid "Warning"
 msgstr "Varování"
 
@@ -2853,6 +2861,9 @@ msgstr "ano"
 
 msgid "« Back"
 msgstr "« Zpět"
+
+#~ msgid "Waiting for router..."
+#~ msgstr "Čekám na router.."
 
 #~ msgid "Enable builtin NTP server"
 #~ msgstr "Povolit zabudovaný NTP server"

@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_BRANCH:=trunk
+PKG_BRANCH:=branches/luci-0.11
 
 ifeq ($(DUMP),)
   USELOCAL:=$(shell grep luci ../../../.project 2>/dev/null >/dev/null && echo 1)
@@ -12,12 +12,12 @@ PKG_RELEASE:=1
 PKG_BUILD_PARALLEL:=0
 
 ifeq ($(USELOCAL),1)
-  PKG_VERSION:=trunk+svn
+  PKG_VERSION:=0.11+svn
 else
   PKG_SOURCE_URL:=http://svn.luci.subsignal.org/luci/$(PKG_BRANCH)
   ifeq ($(DUMP),)
     PKG_REV:=$(shell LC_ALL=C svn info $(CURDIR) | sed -ne's/^Revision: //p')
-    PKG_VERSION:=trunk+svn$(PKG_REV)
+    PKG_VERSION:=0.11+svn$(PKG_REV)
   endif
   PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
   PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
@@ -177,14 +177,13 @@ $(eval $(call library,fastindex,Fastindex indexing module,+PACKAGE_luci-lib-fast
 $(eval $(call library,httpclient,HTTP(S) client library,+luci-lib-web +luci-lib-nixio))
 $(eval $(call library,ipkg,LuCI IPKG/OPKG call abstraction library))
 $(eval $(call library,json,LuCI JSON library))
-$(eval $(call library,lmo,LuCI LMO I18N library))
 $(eval $(call library,lucid,LuCId Full-Stack Webserver,+luci-lib-nixio +luci-lib-web +luci-lib-px5g))
 $(eval $(call library,lucid-http,LuCId HTTP Backend,+luci-lib-lucid))
 $(eval $(call library,lucid-rpc,LuCId RPC Backend,+luci-lib-lucid))
 $(eval $(call library,nixio,NIXIO POSIX library,+PACKAGE_luci-lib-nixio_openssl:libopenssl +PACKAGE_luci-lib-nixio_cyassl:libcyassl))
 $(eval $(call library,px5g,RSA/X.509 Key Generator (required for LuCId SSL support),+luci-lib-nixio))
 $(eval $(call library,sys,LuCI Linux/POSIX system library))
-$(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi +luci-lib-lmo))
+$(eval $(call library,web,MVC Webframework,+luci-lib-sys +luci-lib-nixio +luci-lib-core +luci-sgi-cgi))
 
 
 ### Protocols ###
@@ -327,7 +326,7 @@ endef
 $(eval $(call application,siitwizard,SIIT IPv4-over-IPv6 configuration wizard,\
 	+PACKAGE_luci-app-siitwizard:kmod-siit))
 
-$(eval $(call application,firewall,Firmware and Portforwarding application,\
+$(eval $(call application,firewall,Firewall and Portforwarding application,\
 	+PACKAGE_luci-app-firewall:firewall))
 
 $(eval $(call application,freifunk-policyrouting,Policy routing for mesh traffic,\
@@ -344,6 +343,8 @@ $(eval $(call application,olsr,OLSR configuration and status module,\
 
 $(eval $(call application,olsr-viz,OLSR Visualisation,\
 	luci-app-olsr +olsrd-mod-txtinfo))
+
+$(eval $(call application,freifunk-diagnostics,Tools for network diagnosis like traceroute and ping))
 
 $(eval $(call application,olsr-services,Show services announced with the nameservice plugin,\
 	luci-app-olsr +olsrd-mod-nameservice))
@@ -379,6 +380,8 @@ $(eval $(call application,voice-core,LuCI Voice Software (Core)))
 
 $(eval $(call application,voice-diag,LuCI Voice Software (Diagnostics),\
 	luci-app-diag-devinfo))
+
+$(eval $(call application,commands,LuCI Shell Command Module))
 
 $(eval $(call application,upnp,Universal Plug & Play configuration module,\
 	+PACKAGE_luci-app-upnp:miniupnpd))

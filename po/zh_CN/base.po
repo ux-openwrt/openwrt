@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-21 23:08+0200\n"
-"PO-Revision-Date: 2012-09-29 11:06+0200\n"
+"PO-Revision-Date: 2013-01-07 15:00+0200\n"
 "Last-Translator: phantasm131 <phantasm131@gmail.com>\n"
 "Language-Team: QQ Group:75543259\n"
 "Language: zh_CN\n"
@@ -236,6 +236,11 @@ msgstr "允许127.0.0.0/8回环范围内的上行响应，例如：RBL服务"
 
 msgid "Allowed range is 1 to 65535"
 msgstr "允许的范围：1 到 65535"
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
+msgstr "强制启用40MHz频宽并忽略辅助信道重叠。此选项不兼容IEEE 802.11n-2009!"
 
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "取消选中将会另外创建一个新网络，而不会覆盖当前网络设置"
@@ -828,6 +833,9 @@ msgstr "刷写中..."
 msgid "Force"
 msgstr "强制开启DHCP"
 
+msgid "Force 40MHz mode"
+msgstr "强制40MHz频宽"
+
 msgid "Force CCMP (AES)"
 msgstr "强制使用CCMP(AES)加密"
 
@@ -1278,7 +1286,7 @@ msgid "Localise queries"
 msgstr "本地化查询"
 
 msgid "Locked to channel %d used by %s"
-msgstr "信道已锁定为 %d  源于 %s "
+msgstr "信道已锁定为:%d ；源于:%s "
 
 msgid "Log output level"
 msgstr "日志记录等级"
@@ -1533,6 +1541,9 @@ msgstr "配置网络接口信息。"
 
 msgid "On-State Delay"
 msgstr "通电时间"
+
+msgid "One of hostname or mac address must be specified!"
+msgstr "请指定主机名或MAC地址！"
 
 msgid "One or more fields contain invalid values!"
 msgstr "一个或多个选项值有误！"
@@ -2096,6 +2107,7 @@ msgstr "指定假设主机已丢失的最大时间(秒)"
 msgid "Specify the secret encryption key here."
 msgstr "在此指定密钥。"
 
+# 关联了 启动项 和 接口>LAN>DHCP服务器>网址分配基址
 msgid "Start"
 msgstr "开始"
 
@@ -2239,8 +2251,8 @@ msgid ""
 "\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem\">ext3</abbr></"
 "samp>)"
 msgstr ""
-"用于格式化存储器的文件系统，(<abbr title=\"for example\">例如</abbr> <samp><abbr title=\"Third "
-"Extended Filesystem\">ext4</abbr></samp>)"
+"用于格式化存储器的文件系统，(<abbr title=\"for example\">例如</abbr> "
+"<samp><abbr title=\"Third Extended Filesystem\">ext4</abbr></samp>)"
 
 msgid ""
 "The flash image was uploaded. Below is the checksum and file size listed, "
@@ -2607,9 +2619,6 @@ msgstr "正在应用更改..."
 msgid "Waiting for command to complete..."
 msgstr "正在执行命令..."
 
-msgid "Waiting for router..."
-msgstr "等待路由器..."
-
 msgid "Warning"
 msgstr "警告"
 
@@ -2784,29 +2793,32 @@ msgstr "是"
 msgid "« Back"
 msgstr "« 后退"
 
+#~ msgid "Waiting for router..."
+#~ msgstr "等待路由器..."
+
 #~ msgid "Enable builtin NTP server"
 #~ msgstr "开启内置NTP服务器"
 
 #~ msgid "Active Leases"
-#~ msgstr "活动客户端"
+#~ msgstr "活动的租约"
 
 #~ msgid "Open"
-#~ msgstr "开启"
+#~ msgstr "打开"
 
 #~ msgid "KB"
 #~ msgstr "KB"
 
 #~ msgid "Bit Rate"
-#~ msgstr "传输速率"
+#~ msgstr "比特率"
 
 #~ msgid "Configuration / Apply"
-#~ msgstr "Configuration / Apply"
+#~ msgstr "设置 /应用"
 
 #~ msgid "Configuration / Changes"
-#~ msgstr "Configuration / Changes"
+#~ msgstr "设置 / 修改"
 
 #~ msgid "Configuration / Revert"
-#~ msgstr "Configuration / Revert"
+#~ msgstr "设置 / 重置"
 
 #~ msgid "MAC"
 #~ msgstr "MAC"
@@ -2818,16 +2830,18 @@ msgstr "« 后退"
 #~ msgstr "<abbr title=\"Encrypted\">加密</abbr>"
 
 #~ msgid "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scan"
-#~ msgstr "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-搜索"
+#~ msgstr "搜索<abbr title=\"Wireless Local Area Network\">WLAN</abbr>"
 
 #~ msgid ""
 #~ "Choose the network you want to attach to this wireless interface. Select "
 #~ "<em>unspecified</em> to not attach any network or fill out the "
 #~ "<em>create</em> field to define a new network."
-#~ msgstr "此无线接口的网络。填写<em>创建</em>栏可新建网络。"
+#~ msgstr ""
+#~ "请选择你需要链接到无线网络接口的网络. 如果不链接到任何网络请选择 <em>未指"
+#~ "定</em>,如果需要创建新网络请点<em>创建</em>."
 
 #~ msgid "Create Network"
-#~ msgstr "Create Network"
+#~ msgstr "创建一个网络"
 
 #~ msgid "Link"
 #~ msgstr "链接"
@@ -2839,16 +2853,17 @@ msgstr "« 后退"
 #~ msgstr "Power"
 
 #~ msgid "Wifi networks in your local environment"
-#~ msgstr "Wifi networks in your local environment"
+#~ msgstr "扫描到的无线热点"
 
 #~ msgid ""
 #~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: "
 #~ "address/prefix"
 #~ msgstr ""
-#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-标识：地址/前缀"
+#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: "
+#~ "address/prefix"
 
 #~ msgid "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
-#~ msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
+#~ msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-服务器"
 
 #~ msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"
 #~ msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-广播"
@@ -2860,14 +2875,13 @@ msgstr "« 后退"
 #~ msgstr "IP-Aliases"
 
 #~ msgid "IPv6 Setup"
-#~ msgstr "IPv6设置"
+#~ msgstr "IPv6 设置"
 
 #~ msgid ""
 #~ "Note: If you choose an interface here which is part of another network, "
 #~ "it will be moved into this network."
 #~ msgstr ""
-#~ "Note: If you choose an interface here which is part of another network, "
-#~ "it will be moved into this network."
+#~ "注意：当你选择一个已经存在与一个网络中的接口时，它将会被移除那个网络。"
 
 #~ msgid ""
 #~ "Really delete this interface? The deletion cannot be undone!\\nYou might "
@@ -2910,13 +2924,10 @@ msgstr "« 后退"
 #~ "the next greater network like the internet and other ports for a local "
 #~ "network."
 #~ msgstr ""
-#~ "The network ports on your router can be combined to several <abbr title="
-#~ "\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
-#~ "communicate directly with each other. <abbr title=\"Virtual Local Area "
-#~ "Network\">VLAN</abbr>s are often used to separate different network "
-#~ "segments. Often there is by default one Uplink port for a connection to "
-#~ "the next greater network like the internet and other ports for a local "
-#~ "network."
+#~ "本设备可以划分为多个<abbr title=\"Virtual Local Area Network\">VLAN</"
+#~ "abbr>，并支持电脑间的直接通讯；<abbr title=\"Virtual Local Area Network"
+#~ "\">VLAN</abbr>也常用于分割不同网段；默认通常是一条上传端口连接ISP，其余端"
+#~ "口为本地子网。"
 
 #~ msgid "Enable buffering"
 #~ msgstr "开启缓冲"
@@ -3225,7 +3236,7 @@ msgstr "« 后退"
 #~ msgstr "空闲"
 
 #~ msgid "static"
-#~ msgstr "静态IP"
+#~ msgstr "静态"
 
 #~ msgid ""
 #~ "<abbr title=\"Lua Configuration Interface\">LuCI</abbr> is a collection "
@@ -3701,4 +3712,4 @@ msgstr "« 后退"
 #~ msgstr "服务"
 
 #~ msgid "Statistics"
-#~ msgstr "统计"
+#~ msgstr "统计信息"
