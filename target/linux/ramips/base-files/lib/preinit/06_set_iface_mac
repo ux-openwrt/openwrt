@@ -8,7 +8,9 @@ preinit_set_mac_address() {
 	. /lib/ramips.sh
 
 	case $(ramips_board_name) in
-	3g-6200n)
+	3g-6200n |\
+	wl-330n |\
+	wl-330n3g)
 		mac=$(ramips_get_mac_binary factory 4)
 		ifconfig eth0 hw ether $mac 2>/dev/null
 		;;
@@ -30,6 +32,11 @@ preinit_set_mac_address() {
                 mac=$(ramips_get_mac_binary devdata 16388)
                 ifconfig eth0 hw ether $mac 2>/dev/null
                 ;;
+	dir-645)
+		mac=$(ramips_get_mac_nvram nvram lanmac)
+		mac=$(maccalc or "$mac" "02:00:00:00:00:00")
+		ifconfig eth0 hw ether $mac 2>/dev/null
+		;;
 	dap-1350)
 		mac=$(ramips_get_mac_binary devdata 46)
 		ifconfig eth0 hw ether $mac 2>/dev/null
@@ -43,10 +50,10 @@ preinit_set_mac_address() {
 	hw550-3g |\
 	nbg-419n |\
 	omni-emb |\
+	tew-691gr |\
+	tew-692gr |\
 	w306r-v20 |\
 	w502u    |\
-	wl-330n |\
-	wl-330n3g |\
 	wr6202 |\
 	xdxrn502j)
 		mac=$(ramips_get_mac_binary factory 40)
