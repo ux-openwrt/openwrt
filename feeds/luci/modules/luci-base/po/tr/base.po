@@ -115,10 +115,10 @@ msgstr "<abbr title=\"maximal\">Maks.</abbr> eşzamanlı sorgu"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr ""
 
-msgid "ADSL"
+msgid "xDSL"
 msgstr ""
 
-msgid "ADSL Status"
+msgid "xDSL Status"
 msgstr ""
 
 msgid "AICCU (SIXXS)"
@@ -613,6 +613,9 @@ msgid "Default %d"
 msgstr ""
 
 msgid "Default gateway"
+msgstr ""
+
+msgid "Default is stateless + stateful"
 msgstr ""
 
 msgid "Default route"
@@ -1422,7 +1425,7 @@ msgstr ""
 msgid "Localise queries"
 msgstr ""
 
-msgid "Locked to channel %d used by: %s"
+msgid "Locked to channel %s used by: %s"
 msgstr ""
 
 msgid "Log output level"
