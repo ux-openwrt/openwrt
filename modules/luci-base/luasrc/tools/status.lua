@@ -8,7 +8,7 @@ local uci = require "luci.model.uci".cursor()
 local function dhcp_leases_common(family)
 	local rv = { }
 	local nfs = require "nixio.fs"
-	local leasefile = "/var/dhcp.leases"
+	local leasefile = "/tmp/dhcp.leases"
 
 	uci:foreach("dhcp", "dnsmasq",
 		function(s)
@@ -48,7 +48,15 @@ local function dhcp_leases_common(family)
 		fd:close()
 	end
 
-	local fd = io.open("/tmp/hosts/odhcpd", "r")
+	local lease6file = "/tmp/hosts/odhcpd"
+	uci:foreach("dhcp", "odhcpd",
+		function(t)
+			if t.leasefile and nfs.access(t.leasefile) then
+				lease6file = t.leasefile
+				return false
+			end
+		end)
+	local fd = io.open(lease6file, "r")
 	if fd then
 		while true do
 			local ln = fd:read("*l")
@@ -120,7 +128,9 @@ function wifi_networks()
 				assoclist  = net:assoclist(),
 				country    = net:country(),
 				txpower    = net:txpower(),
-				txpoweroff = net:txpower_offset()
+				txpoweroff = net:txpower_offset(),
+				disabled   = (dev:get("disabled") == "1" or
+				             net:get("disabled") == "1")
 			}
 		end
 

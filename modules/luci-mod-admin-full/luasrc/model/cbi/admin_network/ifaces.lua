@@ -135,7 +135,7 @@ end
 
 -- dhcp setup was requested, create section and reload page
 if m:formvalue("cbid.dhcp._enable._enable") then
-	m.uci:section("dhcp", "dhcp", nil, {
+	m.uci:section("dhcp", "dhcp", arg[1], {
 		interface = arg[1],
 		start     = "100",
 		limit     = "150",
@@ -373,7 +373,7 @@ for _, field in ipairs(s.children) do
 		if next(field.deps) then
 			local _, dep
 			for _, dep in ipairs(field.deps) do
-				dep.deps.proto = net:proto()
+				dep.proto = net:proto()
 			end
 		else
 			field:depends("proto", net:proto())
@@ -492,8 +492,9 @@ if has_dnsmasq and net:proto() == "static" then
 		o:value("relay", translate("relay mode"))
 		o:value("hybrid", translate("hybrid mode"))
 
-		o = s:taboption("ipv6", ListValue, "ra_management", translate("DHCPv6-Mode"))
-		o:value("", translate("stateless"))
+		o = s:taboption("ipv6", ListValue, "ra_management", translate("DHCPv6-Mode"),
+			translate("Default is stateless + stateful"))
+		o:value("0", translate("stateless"))
 		o:value("1", translate("stateless + stateful"))
 		o:value("2", translate("stateful-only"))
 		o:depends("dhcpv6", "server")

@@ -9,6 +9,7 @@ local ldebug = require "luci.debug"
 local string = require "string"
 local coroutine = require "coroutine"
 local tparser = require "luci.template.parser"
+local json = require "luci.jsonc"
 
 local _ubus = require "ubus"
 local _ubus_connection = nil
@@ -148,6 +149,28 @@ end
 
 function striptags(value)
 	return value and tparser.striptags(tostring(value))
+end
+
+-- for bash, ash and similar shells single-quoted strings are taken
+-- literally except for single quotes (which terminate the string)
+-- (and the exception noted below for dash (-) at the start of a
+-- command line parameter).
+function shellsqescape(value)
+   local res
+   res, _ = string.gsub(value, "'", "'\\''")
+   return res
+end
+
+-- bash, ash and other similar shells interpret a dash (-) at the start
+-- of a command-line parameters as an option indicator regardless of
+-- whether it is inside a single-quoted string.  It must be backlash
+-- escaped to resolve this.  This requires in some funky special-case
+-- handling.  It may actually be a property of the getopt function
+-- rather than the shell proper.
+function shellstartsqescape(value)
+   res, _ = string.gsub(value, "^\-", "\\-")
+   res, _ = string.gsub(res, "^-", "\-")
+   return shellsqescape(value)
 end
 
 -- containing the resulting substrings. The optional max parameter specifies
@@ -600,55 +623,11 @@ function ubus(object, method, data)
 end
 
 function serialize_json(x, cb)
-	local rv, push = nil, cb
-	if not push then
-		rv = { }
-		push = function(tok) rv[#rv+1] = tok end
-	end
-
-	if x == nil then
-		push("null")
-	elseif type(x) == "table" then
-		-- test if table is array like
-		local k, v
-		local n1, n2 = 0, 0
-		for k in pairs(x) do n1 = n1 + 1 end
-		for k in ipairs(x) do n2 = n2 + 1 end
-
-		if n1 == n2 and n1 > 0 then
-			push("[")
-			for k = 1, n2 do
-				if k > 1 then
-					push(",")
-				end
-				serialize_json(x[k], push)
-			end
-			push("]")
-		else
-			push("{")
-			for k, v in pairs(x) do
-				push("%q:" % tostring(k))
-				serialize_json(v, push)
-				if next(x, k) then
-					push(",")
-				end
-			end
-			push("}")
-		end
-	elseif type(x) == "number" or type(x) == "boolean" then
-		if (x ~= x) then
-			-- NaN is the only value that doesn't equal to itself.
-			push("Number.NaN")
-		else
-			push(tostring(x))
-		end
+	local js = json.stringify(x)
+	if type(cb) == "function" then
+		cb(js)
 	else
-		push('"%s"' % tostring(x):gsub('["%z\1-\31]',
-			function(c) return '\\u%04x' % c:byte(1) end))
-	end
-
-	if not cb then
-		return table.concat(rv, "")
+		return js
 	end
 end
 
@@ -657,6 +636,23 @@ function libpath()
 	return require "nixio.fs".dirname(ldebug.__file__)
 end
 
+function checklib(fullpathexe, wantedlib)
+	local fs = require "nixio.fs"
+	local haveldd = fs.access('/usr/bin/ldd')
+	if not haveldd then
+		return false
+	end
+	local libs = exec("/usr/bin/ldd " .. fullpathexe)
+	if not libs then
+		return false
+	end
+	for k, v in ipairs(split(libs)) do
+		if v:find(wantedlib) then
+			return true
+		end
+	end
+	return false
+end
 
 --
 -- Coroutine safe xpcall and pcall versions modified for Luci

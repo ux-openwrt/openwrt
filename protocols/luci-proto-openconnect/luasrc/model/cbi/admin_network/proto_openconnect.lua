@@ -13,7 +13,7 @@ oc_key_file = "/etc/openconnect/user-key-" .. ifc .. ".pem"
 oc_ca_file = "/etc/openconnect/ca-" .. ifc .. ".pem"
 
 server = section:taboption("general", Value, "server", translate("VPN Server"))
-server.datatype = "host"
+server.datatype = "host(0)"
 
 port = section:taboption("general", Value, "port", translate("VPN Server port"))
 port.placeholder = "443"
@@ -21,6 +21,20 @@ port.datatype    = "port"
 
 ifname = section:taboption("general", Value, "interface", translate("Output Interface"))
 ifname.template = "cbi/network_netlist"
+
+defaultroute = section:taboption("advanced", Flag, "defaultroute",
+	translate("Use default gateway"),
+	translate("If unchecked, no default route is configured"))
+
+defaultroute.default = defaultroute.enabled
+
+
+metric = section:taboption("advanced", Value, "metric",
+	translate("Use gateway metric"))
+
+metric.placeholder = "0"
+metric.datatype    = "uinteger"
+metric:depends("defaultroute", defaultroute.enabled)
 
 section:taboption("general", Value, "serverhash", translate("VPN Server's certificate SHA1 hash"))
 

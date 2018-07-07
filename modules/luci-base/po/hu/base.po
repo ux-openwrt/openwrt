@@ -32,11 +32,20 @@ msgstr "-- Kérem válasszon --"
 msgid "-- custom --"
 msgstr "-- egyéni --"
 
+msgid "-- match by device --"
+msgstr ""
+
+msgid "-- match by label --"
+msgstr ""
+
 msgid "1 Minute Load:"
 msgstr "Terhelés (utolsó 1 perc):"
 
 msgid "15 Minute Load:"
 msgstr "Terhelés (utolsó 15 perc):"
+
+msgid "464XLAT (CLAT)"
+msgstr ""
 
 msgid "5 Minute Load:"
 msgstr "Terhelés (utolsó 5 perc):"
@@ -111,10 +120,19 @@ msgstr "<abbr title=\"maximal\">Max.</abbr> párhuzamos lekérdezés"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 
+msgid "A43C + J43 + A43"
+msgstr ""
+
+msgid "A43C + J43 + A43 + V43"
+msgstr ""
+
 msgid "ADSL"
 msgstr ""
 
-msgid "ADSL Status"
+msgid "AICCU (SIXXS)"
+msgstr ""
+
+msgid "ANSI T1.413"
 msgstr ""
 
 msgid "APN"
@@ -125,6 +143,9 @@ msgstr "AR Támogatás"
 
 msgid "ARP retry threshold"
 msgstr "ARP újrapróbálkozási küszöbérték"
+
+msgid "ATM (Asynchronous Transfer Mode)"
+msgstr ""
 
 msgid "ATM Bridges"
 msgstr "ATM Hidak"
@@ -146,6 +167,12 @@ msgstr ""
 
 msgid "ATM device number"
 msgstr "ATM eszközszám"
+
+msgid "ATU-C System Vendor ID"
+msgstr ""
+
+msgid "AYIYA"
+msgstr ""
 
 msgid "Access Concentrator"
 msgstr "Elérési központ"
@@ -195,6 +222,9 @@ msgstr "Új interfész hozzáadása..."
 msgid "Additional Hosts files"
 msgstr "További 'hosts' fájlok"
 
+msgid "Additional servers file"
+msgstr ""
+
 msgid "Address"
 msgstr "Cím"
 
@@ -206,6 +236,9 @@ msgstr "Adminisztráció"
 
 msgid "Advanced Settings"
 msgstr "Haladó beállítások"
+
+msgid "Aggregate Transmit Power(ACTATP)"
+msgstr ""
 
 msgid "Alert"
 msgstr "Riasztás"
@@ -240,19 +273,61 @@ msgstr ""
 "A 127.0.0.0/8-as tartományba eső DNS válaszok engedélyezése (pl. RBL "
 "szervizek)"
 
+msgid ""
+"Also see <a href=\"https://www.sixxs.net/faq/connectivity/?faq=comparison"
+"\">Tunneling Comparison</a> on SIXXS"
+msgstr ""
+
 msgid "Always announce default router"
 msgstr ""
 
-msgid ""
-"Always use 40MHz channels even if the secondary channel overlaps. Using this "
-"option does not comply with IEEE 802.11n-2009!"
-msgstr ""
-"40 MHz csatornaszélesség használata akkor is, ha a másodlagos csatorna "
-"átfedésben van. Ezen opció használata nem felel meg az IEE 902.11n-2009 "
-"szabványnak!"
-
 msgid "An additional network will be created if you leave this unchecked."
 msgstr "Amennyiben ezt jelöletlenül hagyja, egy további hálózat jön létre"
+
+msgid "Annex"
+msgstr ""
+
+msgid "Annex A + L + M (all)"
+msgstr ""
+
+msgid "Annex A G.992.1"
+msgstr ""
+
+msgid "Annex A G.992.2"
+msgstr ""
+
+msgid "Annex A G.992.3"
+msgstr ""
+
+msgid "Annex A G.992.5"
+msgstr ""
+
+msgid "Annex B (all)"
+msgstr ""
+
+msgid "Annex B G.992.1"
+msgstr ""
+
+msgid "Annex B G.992.3"
+msgstr ""
+
+msgid "Annex B G.992.5"
+msgstr ""
+
+msgid "Annex J (all)"
+msgstr ""
+
+msgid "Annex L G.992.3 POTS 1"
+msgstr ""
+
+msgid "Annex M (all)"
+msgstr ""
+
+msgid "Annex M G.992.3"
+msgstr ""
+
+msgid "Annex M G.992.5"
+msgstr ""
 
 msgid "Announce as default router even if no public prefix is available."
 msgstr ""
@@ -261,6 +336,12 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Mount"
+msgstr ""
+
+msgid "Anonymous Swap"
 msgstr ""
 
 msgid "Antenna 1"
@@ -298,6 +379,12 @@ msgstr "Kapcsolódó kliensek"
 msgid "Atheros 802.11%s Wireless Controller"
 msgstr "Atheros 802.11%s vezeték-nélküli vezérlő"
 
+msgid "Auth Group"
+msgstr ""
+
+msgid "AuthGroup"
+msgstr ""
+
 msgid "Authentication"
 msgstr "Hitelesítés"
 
@@ -316,6 +403,21 @@ msgstr ""
 msgid "Automatic Homenet (HNCP)"
 msgstr ""
 
+msgid "Automatically check filesystem for errors before mounting"
+msgstr ""
+
+msgid "Automatically mount filesystems on hotplug"
+msgstr ""
+
+msgid "Automatically mount swap on hotplug"
+msgstr ""
+
+msgid "Automount Filesystem"
+msgstr ""
+
+msgid "Automount Swap"
+msgstr ""
+
 msgid "Available"
 msgstr "Elérhető"
 
@@ -324,6 +426,15 @@ msgstr "Elérhető csomagok"
 
 msgid "Average:"
 msgstr "Átlag:"
+
+msgid "B43 + B43C"
+msgstr ""
+
+msgid "B43 + B43C + V43"
+msgstr ""
+
+msgid "BR / DMR / AFTR"
+msgstr ""
 
 msgid "BSSID"
 msgstr "BSSID"
@@ -359,6 +470,9 @@ msgid "Bad address specified!"
 msgstr "Hibás címet adott meg!"
 
 msgid "Band"
+msgstr ""
+
+msgid "Behind NAT"
 msgstr ""
 
 msgid ""
@@ -398,17 +512,22 @@ msgstr "Broadcom BCM%04x 802.11 vezeték-nélküli vezérlő"
 msgid "Buffered"
 msgstr "Átmeneti tárban van"
 
+msgid ""
+"Build/distribution specific feed definitions. This file will NOT be "
+"preserved in any sysupgrade."
+msgstr ""
+
 msgid "Buttons"
 msgstr "Gombok"
+
+msgid "CA certificate; if empty it will be saved after the first connection."
+msgstr ""
 
 msgid "CPU"
 msgstr "Processzor"
 
 msgid "CPU usage (%)"
 msgstr "Processzor használat (%)"
-
-msgid "Cached"
-msgstr "Gyorsítótárban van"
 
 msgid "Cancel"
 msgstr "Mégsem"
@@ -435,6 +554,9 @@ msgstr "Csatorna"
 msgid "Check"
 msgstr "Ellenőrzés"
 
+msgid "Check fileystems before mount"
+msgstr ""
+
 msgid "Checksum"
 msgstr "Ellenőrző összeg"
 
@@ -459,6 +581,9 @@ msgstr ""
 
 msgid "Cipher"
 msgstr "Titkosító"
+
+msgid "Cisco UDP encapsulation"
+msgstr ""
 
 msgid ""
 "Click \"Generate archive\" to download a tar archive of the current "
@@ -507,10 +632,6 @@ msgstr "Beállítások alkalmazva."
 msgid "Configuration files will be kept."
 msgstr "A konfigurációs fájlok megmaradnak."
 
-msgid "Configures this mount as overlay storage for block-extroot"
-msgstr ""
-"Beállítja ezt a csatlakozási pontot block-extroot részére mint overlay tároló"
-
 msgid "Confirmation"
 msgstr "Megerősítés"
 
@@ -522,6 +643,9 @@ msgstr "Kapcsolódva"
 
 msgid "Connection Limit"
 msgstr "Kapcsolati korlát"
+
+msgid "Connection to server fails when TLS cannot be used"
+msgstr ""
 
 msgid "Connections"
 msgstr "Kapcsolatok"
@@ -557,6 +681,14 @@ msgid "Custom Interface"
 msgstr "Egyéni interfész"
 
 msgid "Custom delegated IPv6-prefix"
+msgstr ""
+
+msgid ""
+"Custom feed definitions, e.g. private feeds. This file can be preserved in a "
+"sysupgrade."
+msgstr ""
+
+msgid "Custom feeds"
 msgstr ""
 
 msgid ""
@@ -602,11 +734,26 @@ msgstr "DNS továbbítások"
 msgid "DNS-Label / FQDN"
 msgstr ""
 
+msgid "DPD Idle Timeout"
+msgstr ""
+
 msgid "DS-Lite AFTR address"
+msgstr ""
+
+msgid "DSL"
+msgstr ""
+
+msgid "DSL Status"
+msgstr ""
+
+msgid "DSL line mode"
 msgstr ""
 
 msgid "DUID"
 msgstr "DUID"
+
+msgid "Data Rate"
+msgstr ""
 
 msgid "Debug"
 msgstr "Hibakeresés"
@@ -616,6 +763,12 @@ msgstr "Alapértelmezés %d"
 
 msgid "Default gateway"
 msgstr "Alapértelmezett átjáró"
+
+msgid "Default is stateless + stateful"
+msgstr ""
+
+msgid "Default route"
+msgstr ""
 
 msgid "Default state"
 msgstr "Alapértelmezett állapot"
@@ -634,9 +787,6 @@ msgstr ""
 msgid "Delete"
 msgstr "Törlés"
 
-msgid "Delete this interface"
-msgstr "Interfész törlése"
-
 msgid "Delete this network"
 msgstr "Hálózat törlése"
 
@@ -654,6 +804,12 @@ msgstr "Eszköz"
 
 msgid "Device Configuration"
 msgstr "Eszköz beállítások"
+
+msgid "Device is rebooting..."
+msgstr ""
+
+msgid "Device unreachable"
+msgstr ""
 
 msgid "Diagnostics"
 msgstr "Diagnosztika"
@@ -677,6 +833,9 @@ msgstr ""
 msgid "Disable DNS setup"
 msgstr "DNS beállítás letiltása"
 
+msgid "Disable Encryption"
+msgstr ""
+
 msgid "Disable HW-Beacon timer"
 msgstr "Hardveres beacon időzítő letiltása"
 
@@ -694,6 +853,9 @@ msgstr "Távolság optimalizáció"
 
 msgid "Distance to farthest network member in meters."
 msgstr "A hálózat legtávolabbi tagjának távolsága méterben."
+
+msgid "Distribution feeds"
+msgstr ""
 
 msgid "Diversity"
 msgstr "Diverzitás"
@@ -771,11 +933,19 @@ msgstr ""
 "esetén csak a statikus DHCP bérlettel rendelkező kliensek lesznek "
 "kiszolgálva."
 
+msgid "EA-bits length"
+msgstr ""
+
 msgid "EAP-Method"
 msgstr "EAP metódus"
 
 msgid "Edit"
 msgstr "Szerkesztés"
+
+msgid ""
+"Edit the raw configuration data above to fix any error and hit \"Save\" to "
+"reload the page."
+msgstr ""
 
 msgid "Edit this interface"
 msgstr "Interfész szerkesztése"
@@ -804,14 +974,26 @@ msgstr "Óriás keretek átengedésének engedélyezése"
 msgid "Enable NTP client"
 msgstr "NTP-kliens engedélyezése"
 
+msgid "Enable Single DES"
+msgstr ""
+
 msgid "Enable TFTP server"
 msgstr "TFTP kiszolgáló engedélyezése"
 
 msgid "Enable VLAN functionality"
 msgstr "VLAN funkció engedélyezése"
 
+msgid "Enable WPS pushbutton, requires WPA(2)-PSK"
+msgstr ""
+
 msgid "Enable learning and aging"
 msgstr "Tanulás és aging engedélyezése"
+
+msgid "Enable mirroring of incoming packets"
+msgstr ""
+
+msgid "Enable mirroring of outgoing packets"
+msgstr ""
 
 msgid "Enable this mount"
 msgstr "A csatolás engedélyezése"
@@ -840,6 +1022,9 @@ msgstr "Törlés..."
 msgid "Error"
 msgstr "Hiba"
 
+msgid "Errored seconds (ES)"
+msgstr ""
+
 msgid "Ethernet Adapter"
 msgstr "Ethernet adapter"
 
@@ -866,6 +1051,9 @@ msgstr "Külső rendszernapló kiszolgáló"
 msgid "External system log server port"
 msgstr "Külső rendszernapló kiszolgáló port"
 
+msgid "Extra SSH command options"
+msgstr ""
+
 msgid "Fast Frames"
 msgstr "Gyors keretek"
 
@@ -887,6 +1075,11 @@ msgstr "Privát kérések szűrése"
 msgid "Filter useless"
 msgstr "Használhahatlan kérések szűrése"
 
+msgid ""
+"Find all currently attached filesystems and swap and replace configuration "
+"with defaults based on what was detected"
+msgstr ""
+
 msgid "Find and join network"
 msgstr "Hálózatok keresése és csatlakozás"
 
@@ -905,14 +1098,14 @@ msgstr "Tűzfal Beállítások"
 msgid "Firewall Status"
 msgstr "Tűzfal Állapot"
 
+msgid "Firmware File"
+msgstr ""
+
 msgid "Firmware Version"
 msgstr "Tűzfal verzió"
 
 msgid "Fixed source port for outbound DNS queries"
 msgstr "Rögzített forrás port a kimenő DNS kérésekhez"
-
-msgid "Flags"
-msgstr "Flag-ek"
 
 msgid "Flash Firmware"
 msgstr "Firmware flash-elés"
@@ -932,9 +1125,6 @@ msgstr "Flash-elés..."
 msgid "Force"
 msgstr "Kényszerítés"
 
-msgid "Force 40MHz mode"
-msgstr "40 MHz mód erőltetése"
-
 msgid "Force CCMP (AES)"
 msgstr "CCMP (AES) kényszerítése"
 
@@ -949,8 +1139,17 @@ msgstr "TKIP kényszerítése"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "TKIP és CCMP (AES) kényszerítése"
 
+msgid "Force use of NAT-T"
+msgstr ""
+
+msgid "Form token mismatch"
+msgstr ""
+
 msgid "Forward DHCP traffic"
 msgstr "DHCP forgalom továbbítás"
+
+msgid "Forward Error Correction Seconds (FECS)"
+msgstr ""
 
 msgid "Forward broadcast traffic"
 msgstr "Broadcast forgalom továbbítás"
@@ -970,9 +1169,6 @@ msgstr "Szabad"
 msgid "Free space"
 msgstr "Szabad hely"
 
-msgid "Frequency Hopping"
-msgstr "Frekvencia ugrás"
-
 msgid "GHz"
 msgstr "GHz"
 
@@ -991,6 +1187,12 @@ msgstr "Általános beállítások"
 msgid "General Setup"
 msgstr "Általános beállítások"
 
+msgid "General options for opkg"
+msgstr ""
+
+msgid "Generate Config"
+msgstr ""
+
 msgid "Generate archive"
 msgstr "Archívum készítése"
 
@@ -999,6 +1201,9 @@ msgstr "Általános 802.11%s vezeték-nélküli vezérlő"
 
 msgid "Given password confirmation did not match, password not changed!"
 msgstr "A megadott jelszavak nem egyeznek, a jelszó nem lett megváltoztatva!"
+
+msgid "Global Settings"
+msgstr ""
 
 msgid "Global network options"
 msgstr ""
@@ -1009,6 +1214,9 @@ msgstr "Ugrás a jelszó beállításhoz..."
 msgid "Go to relevant configuration page"
 msgstr "Ugrás a tárgyhoz tartozó beállításokhoz"
 
+msgid "Group Password"
+msgstr ""
+
 msgid "Guest"
 msgstr ""
 
@@ -1018,14 +1226,17 @@ msgstr "HE.net jelszó"
 msgid "HE.net username"
 msgstr ""
 
-msgid "HT mode (802.11n)"
-msgstr ""
-
 msgid "Handler"
 msgstr "Kezelő"
 
 msgid "Hang Up"
 msgstr "Befejezés"
+
+msgid "Header Error Code Errors (HEC)"
+msgstr ""
+
+msgid "Heartbeat"
+msgstr ""
 
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -1047,6 +1258,9 @@ msgstr "Hermes 802.11b vezeték nélküli vezérlő"
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr> elrejtése"
 
+msgid "Host"
+msgstr ""
+
 msgid "Host entries"
 msgstr "Host bejegyzések"
 
@@ -1064,6 +1278,12 @@ msgstr "DHCP kérés során küldendő gépnév"
 
 msgid "Hostnames"
 msgstr "Gépnevek"
+
+msgid "Hybrid"
+msgstr ""
+
+msgid "IKE DH Group"
+msgstr ""
 
 msgid "IP address"
 msgstr "IP cím"
@@ -1098,6 +1318,9 @@ msgstr "IPv4 hálózati maszk"
 msgid "IPv4 only"
 msgstr "csak IPv4"
 
+msgid "IPv4 prefix"
+msgstr ""
+
 msgid "IPv4 prefix length"
 msgstr "IPv4 prefix hossza"
 
@@ -1110,6 +1333,9 @@ msgstr "IPv6"
 msgid "IPv6 Firewall"
 msgstr "IPv6 tűzfal"
 
+msgid "IPv6 Neighbours"
+msgstr ""
+
 msgid "IPv6 Settings"
 msgstr ""
 
@@ -1121,6 +1347,9 @@ msgstr "IPv6 WAN állapot"
 
 msgid "IPv6 address"
 msgstr "IPv6 cím"
+
+msgid "IPv6 address delegated to the local tunnel endpoint (optional)"
+msgstr ""
 
 msgid "IPv6 assignment hint"
 msgstr ""
@@ -1158,6 +1387,12 @@ msgstr "IPv6 IPv4 felett (6to4)"
 msgid "Identity"
 msgstr "Identitás"
 
+msgid "If checked, 1DES is enaled"
+msgstr ""
+
+msgid "If checked, encryption is disabled"
+msgstr ""
+
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
@@ -1190,8 +1425,8 @@ msgstr ""
 "nagyon lassú folyamat mivel a swap-eszköz nem érhető el akkora sebességgel "
 "mint a <abbr title=\"Random Access Memory\">RAM</abbr>."
 
-msgid "Ignore Hosts files"
-msgstr "A hosts fájlok figyelmen kívül hagyása"
+msgid "Ignore <code>/etc/hosts</code>"
+msgstr ""
 
 msgid "Ignore interface"
 msgstr "Interfész figyelmen kívül hagyása"
@@ -1204,6 +1439,11 @@ msgstr "Image"
 
 msgid "In"
 msgstr "Be"
+
+msgid ""
+"In order to prevent unauthorized access to the system, your request has been "
+"blocked. Click \"Continue »\" below to return to the previous page."
+msgstr ""
 
 msgid "Inactivity timeout"
 msgstr "Inaktivitási időtúllépés"
@@ -1261,6 +1501,9 @@ msgstr "Interfész leállítás"
 
 msgid "Interfaces"
 msgstr "Interfészek"
+
+msgid "Internal"
+msgstr ""
 
 msgid "Internal Server Error"
 msgstr "Belső szerverhiba"
@@ -1342,6 +1585,15 @@ msgstr "Nyelv"
 msgid "Language and Style"
 msgstr "Nyelv és megjelenés"
 
+msgid "Latency"
+msgstr ""
+
+msgid "Leaf"
+msgstr ""
+
+msgid "Lease time"
+msgstr ""
+
 msgid "Lease validity time"
 msgstr "Bérlet érvényességi ideje"
 
@@ -1366,13 +1618,16 @@ msgstr "Jelmagyarázat:"
 msgid "Limit"
 msgstr "Korlát"
 
-msgid "Line Attenuation"
+msgid "Line Attenuation (LATN)"
 msgstr ""
 
-msgid "Line Speed"
+msgid "Line Mode"
 msgstr ""
 
 msgid "Line State"
+msgstr ""
+
+msgid "Line Uptime"
 msgstr ""
 
 msgid "Link On"
@@ -1384,6 +1639,9 @@ msgid ""
 msgstr ""
 "<abbr title=\"Domain Name System\">DNS</abbr> szerverek listája, ahová a "
 "kérések továbbításra kerülnek"
+
+msgid "List of SSH key files for auth"
+msgstr ""
 
 msgid "List of domains to allow RFC1918 responses for"
 msgstr "Domain-ok listája, melyeknél az RFC1918 válaszok megengedettek"
@@ -1407,6 +1665,9 @@ msgstr "Átlagos terhelés"
 
 msgid "Loading"
 msgstr "Betöltés"
+
+msgid "Local IP address to assign"
+msgstr ""
 
 msgid "Local IPv4 address"
 msgstr "Helyi IPv4 cím"
@@ -1450,8 +1711,8 @@ msgstr ""
 msgid "Localise queries"
 msgstr "Lekérdezések lokalizációja"
 
-msgid "Locked to channel %d used by %s"
-msgstr "Zárolt a %d csatornára az %s által."
+msgid "Locked to channel %s used by: %s"
+msgstr ""
 
 msgid "Log output level"
 msgstr "Napló kimeneti szintje"
@@ -1468,6 +1729,9 @@ msgstr "Bejelentkezés"
 msgid "Logout"
 msgstr "Kijelentkezés"
 
+msgid "Loss of Signal Seconds (LOSS)"
+msgstr ""
+
 msgid "Lowest leased address as offset from the network address."
 msgstr "A legalacsonyabb bérleti címnek az interfész címétől való távolsága"
 
@@ -1483,6 +1747,9 @@ msgstr "MAC-szűrő"
 msgid "MAC-List"
 msgstr "MAC-lista"
 
+msgid "MAP / LW4over6"
+msgstr ""
+
 msgid "MB/s"
 msgstr "MB/s"
 
@@ -1491,6 +1758,17 @@ msgstr "MHz"
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid ""
+"Make sure to clone the root filesystem using something like the commands "
+"below:"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Max. Attainable Data Rate (ATTNDR)"
+msgstr ""
 
 msgid "Maximum Rate"
 msgstr "Maximális sebesség"
@@ -1509,6 +1787,11 @@ msgstr "Maximális várakozási idő a modem kész állapotára (másodpercben)"
 
 msgid "Maximum hold time"
 msgstr "Maximális tartási idő"
+
+msgid ""
+"Maximum length of the name is 15 characters including the automatic protocol/"
+"bridge prefix (br-, 6in4-, pppoe- etc.)"
+msgstr ""
 
 msgid "Maximum number of leased addresses."
 msgstr "DHCP címek maximális száma"
@@ -1530,6 +1813,12 @@ msgstr "Minimális sebesség"
 
 msgid "Minimum hold time"
 msgstr "Minimális tartási idő"
+
+msgid "Mirror monitor port"
+msgstr ""
+
+msgid "Mirror source port"
+msgstr ""
 
 msgid "Missing protocol extension for proto %q"
 msgstr "Hiányzó protokoll kiterjesztés a %q progokoll számára"
@@ -1571,11 +1860,17 @@ msgstr ""
 "A csatolási pontok határozzák meg, hogy egy memória eszköz hová lesz "
 "csatlakoztatva a fájlendszeren belül "
 
+msgid "Mount filesystems not specifically configured"
+msgstr ""
+
 msgid "Mount options"
 msgstr "Csatolási beállítások"
 
 msgid "Mount point"
 msgstr "Csatolási pont"
+
+msgid "Mount swap not specifically configured"
+msgstr ""
 
 msgid "Mounted file systems"
 msgstr "Csatolt fájlrendszerek"
@@ -1595,11 +1890,23 @@ msgstr "Multicast cím"
 msgid "NAS ID"
 msgstr "NAS azonosító"
 
+msgid "NAT-T Mode"
+msgstr ""
+
+msgid "NAT64 Prefix"
+msgstr ""
+
 msgid "NDP-Proxy"
+msgstr ""
+
+msgid "NT Domain"
 msgstr ""
 
 msgid "NTP server candidates"
 msgstr "Kijelölt NTP kiszolgálók"
+
+msgid "NTP sync time-out"
+msgstr ""
 
 msgid "Name"
 msgstr "Név"
@@ -1634,6 +1941,9 @@ msgstr "Következő »"
 msgid "No DHCP Server configured for this interface"
 msgstr "Ehhez az interfészhez nincs DHCP kiszolgáló beállítva"
 
+msgid "No NAT-T"
+msgstr ""
+
 msgid "No chains in this table"
 msgstr "Ez a tábla nem tartalmaz láncokat."
 
@@ -1667,11 +1977,14 @@ msgstr "Nincs hozzárendelt zóna"
 msgid "Noise"
 msgstr "Zaj"
 
-msgid "Noise Margin"
+msgid "Noise Margin (SNR)"
 msgstr ""
 
 msgid "Noise:"
 msgstr "Zaj:"
+
+msgid "Non Pre-emtive CRC errors (CRC_P)"
+msgstr ""
 
 msgid "None"
 msgstr "Nincs"
@@ -1691,6 +2004,9 @@ msgstr "Nincs kapcsolódva"
 msgid "Note: Configuration files will be erased."
 msgstr "Megjegyzés: konfigurációs fájlok törölve lesznek."
 
+msgid "Note: interface name length"
+msgstr ""
+
 msgid "Notice"
 msgstr "Megjegyzés"
 
@@ -1702,6 +2018,12 @@ msgstr "OK"
 
 msgid "OPKG-Configuration"
 msgstr "OPKG-Beállítások"
+
+msgid "Obfuscated Group Password"
+msgstr ""
+
+msgid "Obfuscated Password"
+msgstr ""
 
 msgid "Off-State Delay"
 msgstr "Kikapcsolt állapot késleltetés"
@@ -1729,17 +2051,32 @@ msgstr "Legalább gépnevet vagy MAC-címet meg kell adni!"
 msgid "One or more fields contain invalid values!"
 msgstr "Egy vagy több mező érvénytelen adatot tartalmaz!"
 
+msgid "One or more invalid/required values on tab"
+msgstr ""
+
 msgid "One or more required fields have no value!"
 msgstr "Egy vagy több kötelezően kitöltendő mező üres!"
 
 msgid "Open list..."
 msgstr "Lista megnyitása..."
 
+msgid "OpenConnect (CISCO AnyConnect)"
+msgstr ""
+
+msgid "Operating frequency"
+msgstr ""
+
 msgid "Option changed"
 msgstr "Beállítás módosítva"
 
 msgid "Option removed"
 msgstr "Beállítás eltávolítva"
+
+msgid "Optional, specify to override default server (tic.sixxs.net)"
+msgstr ""
+
+msgid "Optional, use when the SIXXS account has more than one tunnel"
+msgstr ""
 
 msgid "Options"
 msgstr "Lehetőségek"
@@ -1755,6 +2092,9 @@ msgstr "Kimenő:"
 
 msgid "Outdoor Channels"
 msgstr "Kültéri csatornák"
+
+msgid "Output Interface"
+msgstr ""
 
 msgid "Override MAC address"
 msgstr "MAC cím felülbírálása"
@@ -1805,8 +2145,20 @@ msgstr "PPPoATM"
 msgid "PPPoE"
 msgstr "PPPoE"
 
+msgid "PPPoSSH"
+msgstr ""
+
 msgid "PPtP"
 msgstr "PPtP"
+
+msgid "PSID offset"
+msgstr ""
+
+msgid "PSID-bits length"
+msgstr ""
+
+msgid "PTM/EFM (Packet Transfer Mode)"
+msgstr ""
 
 msgid "Package libiwinfo required!"
 msgstr "A libiwinfo csomag szükséges!"
@@ -1832,6 +2184,9 @@ msgstr "Jelszó hitelesítés"
 msgid "Password of Private Key"
 msgstr "A privát kulcsh jelszava"
 
+msgid "Password of inner Private Key"
+msgstr ""
+
 msgid "Password successfully changed!"
 msgstr "A jelszó megváltoztatása sikeres!"
 
@@ -1847,8 +2202,23 @@ msgstr "A privát kulcs elérési útja"
 msgid "Path to executable which handles the button event"
 msgstr "A gomb eseményeit kezelő végrehajtható állomány elérési útja"
 
+msgid "Path to inner CA-Certificate"
+msgstr ""
+
+msgid "Path to inner Client-Certificate"
+msgstr ""
+
+msgid "Path to inner Private Key"
+msgstr ""
+
 msgid "Peak:"
 msgstr "Csúcs:"
+
+msgid "Peer IP address to assign"
+msgstr ""
+
+msgid "Perfect Forward Secrecy"
+msgstr ""
 
 msgid "Perform reboot"
 msgstr "Újraindítás végrehajtása"
@@ -1871,9 +2241,6 @@ msgstr "csom."
 msgid "Please enter your username and password."
 msgstr "Adja meg a felhasználónevét és a jelszavát."
 
-msgid "Please wait: Device rebooting..."
-msgstr "Kérem várjon: az eszköz újraindul..."
-
 msgid "Policy"
 msgstr "Szabály"
 
@@ -1888,6 +2255,12 @@ msgstr "A %d port egyszerre több VLAN-ban is cimkézetlen!"
 
 msgid "Port status:"
 msgstr "Port állapot:"
+
+msgid "Power Management Mode"
+msgstr ""
+
+msgid "Pre-emtive CRC errors (CRCP_P)"
+msgstr ""
 
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
@@ -1907,6 +2280,9 @@ msgstr "Folytatás"
 
 msgid "Processes"
 msgstr "Folyamatok"
+
+msgid "Profile"
+msgstr ""
 
 msgid "Prot."
 msgstr "Prot."
@@ -1937,6 +2313,9 @@ msgstr ""
 
 msgid "Quality"
 msgstr "Minőség"
+
+msgid "RFC3947 NAT-T mode"
+msgstr ""
 
 msgid "RTS/CTS Threshold"
 msgstr "RTS/CTS küszöbérték"
@@ -2092,6 +2471,9 @@ msgstr ""
 msgid "Request IPv6-prefix of length"
 msgstr ""
 
+msgid "Require TLS"
+msgstr ""
+
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
 "Szükséges bizonyos internetszolgáltatók esetén, pl. Charter 'DOCSIS 3'-al"
@@ -2132,6 +2514,12 @@ msgstr "Gyökérkönyvtár"
 msgid "Root directory for files served via TFTP"
 msgstr "TFTP-n keresztül megosztott fájlok gyökérkönyvtára"
 
+msgid "Root preparation"
+msgstr ""
+
+msgid "Routed IPv6 prefix for downstream interfaces"
+msgstr ""
+
 msgid "Router Advertisement-Service"
 msgstr ""
 
@@ -2148,17 +2536,34 @@ msgstr ""
 "Az útvonalak határozzák meg, hogy bizonyos gépek illetve hálózatok melyik "
 "interfészen keresztül érhetők el."
 
-msgid "Rule #"
-msgstr "Szabály #"
-
 msgid "Run a filesystem check before mounting the device"
 msgstr "Fájlrendszer ellenőrzés futtatása az eszköz csatolása előtt"
 
 msgid "Run filesystem check"
 msgstr "Fájlrendszer ellenőrzés futtatása"
 
+msgid ""
+"SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
+"use 6in4 instead"
+msgstr ""
+
+msgid "SIXXS-handle[/Tunnel-ID]"
+msgstr ""
+
+msgid "SNR"
+msgstr ""
+
 msgid "SSH Access"
 msgstr "SSH hozzáférés"
+
+msgid "SSH server address"
+msgstr ""
+
+msgid "SSH server port"
+msgstr ""
+
+msgid "SSH username"
+msgstr ""
 
 msgid "SSH-Keys"
 msgstr "SSH kulcsok"
@@ -2206,6 +2611,17 @@ msgstr "WDS szétválasztása"
 msgid "Server Settings"
 msgstr "Kiszolgáló beállításai"
 
+msgid "Server password"
+msgstr ""
+
+msgid ""
+"Server password, enter the specific password of the tunnel when the username "
+"contains the tunnel ID"
+msgstr ""
+
+msgid "Server username"
+msgstr ""
+
 msgid "Service Name"
 msgstr "Szolgáltatás neve"
 
@@ -2222,6 +2638,12 @@ msgstr "Idő szinkronizálás beállítása"
 msgid "Setup DHCP Server"
 msgstr "DHCP kiszolgáló beállítása"
 
+msgid "Severely Errored Seconds (SES)"
+msgstr ""
+
+msgid "Short GI"
+msgstr ""
+
 msgid "Show current backup file list"
 msgstr "Mentendő fájlok aktuális listájának megjelenítése"
 
@@ -2234,11 +2656,17 @@ msgstr "Hálózat leállítása"
 msgid "Signal"
 msgstr "Jel"
 
+msgid "Signal Attenuation (SATN)"
+msgstr ""
+
 msgid "Signal:"
 msgstr "Jel:"
 
 msgid "Size"
 msgstr "Méret"
+
+msgid "Size (.ipk)"
+msgstr ""
 
 msgid "Skip"
 msgstr "Ugrás"
@@ -2279,6 +2707,9 @@ msgstr "Sorbarendezés"
 
 msgid "Source"
 msgstr "Forrás"
+
+msgid "Source routing"
+msgstr ""
 
 msgid "Specifies the button state to handle"
 msgstr "Meghatározza a gomb kezelendő állapotát"
@@ -2411,6 +2842,9 @@ msgstr "Tábla"
 msgid "Target"
 msgstr "Cél"
 
+msgid "Target network"
+msgstr ""
+
 msgid "Terminate"
 msgstr "Megszakítás"
 
@@ -2451,6 +2885,9 @@ msgid ""
 msgstr ""
 "A következő karakterek használhatók: <code>A-Z</code>, <code>a-z</code>, "
 "<code>0-9</code> and <code>_</code>"
+
+msgid "The configuration file could not be loaded due to the following error:"
+msgstr ""
 
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
@@ -2526,6 +2963,9 @@ msgstr ""
 msgid "The selected protocol needs a device assigned"
 msgstr "A kiválasztott protokoll eszköz hozzárendelést igényel"
 
+msgid "The submitted security token is invalid or already expired!"
+msgstr ""
+
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
 "when finished."
@@ -2542,6 +2982,11 @@ msgstr ""
 "Várjon néhány percet, amíg az eszköz ismételten elérhető. Az eszköz "
 "eléréséhez a beállításaitól függően szükséges lehet a számítógépe IP-címének "
 "megújítása."
+
+msgid ""
+"The tunnel end-point is behind NAT, defaults to disabled and only applies to "
+"AYIYA"
+msgstr ""
 
 msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
@@ -2579,6 +3024,12 @@ msgstr ""
 
 msgid "This IPv4 address of the relay"
 msgstr "Az átjátszó IPV4 címe"
+
+msgid ""
+"This file may contain lines like 'server=/domain/1.2.3.4' or "
+"'server=1.2.3.4' fordomain-specific or full upstream <abbr title=\"Domain "
+"Name System\">DNS</abbr> servers."
+msgstr ""
 
 msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
@@ -2664,6 +3115,9 @@ msgstr ""
 "Itt tölthet fel egy korábban létrehozott biztonsági mentés archívumot a "
 "konfigurációs fájlok visszaállításához."
 
+msgid "Tone"
+msgstr ""
+
 msgid "Total Available"
 msgstr "Összes elérhető"
 
@@ -2703,6 +3157,15 @@ msgstr "Tunnel interfész"
 msgid "Tunnel Link"
 msgstr ""
 
+msgid "Tunnel broker protocol"
+msgstr ""
+
+msgid "Tunnel setup server"
+msgstr ""
+
+msgid "Tunnel type"
+msgstr ""
+
 msgid "Turbo Mode"
 msgstr "Turbó mód"
 
@@ -2730,6 +3193,9 @@ msgstr "UUID"
 msgid "Unable to dispatch"
 msgstr "Nem indiítható"
 
+msgid "Unavailable Seconds (UAS)"
+msgstr ""
+
 msgid "Unknown"
 msgstr "Ismeretlen"
 
@@ -2738,6 +3204,9 @@ msgstr "Ismeretlen hiba, a jelszó nem lett megváltoztatva!"
 
 msgid "Unmanaged"
 msgstr "Nem kezelt"
+
+msgid "Unmount"
+msgstr ""
 
 msgid "Unsaved Changes"
 msgstr "El nem mentett módosítások"
@@ -2785,8 +3254,11 @@ msgstr "MTU használata az alagút interfészen"
 msgid "Use TTL on tunnel interface"
 msgstr "TTL használata az alagút interfészen"
 
-msgid "Use as root filesystem"
-msgstr "Gyökér fájlrenszerként történő használat"
+msgid "Use as external overlay (/overlay)"
+msgstr ""
+
+msgid "Use as root filesystem (/)"
+msgstr ""
 
 msgid "Use broadcast flag"
 msgstr "Broadcast flag használata"
@@ -2810,7 +3282,8 @@ msgid ""
 "Use the <em>Add</em> Button to add a new lease entry. The <em>MAC-Address</"
 "em> indentifies the host, the <em>IPv4-Address</em> specifies to the fixed "
 "address to use and the <em>Hostname</em> is assigned as symbolic name to the "
-"requesting host."
+"requesting host. The optional <em>Lease time</em> can be used to set non-"
+"standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
 "Használja a <em>Hozzáadás</em> gombot új bérleti bejegyzés hozzáadásához. A "
 "<em>MAC-cím</em> azonosítja a gépet. az <em>IPv4-cím</em> adja meg a "
@@ -2823,11 +3296,20 @@ msgstr "Használt"
 msgid "Used Key Slot"
 msgstr "Használt kulcsindex"
 
+msgid "User certificate (PEM encoded)"
+msgstr ""
+
+msgid "User key (PEM encoded)"
+msgstr ""
+
 msgid "Username"
 msgstr "Felhasználónév"
 
 msgid "VC-Mux"
 msgstr "VC-Mux"
+
+msgid "VDSL"
+msgstr ""
 
 msgid "VLAN Interface"
 msgstr "VLAN interfész"
@@ -2838,11 +3320,35 @@ msgstr "VLAN-ok %q-n"
 msgid "VLANs on %q (%s)"
 msgstr "VLAN-ok %q-n (%s)"
 
+msgid "VPN Local address"
+msgstr ""
+
+msgid "VPN Local port"
+msgstr ""
+
 msgid "VPN Server"
 msgstr "VPN kiszolgáló"
 
+msgid "VPN Server port"
+msgstr ""
+
+msgid "VPN Server's certificate SHA1 hash"
+msgstr ""
+
+msgid "VPNC (CISCO 3000 (and others) VPN)"
+msgstr ""
+
+msgid "Vendor"
+msgstr ""
+
 msgid "Vendor Class to send when requesting DHCP"
 msgstr "DHCP kérés során küldendő 'Vendor Class'"
+
+msgid "Verbose"
+msgstr ""
+
+msgid "Verbose logging by aiccu daemon"
+msgstr ""
 
 msgid "Verify"
 msgstr "Ellenőrzés"
@@ -2875,19 +3381,33 @@ msgstr ""
 "WPA titkosításhoz kliens módnál 'wpa_supplicant', hozzáférési pont illetve "
 "ad-hoc módnál 'hostapd' telepítése szükséges."
 
+msgid ""
+"Wait for NTP sync that many seconds, seting to 0 disables waiting (optional)"
+msgstr ""
+
 msgid "Waiting for changes to be applied..."
 msgstr "Várakozás a változtatások alkalmazására..."
 
 msgid "Waiting for command to complete..."
 msgstr "Várakozás a parancs befejezésére..."
 
+msgid "Waiting for device..."
+msgstr ""
+
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
-msgid "Warning: There are unsaved changes that will be lost while rebooting!"
+msgid "Warning: There are unsaved changes that will get lost on reboot!"
 msgstr ""
-"Figyelem: vannak el nem mentett változások melyek el fognak veszni az "
-"újraindítás során!"
+
+msgid "Whether to create an IPv6 default route over the tunnel"
+msgstr ""
+
+msgid "Whether to route only packets from delegated prefixes"
+msgstr ""
+
+msgid "Width"
+msgstr ""
 
 msgid "Wifi"
 msgstr "Wifi"
@@ -2946,6 +3466,12 @@ msgid ""
 msgstr ""
 "Engélyezze a Java Szkripteket a böngészőjében, mert anélkül a LuCI nem fog "
 "megfelelően működni."
+
+msgid ""
+"Your Internet Explorer is too old to display this page correctly. Please "
+"upgrade it to at least version 7 or use another browser like Firefox, Opera "
+"or Safari."
+msgstr ""
 
 msgid "any"
 msgstr "bármelyik"
@@ -3026,6 +3552,12 @@ msgstr "kbit/s"
 msgid "local <abbr title=\"Domain Name System\">DNS</abbr> file"
 msgstr "helyi <abbr title=\"Domain Name System\">DNS</abbr> fájl"
 
+msgid "minimum 1280, maximum 1480"
+msgstr ""
+
+msgid "navigation Navigation"
+msgstr ""
+
 msgid "no"
 msgstr "nem"
 
@@ -3034,6 +3566,9 @@ msgstr "nincs link"
 
 msgid "none"
 msgstr "nincs"
+
+msgid "not present"
+msgstr ""
 
 msgid "off"
 msgstr "ki"
@@ -3044,6 +3579,9 @@ msgstr "be"
 msgid "open"
 msgstr "nyitás"
 
+msgid "overlay"
+msgstr ""
+
 msgid "relay mode"
 msgstr ""
 
@@ -3051,6 +3589,12 @@ msgid "routed"
 msgstr "irányított"
 
 msgid "server mode"
+msgstr ""
+
+msgid "skiplink1 Skip to navigation"
+msgstr ""
+
+msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3085,6 +3629,55 @@ msgstr "igen"
 
 msgid "« Back"
 msgstr "« Vissza"
+
+#~ msgid "Delete this interface"
+#~ msgstr "Interfész törlése"
+
+#~ msgid "Flags"
+#~ msgstr "Flag-ek"
+
+#~ msgid "Rule #"
+#~ msgstr "Szabály #"
+
+#~ msgid "Ignore Hosts files"
+#~ msgstr "A hosts fájlok figyelmen kívül hagyása"
+
+#~ msgid "Please wait: Device rebooting..."
+#~ msgstr "Kérem várjon: az eszköz újraindul..."
+
+#~ msgid ""
+#~ "Warning: There are unsaved changes that will be lost while rebooting!"
+#~ msgstr ""
+#~ "Figyelem: vannak el nem mentett változások melyek el fognak veszni az "
+#~ "újraindítás során!"
+
+#~ msgid ""
+#~ "Always use 40MHz channels even if the secondary channel overlaps. Using "
+#~ "this option does not comply with IEEE 802.11n-2009!"
+#~ msgstr ""
+#~ "40 MHz csatornaszélesség használata akkor is, ha a másodlagos csatorna "
+#~ "átfedésben van. Ezen opció használata nem felel meg az IEE 902.11n-2009 "
+#~ "szabványnak!"
+
+#~ msgid "Cached"
+#~ msgstr "Gyorsítótárban van"
+
+#~ msgid "Configures this mount as overlay storage for block-extroot"
+#~ msgstr ""
+#~ "Beállítja ezt a csatlakozási pontot block-extroot részére mint overlay "
+#~ "tároló"
+
+#~ msgid "Force 40MHz mode"
+#~ msgstr "40 MHz mód erőltetése"
+
+#~ msgid "Frequency Hopping"
+#~ msgstr "Frekvencia ugrás"
+
+#~ msgid "Locked to channel %d used by %s"
+#~ msgstr "Zárolt a %d csatornára az %s által."
+
+#~ msgid "Use as root filesystem"
+#~ msgstr "Gyökér fájlrenszerként történő használat"
 
 #~ msgid "HE.net user ID"
 #~ msgstr "HE.net felhasználói azonosító"

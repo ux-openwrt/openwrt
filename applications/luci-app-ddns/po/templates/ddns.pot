@@ -7,7 +7,13 @@ msgstr ""
 msgid "-- custom --"
 msgstr ""
 
+msgid "-- default --"
+msgstr ""
+
 msgid "Advanced Settings"
+msgstr ""
+
+msgid "Allow non-public IP's"
 msgstr ""
 
 msgid "Applying changes"
@@ -23,18 +29,33 @@ msgstr ""
 
 msgid ""
 "Below is a list of configured DDNS configurations and their current state."
-"<br />If you want to send updates for IPv4 and IPv6 you need to define two "
-"separate Configurations i.e. 'myddns_ipv4' and 'myddns_ipv6'"
+msgstr ""
+
+msgid "Bind Network"
+msgstr ""
+
+msgid "Binding to a specific network not supported"
 msgstr ""
 
 msgid ""
 "BusyBox's nslookup and Wget do not support to specify the IP version to use "
-"for communication with DDNS Provider."
+"for communication with DDNS Provider!"
 msgstr ""
 
 msgid ""
-"BusyBox's nslookup does not support to specify to use TCP instead of default "
-"UDP when requesting DNS server"
+"BusyBox's nslookup and hostip do not support to specify to use TCP instead "
+"of default UDP when requesting DNS server!"
+msgstr ""
+
+msgid ""
+"BusyBox's nslookup in the current compiled version does not handle given DNS "
+"Servers correctly!"
+msgstr ""
+
+msgid "Casual users should not change this setting"
+msgstr ""
+
+msgid "Change provider"
 msgstr ""
 
 msgid "Check Interval"
@@ -49,7 +70,15 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-msgid "Configure here the details for selected Dynamic DNS service"
+msgid ""
+"Configure here the details for all Dynamic DNS services including this LuCI "
+"application."
+msgstr ""
+
+msgid "Configure here the details for selected Dynamic DNS service."
+msgstr ""
+
+msgid "Current setting"
 msgstr ""
 
 msgid ""
@@ -75,6 +104,12 @@ msgstr ""
 msgid "DDNS Autostart disabled"
 msgstr ""
 
+msgid "DDNS Client Configuration"
+msgstr ""
+
+msgid "DDNS Client Documentation"
+msgstr ""
+
 msgid "DDNS Service provider"
 msgstr ""
 
@@ -82,6 +117,9 @@ msgid "DNS requests via TCP not supported"
 msgstr ""
 
 msgid "DNS-Server"
+msgstr ""
+
+msgid "Date format"
 msgstr ""
 
 msgid "Defines the Web page to read systems IPv4-Address from"
@@ -115,7 +153,17 @@ msgstr ""
 msgid "Details for"
 msgstr ""
 
+msgid "Directory contains Log files for each running section"
+msgstr ""
+
+msgid ""
+"Directory contains PID and other status information for each running section"
+msgstr ""
+
 msgid "Disabled"
+msgstr ""
+
+msgid "Domain"
 msgstr ""
 
 msgid "Dynamic DNS"
@@ -158,6 +206,12 @@ msgid ""
 "run DDNS scripts with all options"
 msgstr ""
 
+msgid "For detailed information about parameter settings look here."
+msgstr ""
+
+msgid "For supported codes look here"
+msgstr ""
+
 msgid "Force IP Version"
 msgstr ""
 
@@ -179,13 +233,21 @@ msgstr ""
 msgid "Format: IP or FQDN"
 msgstr ""
 
+msgid ""
+"GNU Wget will use the IP of given network, cURL will use the physical "
+"interface."
+msgstr ""
+
+msgid "Global Settings"
+msgstr ""
+
 msgid "HTTPS not supported"
 msgstr ""
 
 msgid "Hints"
 msgstr ""
 
-msgid "Hostname/Domain"
+msgid "Hostname/FQDN to validate, if IP update happen or necessary"
 msgstr ""
 
 msgid "IP address source"
@@ -212,9 +274,20 @@ msgstr ""
 msgid "IPv6-Address"
 msgstr ""
 
+msgid "If both cURL and GNU Wget are installed, Wget is used by default."
+msgstr ""
+
 msgid ""
 "If this service section is disabled it could not be started.<br />Neither "
 "from LuCI interface nor from console"
+msgstr ""
+
+msgid "If using secure communication you should verify server certificates!"
+msgstr ""
+
+msgid ""
+"If you want to send updates for IPv4 and IPv6 you need to define two "
+"separate Configurations i.e. 'myddns_ipv4' and 'myddns_ipv6'"
 msgstr ""
 
 msgid ""
@@ -222,6 +295,11 @@ msgid ""
 msgstr ""
 
 msgid "Info"
+msgstr ""
+
+msgid ""
+"Install ca-certificates package or needed certificates by hand into /etc/ssl/"
+"certs default directory"
 msgstr ""
 
 msgid "Interface"
@@ -238,6 +316,9 @@ msgid ""
 "Interval' except '0' are not supported"
 msgstr ""
 
+msgid "It is NOT recommended for casual users to change settings on this page."
+msgstr ""
+
 msgid "Last Update"
 msgstr ""
 
@@ -247,10 +328,27 @@ msgstr ""
 msgid "Log File Viewer"
 msgstr ""
 
+msgid "Log directory"
+msgstr ""
+
+msgid "Log length"
+msgstr ""
+
 msgid "Log to file"
 msgstr ""
 
 msgid "Log to syslog"
+msgstr ""
+
+msgid "Lookup Hostname"
+msgstr ""
+
+msgid "NOT installed"
+msgstr ""
+
+msgid ""
+"Neither GNU Wget with SSL nor cURL installed to select a network to use for "
+"communication."
 msgstr ""
 
 msgid ""
@@ -270,13 +368,22 @@ msgstr ""
 msgid "Next Update"
 msgstr ""
 
+msgid "No certificates found"
+msgstr ""
+
 msgid "No data"
 msgstr ""
 
 msgid "No logging"
 msgstr ""
 
+msgid "Non-public and by default blocked IP's"
+msgstr ""
+
 msgid "Notice"
+msgstr ""
+
+msgid "Number of last lines stored in log files"
 msgstr ""
 
 msgid "OPTIONAL: Force the usage of pure IPv4/IPv6 only communication."
@@ -285,19 +392,34 @@ msgstr ""
 msgid "OPTIONAL: Force the use of TCP instead of default UDP on DNS requests."
 msgstr ""
 
+msgid "OPTIONAL: Network to use for communication"
+msgstr ""
+
 msgid "OPTIONAL: Proxy-Server for detection and updates."
 msgstr ""
 
 msgid "OPTIONAL: Use non-default DNS-Server to detect 'Registered IP'."
 msgstr ""
 
-msgid "Old version of ddns-scripts installed"
-msgstr ""
-
 msgid "On Error the script will retry the failed action after given time"
 msgstr ""
 
 msgid "On Error the script will stop execution after given number of retrys"
+msgstr ""
+
+msgid "OpenWrt Wiki"
+msgstr ""
+
+msgid "Optional Encoded Parameter"
+msgstr ""
+
+msgid "Optional Parameter"
+msgstr ""
+
+msgid "Optional: Replaces [PARAMENC] in Update-URL (URL-encoded)"
+msgstr ""
+
+msgid "Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"
 msgstr ""
 
 msgid "Overview"
@@ -330,16 +452,19 @@ msgstr ""
 msgid "Read / Reread log file"
 msgstr ""
 
+msgid "Really change DDNS provider?"
+msgstr ""
+
 msgid "Registered IP"
 msgstr ""
 
 msgid "Replaces [DOMAIN] in Update-URL"
 msgstr ""
 
-msgid "Replaces [PASSWORD] in Update-URL"
+msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
 msgstr ""
 
-msgid "Replaces [USERNAME] in Update-URL"
+msgid "Replaces [USERNAME] in Update-URL (URL-encoded)"
 msgstr ""
 
 msgid "Run once"
@@ -354,10 +479,16 @@ msgstr ""
 msgid "Software update required"
 msgstr ""
 
+msgid "Specifying a DNS-Server is not supported"
+msgstr ""
+
 msgid "Start"
 msgstr ""
 
 msgid "Start / Stop"
+msgstr ""
+
+msgid "Status directory"
 msgstr ""
 
 msgid "Stopped"
@@ -368,10 +499,19 @@ msgid ""
 "settings."
 msgstr ""
 
+msgid "The default setting of '0' will retry infinite."
+msgstr ""
+
 msgid "There is no service configured."
 msgstr ""
 
 msgid "Timer Settings"
+msgstr ""
+
+msgid "To change global settings click here"
+msgstr ""
+
+msgid "To use cURL activate this option."
 msgstr ""
 
 msgid "URL"
@@ -394,10 +534,16 @@ msgstr ""
 msgid "Use HTTP Secure"
 msgstr ""
 
+msgid "Use cURL"
+msgstr ""
+
 msgid "User defined script to read systems IP-Address"
 msgstr ""
 
 msgid "Username"
+msgstr ""
+
+msgid "Using specific DNS Server not supported"
 msgstr ""
 
 msgid "Verify"
@@ -424,10 +570,26 @@ msgid ""
 "syslog."
 msgstr ""
 
+msgid "You should install BIND host or hostip package for DNS requests."
+msgstr ""
+
+msgid ""
+"You should install BIND host or hostip package, if you need to specify a DNS "
+"server to detect your registered IP."
+msgstr ""
+
 msgid "You should install BIND host package for DNS requests."
 msgstr ""
 
-msgid "You should install GNU Wget with SSL (prefered) or cURL package."
+msgid ""
+"You should install GNU Wget with SSL (preferred) or cURL or uclient-fetch "
+"package."
+msgstr ""
+
+msgid "You should install GNU Wget with SSL (preferred) or cURL package."
+msgstr ""
+
+msgid "You should install GNU Wget with SSL or cURL package."
 msgstr ""
 
 msgid "You should install GNU Wget with SSL or replace libcurl."
@@ -463,16 +625,16 @@ msgstr ""
 msgid "file or directory not found or not 'IGNORE'"
 msgstr ""
 
-msgid "hours"
+msgid "help"
 msgstr ""
 
-msgid "install update here"
+msgid "hours"
 msgstr ""
 
 msgid "installed"
 msgstr ""
 
-msgid "invalid - Sample"
+msgid "invalid FQDN / required - Sample"
 msgstr ""
 
 msgid "minimum value '0'"
@@ -527,6 +689,9 @@ msgid "please select 'IPv4' address version"
 msgstr ""
 
 msgid "please select 'IPv4' address version in"
+msgstr ""
+
+msgid "please set to 'default'"
 msgstr ""
 
 msgid "proxy port missing"

@@ -31,12 +31,6 @@ msgstr ""
 msgid "(Unnamed SNAT)"
 msgstr ""
 
-msgid "-- Please choose --"
-msgstr "-- Παρακαλώ επιλέξτε --"
-
-msgid "-- custom --"
-msgstr "-- προσαρμοσμένο --"
-
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> πκτ. ανά <var>%s</var>"
 
@@ -147,6 +141,9 @@ msgstr "Προώθηση"
 msgid "Forward to"
 msgstr ""
 
+msgid "Friday"
+msgstr ""
+
 msgid "From %s in %s"
 msgstr "Απο %s στο %s"
 
@@ -218,6 +215,12 @@ msgstr ""
 msgid ""
 "Match incoming traffic originating from the given source port or port range "
 "on the client host."
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+msgid "Month Days"
 msgstr ""
 
 msgid "Name"
@@ -311,6 +314,9 @@ msgstr ""
 msgid "SNAT port"
 msgstr ""
 
+msgid "Saturday"
+msgstr ""
+
 #, fuzzy
 msgid "Source IP address"
 msgstr "Διεύθυνση MAC πηγής"
@@ -337,6 +343,21 @@ msgstr "Θύρα πηγής"
 #, fuzzy
 msgid "Source zone"
 msgstr "Θύρα πηγής"
+
+msgid "Start Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Start Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -372,6 +393,12 @@ msgid ""
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
 
+msgid "Thursday"
+msgstr ""
+
+msgid "Time in UTC"
+msgstr ""
+
 msgid "To %s at %s on <var>this device</var>"
 msgstr ""
 
@@ -399,10 +426,19 @@ msgid ""
 "the router."
 msgstr ""
 
+msgid "Tuesday"
+msgstr ""
+
 msgid "Via %s"
 msgstr ""
 
 msgid "Via %s at %s"
+msgstr ""
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Week Days"
 msgstr ""
 
 msgid ""
@@ -445,6 +481,12 @@ msgstr "απόρριψη"
 
 msgid "traffic"
 msgstr ""
+
+#~ msgid "-- Please choose --"
+#~ msgstr "-- Παρακαλώ επιλέξτε --"
+
+#~ msgid "-- custom --"
+#~ msgstr "-- προσαρμοσμένο --"
 
 #~ msgid "Destination"
 #~ msgstr "Προορισμός"

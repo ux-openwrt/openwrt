@@ -33,12 +33,6 @@ msgstr "(Regla sense nom)"
 msgid "(Unnamed SNAT)"
 msgstr "(SNAT sense nom)"
 
-msgid "-- Please choose --"
-msgstr "-- Si us plau, trieu --"
-
-msgid "-- custom --"
-msgstr "-- personalitzats --"
-
 msgid "<var>%d</var> pkts. per <var>%s</var>"
 msgstr "<var>%d</var> paquets al <var>%s</var>"
 
@@ -151,6 +145,9 @@ msgstr "Reenvia"
 msgid "Forward to"
 msgstr "Reenvia a"
 
+msgid "Friday"
+msgstr ""
+
 msgid "From %s in %s"
 msgstr "Des de %s en %s"
 
@@ -225,6 +222,12 @@ msgid ""
 msgstr ""
 "Coincideix amb trànsit entrant originant en el host client des del port o "
 "rang de ports d'origen donat."
+
+msgid "Monday"
+msgstr ""
+
+msgid "Month Days"
+msgstr ""
 
 msgid "Name"
 msgstr "Nom"
@@ -323,6 +326,9 @@ msgstr "Adreça IP de SNAT"
 msgid "SNAT port"
 msgstr "Port SNAT"
 
+msgid "Saturday"
+msgstr ""
+
 msgid "Source IP address"
 msgstr "Adreça IP d'origen"
 
@@ -349,6 +355,21 @@ msgstr "Port d'origen"
 
 msgid "Source zone"
 msgstr "Zona d'origen"
+
+msgid "Start Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Start Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Stop Date (yyyy-mm-dd)"
+msgstr ""
+
+msgid "Stop Time (hh:mm:ss)"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
 
 msgid ""
 "The firewall creates zones over your network interfaces to control network "
@@ -402,6 +423,12 @@ msgstr ""
 "<em>Xarxes cobertes</em> especifica quines xarxes disponibles són membres "
 "d'aquesta zona."
 
+msgid "Thursday"
+msgstr ""
+
+msgid "Time in UTC"
+msgstr ""
+
 msgid "To %s at %s on <var>this device</var>"
 msgstr "A %s a %s en <var>aquest dispositiu</var>"
 
@@ -432,11 +459,20 @@ msgstr ""
 "zones distintes, per exemple per a rebutjar trànsit entre certs hosts o "
 "obrir ports WAN en el encaminador."
 
+msgid "Tuesday"
+msgstr ""
+
 msgid "Via %s"
 msgstr "Via %s"
 
 msgid "Via %s at %s"
 msgstr "Via %s a %s"
+
+msgid "Wednesday"
+msgstr ""
+
+msgid "Week Days"
+msgstr ""
 
 msgid ""
 "You may specify multiple by selecting \"-- custom --\" and then entering "
@@ -480,6 +516,12 @@ msgstr "rebutja"
 
 msgid "traffic"
 msgstr "trànsit"
+
+#~ msgid "-- Please choose --"
+#~ msgstr "-- Si us plau, trieu --"
+
+#~ msgid "-- custom --"
+#~ msgstr "-- personalitzats --"
 
 #~ msgid "Destination"
 #~ msgstr "Destí"
