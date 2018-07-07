@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013 OpenWrt.org
+# Copyright (C) 2014 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,12 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kamailio4
-PKG_VERSION:=4.0.0
-PKG_RELEASE:=1
+PKG_VERSION:=4.1.5
+PKG_RELEASE:=3
 
 PKG_SOURCE_URL:=http://www.kamailio.org/pub/kamailio/$(PKG_VERSION)/src/
 PKG_SOURCE:=kamailio-$(PKG_VERSION)$(PKG_VARIANT)_src.tar.gz
-PKG_MD5SUM:=1f26e115370dbfb90dc6869553a9af6d
+PKG_MD5SUM:=623b46e969445494655b1aa5ab5ad4b0
+PKG_USE_MIPS16:=0
 
 INCL_MODULES:=
 KAM_MODULES:=
@@ -30,12 +31,13 @@ define Package/kamailio4/Default
   CATEGORY:=Network
   SUBMENU:=Telephony
   URL:=http://www.kamailio.org/
+  MAINTAINER:=Jiri Slachta <slachta@cesnet.cz>
   DEPENDS:=$(ICONV_DEPENDS) +libncurses +libpthread +libreadline +libxml2
 endef
 
 define Package/kamailio4
 $(call Package/kamailio4/Default)
-  TITLE:=Mature and flexible open source SIP server, v4.0.x
+  TITLE:=Mature and flexible open source SIP server, v$(PKG_VERSION)
   MENU:=1
 endef
 
@@ -44,13 +46,12 @@ define Package/kamailio4/conffiles
 /etc/kamailio/kamailio.cfg
 /etc/kamailio/kamailio-advanced.cfg
 /etc/kamailio/dictionary.kamailio
-/etc/kamailio/tls.cfg
 endef
 
 define Package/kamailio4-tools
 $(call Package/kamailio4/Default)
   TITLE:=Kamailio4 control tools
-  DEPENDS:=kamailio4 +bash
+  DEPENDS:=kamailio4
 endef
 
 define Package/kamailio4-tools/conffiles
@@ -68,7 +69,11 @@ define Package/kamailio4/install
 		$(1)/usr/lib/kamailio/
 	$(INSTALL_DIR) $(1)/etc/kamailio
 	$(CP) \
-		$(PKG_INSTALL_DIR)/usr/etc/kamailio/*{kamailio,tls}* \
+		$(PKG_INSTALL_DIR)/etc/kamailio/{kamailio-advanced.cfg,kamailio.cfg} \
+		$(1)/etc/kamailio/
+	$(INSTALL_DIR) $(1)/etc/kamailio
+	$(CP) \
+		$(PKG_INSTALL_DIR)/etc/kamailio/dictionary.kamailio \
 		$(1)/etc/kamailio/
 	$(INSTALL_DIR) $(1)/etc/default
 	$(CP) \
@@ -77,7 +82,7 @@ define Package/kamailio4/install
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) \
 		./files/kamailio.init \
-		$(1)/etc/init.d/kamailio	
+		$(1)/etc/init.d/kamailio
 endef
 
 define Package/kamailio4-tools/install
@@ -86,7 +91,7 @@ define Package/kamailio4-tools/install
 		$(PKG_BUILD_DIR)/utils/kamctl/kamctlrc \
 		$(1)/etc/kamailio/
 	$(INSTALL_DIR) $(1)/usr/sbin
-	$(CP) \
+	$(INSTALL_BIN) \
 		$(PKG_INSTALL_DIR)/usr/sbin/kam{ctl,dbctl} \
 		$(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/kamailio
@@ -104,26 +109,34 @@ define BuildPlugin
 
   define Package/kamailio4-mod-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/kamailio/modules
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/kamailio/modules/$(2).so \
-			$$(1)/usr/lib/kamailio/modules/ ;
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/kamailio/modules/$(2).so $$(1)/usr/lib/kamailio/modules/
   endef
 
   INCL_MODULES+=$(2)
   KAM_MODULES+=kamailio4-mod-$(1)
 endef
 
+################################
+# Kamailio modules
+# Params:
+# 1 - Package subname
+# 2 - Module name
+# 3 - Module description
+# 4 - Dependencies to internal modules
+# 5 - Dependencies to external libs/apps
+################################
+
 $(eval $(call BuildPlugin,acc,acc,Accounting,tm,))
-$(eval $(call BuildPlugin,acc-radius,acc_radius,Accounting for RADIUS backend,acc,+libradiusclient-ng))
 $(eval $(call BuildPlugin,alias-db,alias_db,Database-backend aliases,db-sqlite,))
 $(eval $(call BuildPlugin,auth,auth,Authentication Framework,,))
 $(eval $(call BuildPlugin,auth-db,auth_db,Database-backend authentication,auth db-sqlite,))
 $(eval $(call BuildPlugin,auth-diameter,auth_diameter,Diameter-backend authentication,sl,))
-$(eval $(call BuildPlugin,auth-radius,auth_radius,RADIUS-backend authentication,auth,+libradiusclient-ng))
 $(eval $(call BuildPlugin,avpops,avpops,AVP operation,,))
 $(eval $(call BuildPlugin,benchmark,benchmark,Config benchmark,,))
 $(eval $(call BuildPlugin,cfgutils,cfgutils,Config utilities,,))
 $(eval $(call BuildPlugin,cfg-db,cfg_db,Load core and module parameters from database,db-sqlite,))
 $(eval $(call BuildPlugin,cfg-rpc,cfg_rpc,Update core and module parameters at runtime via RPC interface,,))
+$(eval $(call BuildPlugin,cnxcc,cnxcc,Limit call duration,dialog,))
 $(eval $(call BuildPlugin,corex,corex,Legacy functions,,))
 $(eval $(call BuildPlugin,ctl,ctl,BINRPC transport interface,,))
 $(eval $(call BuildPlugin,db-flatstore,db_flatstore,Fast writing-only text database-backed,,))
@@ -155,13 +168,13 @@ $(eval $(call BuildPlugin,mediaproxy,mediaproxy,Automatic NAT traversal,dialog,)
 $(eval $(call BuildPlugin,mi-datagram,mi_datagram,Datagram support for Management Interface,,))
 $(eval $(call BuildPlugin,mi-fifo,mi_fifo,FIFO support for Management Interface,,))
 $(eval $(call BuildPlugin,mi-rpc,mi_rpc,RPC support for Management Interface,,))
-$(eval $(call BuildPlugin,misc_radius,misc_radius,Generic RADIUS,,+libradiusclient-ng))
 $(eval $(call BuildPlugin,msilo,msilo,SIP message silo,tm,))
+$(eval $(call BuildPlugin,msrp,msrp,MSRP routing engine,tls,))
+$(eval $(call BuildPlugin,nathelper,nathelper,NAT helper,usrloc,))
 $(eval $(call BuildPlugin,nat_traversal,nat_traversal,NAT traversal,dialog sl tm,))
 $(eval $(call BuildPlugin,nathelper,nathelper,NAT traversal helper,,+rtpproxy))
 $(eval $(call BuildPlugin,path,path,SIP path insertion,rr,))
 $(eval $(call BuildPlugin,pdt,pdt,Prefix-to-Domain translator,,))
-$(eval $(call BuildPlugin,peering,peering,Perring,,+libradiusclient-ng))
 $(eval $(call BuildPlugin,permissions,permissions,Permissions control,,))
 $(eval $(call BuildPlugin,pike,pike,Flood detector,,))
 $(eval $(call BuildPlugin,presence,presence,Presence server,sl tm,+libxml2))
@@ -182,6 +195,8 @@ $(eval $(call BuildPlugin,registrar,registrar,SIP Registrar,usrloc,))
 $(eval $(call BuildPlugin,rls,rls,Resource List Server,presence pua tm,+libxml2))
 $(eval $(call BuildPlugin,rr,rr,Record-Route and Route,,))
 $(eval $(call BuildPlugin,rtimer,rtimer,Routing Timer,,))
+$(eval $(call BuildPlugin,rtpproxy,rtpproxy,RTP proxy,tm,))
+$(eval $(call BuildPlugin,rtpproxy-ng,rtpproxy-ng,RTP proxy with new control protocol,tm,))
 $(eval $(call BuildPlugin,sanity,sanity,SIP sanity checks,sl,))
 $(eval $(call BuildPlugin,sipcapture,sipcapture,SIP capture,,))
 $(eval $(call BuildPlugin,siptrace,siptrace,SIP trace,,))
@@ -191,6 +206,7 @@ $(eval $(call BuildPlugin,sms,sms,SIP-to-SMS IM gateway,tm,))
 $(eval $(call BuildPlugin,speeddial,speeddial,Per-user speed-dial controller,,))
 $(eval $(call BuildPlugin,sqlops,sqlops,SQL operations,,))
 $(eval $(call BuildPlugin,statistics,statistics,Script statistics,,))
+$(eval $(call BuildPlugin,stun,stun,STUN server support,,))
 $(eval $(call BuildPlugin,sst,sst,SIP Session Timer,dialog sl,))
 $(eval $(call BuildPlugin,textops,textops,Text operations,,))
 $(eval $(call BuildPlugin,tls,tls,TLS operations,,+libopenssl))
@@ -208,40 +224,31 @@ $(eval $(call BuildPlugin,xlog,xlog,Advanced logger,,))
 $(eval $(call BuildPlugin,xmpp,xmpp,SIP-to-XMPP Gateway,tm,+libexpat))
 
 PKG_MAKE_ARGS:= \
-	cfg-dir="/etc/kamailio/" \
-	bin-dir="/usr/sbin/" \
-	data-dir="/var/lib/kamailio/" \
-	lib-dir="/usr/lib/kamailio/" \
-	modules-dir="/usr/lib/kamailio/modules/" \
+	prefix=/ \
+	cfg_dir=/etc/kamailio/ \
+	bin_dir=/usr/sbin/ \
+	data_dir=/var/lib/kamailio/ \
+	lib_dir=/usr/lib/kamailio/ \
+	modules_dir=/usr/lib/kamailio/ \
 	include_modules="$(INCL_MODULES)" \
+	cfg_target:=/etc/kamailio/ \
 	TLS_HOOKS=1 \
 	extra_defs="-DUSE_PTHREAD_MUTEX " \
 	CFLAGS="$(TARGET_CFLAGS)" \
-	ISSMP="no" \
 	LOCALBASE="$(STAGING_DIR)/usr" \
 	SYSBASE="$(STAGING_DIR)/usr" \
 	PCREDEFS:="$(TARGET_CPPFLAGS)" \
 	PCRELIBS:="$(TARGET_LDFLAGS)" \
-	cfg_target:=/etc/kamailio/ \
-	PREFIX:=/usr \
 	CROSS_COMPILE=$(TARGET_CROSS) \
 	CC="$(TARGET_CC)" \
 	ARCH="$(ARCH)"  \
 	DESTDIR=$(PKG_INSTALL_DIR) \
-	quiet=verbose \
-	prefix=/usr
-
-define Build/Configure
-	$(MAKE) -C $(PKG_BUILD_DIR) $(PKG_MAKE_ARGS) \
-		cfg
-endef
+	quiet=verbose
 
 define Build/Compile
-	if ! [ -f $(PREBUILT_STAMP) ]; then \
-		echo $(MAKE) -C $(PKG_BUILD_DIR) $(PKG_MAKE_ARGS) \
+	$(MAKE) -C $(PKG_BUILD_DIR) $(PKG_MAKE_ARGS) \
 		EXTRA_LIBS=-L$(STAGING_DIR)/usr/lib/ \
-		all && touch $(PREBUILT_STAMP); \
-	fi
+		all
 	$(MAKE) -C $(PKG_BUILD_DIR) $(PKG_MAKE_ARGS) \
 		install
 endef
