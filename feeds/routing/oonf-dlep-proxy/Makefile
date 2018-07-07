@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=oonf-dlep-proxy
-PKG_VERSION:=0.11.4
-PKG_REV:=a7087466958d3af477fecf4ad8e412ccca33d4c7
+PKG_VERSION:=0.13.0
+PKG_REV:=9f941b25e1ac806db9d41e9892a5cf361bfe98f5
 PKG_RELEASE:=$(PKG_REV)
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
@@ -21,7 +21,7 @@ CMAKE_OPTIONS=-D OONF_NO_WERROR:Bool=true \
               -D OONF_NO_TESTING:Bool=true \
               -D UCI:Bool=true \
               -D OONF_APP_DEFAULT_CFG_HANDLER:String=uci \
-              -D OONF_STATIC_PLUGINS:String="class;clock;interface;layer2;packet_socket;socket;stream_socket;telnet;timer;viewer;os_clock;os_fd;os_interface;os_system;nl80211_listener;layer2info;systeminfo;cfg_uciloader;cfg_compact;dlep_proxy" \
+              -D OONF_STATIC_PLUGINS:String="class;clock;layer2;packet_socket;socket;stream_socket;telnet;timer;viewer;os_clock;os_fd;os_interface;os_system;nl80211_listener;layer2info;systeminfo;cfg_uciloader;cfg_compact;dlep_proxy" \
               -D OONF_LIB_GIT:String=v$(PKG_VERSION)-archive \
               -D OONF_VERSION:String=$(PKG_VERSION) \
               -D INSTALL_LIB_DIR:Path=lib/oonf \

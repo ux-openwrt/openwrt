@@ -1,4 +1,3 @@
-#    Copyright (C) 2011 Fundacio Privada per a la Xarxa Oberta, Lliure i Neutral guifi.net
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -28,12 +27,12 @@ PKG_NAME:=bmx7
 
 PKG_SOURCE_PROTO:=git
 
-#PKG_SOURCE_URL:=file:///usr/src/bmx6/bmx6.git
 #PKG_SOURCE_URL:=git://bmx6.net/bmx6.git
 PKG_SOURCE_URL:=git://github.com/axn/bmx6.git
+#PKG_SOURCE_URL:=file:///usr/src/bmx6/bmx6.git
 
-PKG_REV:=60143a195478a98e73089566bbfde78cf193ed67
-PKG_VERSION:=r2016021505
+PKG_REV:=589ee21b49d370056a24d8931d663626608f3c12
+PKG_VERSION:=r2017011101
 PKG_RELEASE:=4
 PKG_LICENSE:=GPL-2.0
 
@@ -46,9 +45,11 @@ include $(INCLUDE_DIR)/package.mk
 
 TARGET_CFLAGS += $(FPIC)
 
+#MAKE_ARGS += EXTRA_CFLAGS="$(TARGET_CFLAGS) -I. -I$(STAGING_DIR)/usr/include -DCRYPTLIB=POLARSSL_1_3_4 -DCORE_LIMIT=20000 -DTRAFFIC_DUMP -DNO_TRACE_FUNCTION_CALLS -DBMX7_LIB_IWINFO"
+MAKE_ARGS += EXTRA_CFLAGS="$(TARGET_CFLAGS) -I. -I$(STAGING_DIR)/usr/include -DCRYPTLIB=MBEDTLS_2_4_0 -DCORE_LIMIT=20000 -DTRAFFIC_DUMP -DNO_TRACE_FUNCTION_CALLS -DBMX7_LIB_IWINFO"
+
 MAKE_ARGS += \
-        EXTRA_CFLAGS="$(TARGET_CFLAGS) -I. -I$(STAGING_DIR)/usr/include -DCRYPTLIB=POLARSSL_1_3_4 -DCORE_LIMIT=20000 -DTRAFFIC_DUMP -DNO_TRACE_FUNCTION_CALLS" \
-        EXTRA_LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib " \
+        EXTRA_LDFLAGS="$(TARGET_LDFLAGS) -L$(STAGING_DIR)/usr/lib -liwinfo" \
         GIT_REV="$(PKG_REV)" \
         CC="$(TARGET_CC)" \
         INSTALL_DIR="$(PKG_INSTALL_DIR)" \
@@ -61,7 +62,8 @@ define Package/bmx7/Default
   TITLE:=BMX7 layer 3 routing daemon
   URL:=http://bmx6.net/
   MAINTAINER:=Axel Neumann <neumann@cgws.de>
-  DEPENDS:=+zlib +libpolarssl
+#  DEPENDS:=+zlib +libpolarssl +libiwinfo
+  DEPENDS:=+zlib +libmbedtls +libiwinfo
 endef
 
 define Package/bmx7/description
@@ -77,6 +79,18 @@ define Package/bmx7-uci-config
   $(call Package/bmx7/Default)
   DEPENDS:=bmx7 +libuci
   TITLE:=configuration plugin based on uci (recommended!)
+endef
+
+define Package/bmx7-iwinfo
+  $(call Package/bmx7/Default)
+  DEPENDS:=bmx7 +libiwinfo
+  TITLE:=link characteristics plugin based on libiwinfo (recommended!)
+endef
+
+define Package/bmx7-topology
+  $(call Package/bmx7/Default)
+  DEPENDS:=bmx7
+  TITLE:=topology plugin
 endef
 
 define Package/bmx7-json
@@ -138,6 +152,16 @@ define Package/bmx7-uci-config/install
 	$(INSTALL_DATA) ./files/etc/config/bmx7 $(1)/etc/config/bmx7
 endef
 
+define Package/bmx7-iwinfo/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/bmx7_iwinfo/bmx7_iwinfo.so $(1)/usr/lib/bmx7_iwinfo.so
+endef
+
+define Package/bmx7-topology/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/bmx7_topology/bmx7_topology.so $(1)/usr/lib/bmx7_topology.so
+endef
+
 define Package/bmx7-json/install
 	$(INSTALL_DIR) $(1)/usr/lib
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/lib/bmx7_json/bmx7_json.so $(1)/usr/lib/bmx7_json.so
@@ -161,6 +185,8 @@ endef
 
 $(eval $(call BuildPackage,bmx7))
 $(eval $(call BuildPackage,bmx7-uci-config))
+$(eval $(call BuildPackage,bmx7-iwinfo))
+$(eval $(call BuildPackage,bmx7-topology))
 $(eval $(call BuildPackage,bmx7-json))
 $(eval $(call BuildPackage,bmx7-sms))
 $(eval $(call BuildPackage,bmx7-table))

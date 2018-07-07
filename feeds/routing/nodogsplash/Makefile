@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2013-2015 OpenWrt.org
+# Copyright (C) 2013-2016 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,13 +9,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nodogsplash
 PKG_FIXUP:=autoreconf
-PKG_VERSION:=0.9_beta9.9.9
-PKG_RELEASE:=6
+PKG_VERSION:=1.0.1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=git://github.com/nodogsplash/nodogsplash.git
-PKG_SOURCE_VERSION:=v0.9_beta9.9.9
+PKG_SOURCE_VERSION:=485d6dba05cce7a4ed87c28beaaf1199c0f832cf
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_PARALLEL:=1
 PKG_LICENSE:=GPL-2.0+
