@@ -14,7 +14,7 @@ PKG_VERSION:=v4.2-r$(PKG_REV)
 PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://svn.code.sf.net/p/chan-sccp-b/code/branches/V4.2
+PKG_SOURCE_URL:=http://svn.code.sf.net/p/chan-sccp-b/code/branches/v4.2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=$(PKG_REV)
 PKG_SOURCE_PROTO:=svn
@@ -40,18 +40,21 @@ define Package/asterisk18-chan-sccp-b
 $(call Package/chan-sccp-b/Default)
   DEPENDS+= asterisk18
   VARIANT:=asterisk18
+  CONFLICTS:=asterisk18-chan-skinny
 endef
 
 define Package/asterisk13-chan-sccp-b
 $(call Package/chan-sccp-b/Default)
   DEPENDS+= asterisk13
   VARIANT:=asterisk13
+  CONFLICTS:=asterisk13-chan-skinny
 endef
 
 define Package/asterisk11-chan-sccp-b
 $(call Package/chan-sccp-b/Default)
   DEPENDS+= asterisk11 
   VARIANT:=asterisk11
+  CONFLICTS:=asterisk11-chan-skinny
 endef
 
 define Package/description/Default
