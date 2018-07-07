@@ -153,6 +153,11 @@ msgstr "Maximum de requêtes concurrentes"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -428,9 +433,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr "Contrôleur sans fil Atheros 802.11%s "
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1491,6 +1493,9 @@ msgstr "longueur du préfixe IPv6"
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr "Adresse IPv6"
 
@@ -1599,6 +1604,9 @@ msgstr "Paquets installés"
 msgid "Interface"
 msgstr "Interface"
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr "Configuration de l'interface"
 
@@ -1657,6 +1665,9 @@ msgstr ""
 "image !"
 
 msgid "Java Script required!"
+msgstr ""
+
+msgid "JavaScript required!"
 msgstr "Nécessite un Script Java !"
 
 msgid "Join Network"
@@ -1724,9 +1735,6 @@ msgstr "Durée de validité d'un bail"
 
 msgid "Leasefile"
 msgstr "Fichier de baux"
-
-msgid "Leasetime"
-msgstr "Durée du bail"
 
 msgid "Leasetime remaining"
 msgstr "Durée de validité"
@@ -2245,12 +2253,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3785,8 +3797,12 @@ msgstr ""
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
 msgstr ""
-"Vous devez activer Java Script dans votre navigateur pour que LuCI "
-"fonctionne correctement."
+
+msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr ""
+"Vous devez activer JavaScript dans votre navigateur pour que LuCI fonctionne "
+"correctement."
 
 msgid ""
 "Your Internet Explorer is too old to display this page correctly. Please "
@@ -3799,10 +3815,6 @@ msgstr "n'importe lequel"
 
 msgid "auto"
 msgstr "auto"
-
-#, fuzzy
-msgid "automatic"
-msgstr "statique"
 
 msgid "baseT"
 msgstr "baseT"
@@ -3878,9 +3890,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr "non"
 
@@ -3912,12 +3921,6 @@ msgid "routed"
 msgstr "routé"
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3955,6 +3958,13 @@ msgstr "oui"
 
 msgid "« Back"
 msgstr "« Retour"
+
+#~ msgid "Leasetime"
+#~ msgstr "Durée du bail"
+
+#, fuzzy
+#~ msgid "automatic"
+#~ msgstr "statique"
 
 #~ msgid "An additional network will be created if you leave this unchecked."
 #~ msgstr "Un réseau supplémentaire sera créé si vous laissé ceci décoché."

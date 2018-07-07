@@ -143,6 +143,11 @@ msgstr ""
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr ""
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -417,9 +422,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr "שלט אלחוטי Atheros 802.11%s"
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1440,6 +1442,9 @@ msgstr ""
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr ""
 
@@ -1540,6 +1545,9 @@ msgstr ""
 msgid "Interface"
 msgstr ""
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr ""
 
@@ -1591,6 +1599,9 @@ msgid ""
 msgstr ""
 
 msgid "Java Script required!"
+msgstr ""
+
+msgid "JavaScript required!"
 msgstr ""
 
 msgid "Join Network"
@@ -1657,9 +1668,6 @@ msgid "Lease validity time"
 msgstr ""
 
 msgid "Leasefile"
-msgstr ""
-
-msgid "Leasetime"
 msgstr ""
 
 msgid "Leasetime remaining"
@@ -2161,12 +2169,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3601,7 +3613,11 @@ msgstr ""
 
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
-msgstr "אתה חייב להפעיל את Java Script בדפדפן שלך; אחרת, LuCI לא יפעל כראוי."
+msgstr ""
+
+msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr "אתה חייב להפעיל את JavaScript בדפדפן שלך; אחרת, LuCI לא יפעל כראוי."
 
 msgid ""
 "Your Internet Explorer is too old to display this page correctly. Please "
@@ -3614,9 +3630,6 @@ msgstr "כלשהו"
 
 msgid "auto"
 msgstr "אוטומטי"
-
-msgid "automatic"
-msgstr ""
 
 msgid "baseT"
 msgstr ""
@@ -3692,9 +3705,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr "לא"
 
@@ -3726,12 +3736,6 @@ msgid "routed"
 msgstr "מנותב"
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"

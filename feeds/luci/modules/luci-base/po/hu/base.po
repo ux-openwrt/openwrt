@@ -150,6 +150,11 @@ msgstr "<abbr title=\"maximal\">Max.</abbr> párhuzamos lekérdezés"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -421,9 +426,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr "Atheros 802.11%s vezeték-nélküli vezérlő"
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1480,6 +1482,9 @@ msgstr "IPv6 prefix hossz"
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr "IPv6-cím"
 
@@ -1589,6 +1594,9 @@ msgstr "Telepített csomagok"
 msgid "Interface"
 msgstr "Interfész"
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr "Interfész beállítások"
 
@@ -1646,7 +1654,10 @@ msgstr ""
 "ellenőrizze a kép fájlt!"
 
 msgid "Java Script required!"
-msgstr "Javascript szükséges!"
+msgstr ""
+
+msgid "JavaScript required!"
+msgstr "JavaScript szükséges!"
 
 msgid "Join Network"
 msgstr "Csatlakozás a hálózathoz"
@@ -1713,9 +1724,6 @@ msgstr "Bérlet érvényességi ideje"
 
 msgid "Leasefile"
 msgstr "Bérlet fájl"
-
-msgid "Leasetime"
-msgstr "Bérlet időtartama"
 
 msgid "Leasetime remaining"
 msgstr "A bérletből hátralévő idő"
@@ -2235,12 +2243,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3772,6 +3784,10 @@ msgstr ""
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
 msgstr ""
+
+msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr ""
 "Engélyezze a Java Szkripteket a böngészőjében, mert anélkül a LuCI nem fog "
 "megfelelően működni."
 
@@ -3786,9 +3802,6 @@ msgstr "bármelyik"
 
 msgid "auto"
 msgstr "automatikus"
-
-msgid "automatic"
-msgstr ""
 
 msgid "baseT"
 msgstr "baseT"
@@ -3866,9 +3879,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr "nem"
 
@@ -3900,12 +3910,6 @@ msgid "routed"
 msgstr "irányított"
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3943,6 +3947,9 @@ msgstr "igen"
 
 msgid "« Back"
 msgstr "« Vissza"
+
+#~ msgid "Leasetime"
+#~ msgstr "Bérlet időtartama"
 
 #~ msgid "An additional network will be created if you leave this unchecked."
 #~ msgstr "Amennyiben ezt jelöletlenül hagyja, egy további hálózat jön létre"

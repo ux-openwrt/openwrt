@@ -147,6 +147,11 @@ msgstr "<abbr title=\"Maksimal\">Maks.</abbr> samtidige spørringer"
 msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
 msgstr "<abbr title='Parvis: %s / Gruppe: %s'>%s - %s</abbr>"
 
+msgid ""
+"<br/>Note: you need to manually restart the cron service if the crontab file "
+"was empty before editing."
+msgstr ""
+
 msgid "A43C + J43 + A43"
 msgstr ""
 
@@ -414,9 +419,6 @@ msgid "Atheros 802.11%s Wireless Controller"
 msgstr "Atheros 802.11%s Trådløs Kontroller"
 
 msgid "Auth Group"
-msgstr ""
-
-msgid "AuthGroup"
 msgstr ""
 
 msgid "Authentication"
@@ -1466,6 +1468,9 @@ msgstr "IPv6 prefikslengde"
 msgid "IPv6 routed prefix"
 msgstr ""
 
+msgid "IPv6 suffix"
+msgstr ""
+
 msgid "IPv6-Address"
 msgstr "IPv6-Adresse"
 
@@ -1570,6 +1575,9 @@ msgstr "Installerte pakker"
 msgid "Interface"
 msgstr "Grensesnitt"
 
+msgid "Interface %q device auto-migrated from %q to %q."
+msgstr ""
+
 msgid "Interface Configuration"
 msgstr "Grensesnitt Konfigurasjon"
 
@@ -1624,7 +1632,10 @@ msgstr ""
 "flash-minnet, vennligst kontroller firmware filen!"
 
 msgid "Java Script required!"
-msgstr "Java Script kreves!"
+msgstr ""
+
+msgid "JavaScript required!"
+msgstr "JavaScript kreves!"
 
 msgid "Join Network"
 msgstr "Koble til nettverket"
@@ -1691,9 +1702,6 @@ msgstr "Gyldig leietid"
 
 msgid "Leasefile"
 msgstr "<abbr title=\"Leasefile\">Leie-fil</abbr>"
-
-msgid "Leasetime"
-msgstr "<abbr title=\"Leasetime\">Leietid</abbr>"
 
 msgid "Leasetime remaining"
 msgstr "Gjenværende leietid"
@@ -2210,12 +2218,16 @@ msgstr ""
 msgid "Optional, use when the SIXXS account has more than one tunnel"
 msgstr ""
 
-msgid "Optional."
-msgstr ""
-
 msgid ""
 "Optional. Adds in an additional layer of symmetric-key cryptography for post-"
 "quantum resistance."
+msgstr ""
+
+msgid ""
+"Optional. Allowed values: 'eui64', 'random', fixed value like '::1' or "
+"'::1:2'. When IPv6 prefix (like 'a:b:c:d::') is received from a delegating "
+"server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
+"for the interface."
 msgstr ""
 
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -3738,7 +3750,11 @@ msgstr ""
 msgid ""
 "You must enable Java Script in your browser or LuCI will not work properly."
 msgstr ""
-"Du må aktivere Java Script i nettleseren din ellers vil ikke LuCI fungere "
+
+msgid ""
+"You must enable JavaScript in your browser or LuCI will not work properly."
+msgstr ""
+"Du må aktivere JavaScript i nettleseren din ellers vil ikke LuCI fungere "
 "skikkelig."
 
 msgid ""
@@ -3752,9 +3768,6 @@ msgstr "enhver"
 
 msgid "auto"
 msgstr "auto"
-
-msgid "automatic"
-msgstr ""
 
 msgid "baseT"
 msgstr "baseT"
@@ -3832,9 +3845,6 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-msgid "navigation Navigation"
-msgstr ""
-
 msgid "no"
 msgstr "nei"
 
@@ -3866,12 +3876,6 @@ msgid "routed"
 msgstr "rutet"
 
 msgid "server mode"
-msgstr ""
-
-msgid "skiplink1 Skip to navigation"
-msgstr ""
-
-msgid "skiplink2 Skip to content"
 msgstr ""
 
 msgid "stateful-only"
@@ -3909,6 +3913,9 @@ msgstr "ja"
 
 msgid "« Back"
 msgstr "« Tilbake"
+
+#~ msgid "Leasetime"
+#~ msgstr "<abbr title=\"Leasetime\">Leietid</abbr>"
 
 #~ msgid "An additional network will be created if you leave this unchecked."
 #~ msgstr "Et nytt nettverk vil bli opprettet hvis du tar bort haken."
