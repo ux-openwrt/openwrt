@@ -8,14 +8,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=2.5.3
+PKG_VERSION:=2.7.1
 PKG_RELEASE:=1
 PKG_LICENSE:=GPL-3.0+
 PKG_LICENSE_FILES:=COPYING
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=@GNU/nano
-PKG_MD5SUM:=a04d77611422ab4b6a7b489650c7a793
+PKG_MD5SUM:=df5cbe69831d7394c0a32fb27373ab313335ea4dc586d6f4be4081eb1de857cd
 
 PKG_INSTALL:=1
 PKG_BUILD_PARALLEL:=1
@@ -33,7 +33,7 @@ define Package/nano
 endef
 
 define Package/nano/description
-  GNU nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone
+  Nano (Nano's ANOther editor, or Not ANOther editor) is an enhanced clone
   of the Pico text editor.
 endef
 

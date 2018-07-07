@@ -5,8 +5,7 @@
 # See /LICENSE for more information.
 #
 
-PYTHON_VERSION:=2.7
-PYTHON_VERSION_MICRO:=11
+$(call include_mk, python-version.mk)
 
 PYTHON_DIR:=$(STAGING_DIR)/usr
 PYTHON_BIN_DIR:=$(PYTHON_DIR)/bin
@@ -45,7 +44,7 @@ define PyPackage
   $(call shexport,PyPackage/$(1)/filespec)
 
   define Package/$(1)/install
-	find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f
+	find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" -o -name "*\.exe" | xargs rm -f
 	@echo "$$$$$$$$$$(call shvar,PyPackage/$(1)/filespec)" | ( \
 		IFS='|'; \
 		while read fop fspec fperm; do \
@@ -82,13 +81,12 @@ endef
 
 $(call include_mk, python-host.mk)
 
-# $(1) => build subdir
-# $(2) => additional arguments to setup.py
+# $(1) => commands to execute before running pythons script
+# $(2) => python script and its arguments
 # $(3) => additional variables
-define Build/Compile/PyMod
-	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)
+define Build/Compile/HostPyRunTarget
 	$(call HostPython, \
-		cd $(PKG_BUILD_DIR)/$(strip $(1)); \
+		$(if $(1),$(1);) \
 		CC="$(TARGET_CC)" \
 		CCSHARED="$(TARGET_CC) $(FPIC)" \
 		CXX="$(TARGET_CXX)" \
@@ -101,9 +99,20 @@ define Build/Compile/PyMod
 		__PYVENV_LAUNCHER__="/usr/bin/$(PYTHON)" \
 		$(3) \
 		, \
-		./setup.py $(2) \
+		$(2) \
 	)
-	find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" | xargs rm -f
+endef
+
+# $(1) => build subdir
+# $(2) => additional arguments to setup.py
+# $(3) => additional variables
+define Build/Compile/PyMod
+	$(INSTALL_DIR) $(PKG_INSTALL_DIR)/$(PYTHON_PKG_DIR)
+	$(call Build/Compile/HostPyRunTarget, \
+		cd $(PKG_BUILD_DIR)/$(strip $(1)), \
+		./setup.py $(2), \
+		$(3))
+	find $(PKG_INSTALL_DIR) -name "*\.pyc" -o -name "*\.pyo" -o -name "*\.exe" | xargs rm -f
 endef
 
 define PyMod/Default
