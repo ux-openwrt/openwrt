@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=perl
 PKG_VERSION:=5.20.0
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PKG_SOURCE_URL:=ftp://ftp.cpan.org/pub/CPAN/src/5.0 \
 		http://www.cpan.org/src/5.0/perl-5.20.0.tar.gz \
@@ -68,6 +68,7 @@ endef
 
 define Host/Install
 	( cd $(HOST_BUILD_DIR); ./miniperl installperl )
+	$(INSTALL_DIR) $(HOST_PERL_PREFIX)/bin/
 	$(CP) $(HOST_BUILD_DIR)/generate_uudmap $(HOST_PERL_PREFIX)/bin/
 endef
 
@@ -99,13 +100,16 @@ endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/lib/perl5/5.20/CORE
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/perl5/5.20/CORE/*.h $(1)/usr/lib/perl5/5.20/CORE/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/perl5/5.20 $(1)/usr/lib/perl5/
 endef
 
 define Package/perl/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/perl$(PKG_VERSION) $(1)/usr/bin
 	ln -nsf perl$(PKG_VERSION) $(1)/usr/bin/perl
+
+	$(INSTALL_DIR) $(1)/usr/lib/perl5/5.20/CORE
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/perl5/5.20/CORE/libperl.so $(1)/usr/lib/perl5/5.20/CORE/
 endef
 
 
