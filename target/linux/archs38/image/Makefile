@@ -10,9 +10,7 @@ include $(INCLUDE_DIR)/image.mk
 # On ARC initramfs is put before entry point and so entry point moves
 # in memory from build to built. Thus we need to extract EP from vmlinux
 # every time before generation of uImage.
-define Build/calculate-ep
-	$(eval KERNEL_ENTRY=$(shell $(KERNEL_CROSS)readelf -h $(1) | grep "Entry point address" | grep -o 0x.*))
-endef
+kernel_ep = `$(KERNEL_CROSS)readelf -h $(1) | grep "Entry point address" | grep -o 0x.*`
 
 define Build/patch-dtb
 	$(STAGING_DIR_HOST)/bin/patch-dtb $@ $(DTS_DIR)/$(DEVICE_DTS).dtb
@@ -35,8 +33,8 @@ TARGET_DEVICES += nsim_hs
 endif
 
 # Root FS on SD-card
-KERNEL_LOADADDR := 0x80000000
-DEVICE_DTS_LIST:= axs103_idu nsim_hs_idu
+KERNEL_LOADADDR := 0x90000000
+DEVICE_DTS_LIST:= axs103_idu nsim_hs_idu hsdk
 FAT32_BLOCK_SIZE=1024
 FAT32_BLOCKS=$(shell echo $$(($(CONFIG_AXS10X_SD_BOOT_PARTSIZE)*1024*1024/$(FAT32_BLOCK_SIZE))))
 
@@ -51,9 +49,11 @@ define Image/Build/SDCard
 	rm -f $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img
 	mkfs.fat $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img -C $(FAT32_BLOCKS)
 	mkimage -C none -A arc -T script -d uEnv.txt $(BIN_DIR)/uEnv.scr
+	mkenvimage -s 0x4000 -o $(BIN_DIR)/uboot.env ./uboot.env.txt
 	mcopy -i $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img $(BIN_DIR)/uEnv.scr ::boot.scr
 	mcopy -i $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img $(DTS_DIR)/*.dtb ::
 	mcopy -i $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img $(BIN_DIR)/$(IMG_PREFIX)-uImage ::uImage
+	mcopy -i $(KDIR_TMP)/$(IMG_PREFIX)-$(PROFILE)-boot.img $(BIN_DIR)/uboot.env ::uboot.env
 
 	./gen_axs10x_sdcard_img.sh \
 		$(BIN_DIR)/$(IMG_PREFIX)-$(PROFILE)-sdcard-vfat-$(1).img \
@@ -69,9 +69,8 @@ endef
 
 define Image/BuildKernel
 	# Build unified uImage
-	$(call Build/calculate-ep, $(KDIR)/vmlinux.elf)
 	$(call Image/BuildKernel/MkuImage, \
-		none, $(KERNEL_LOADADDR), $(KERNEL_ENTRY), \
+		none, $(KERNEL_LOADADDR),$(call kernel_ep,$(KDIR)/vmlinux.elf) , \
 		$(KDIR)/vmlinux, \
 		$(BIN_DIR)/$(IMG_PREFIX)-uImage \
 	)

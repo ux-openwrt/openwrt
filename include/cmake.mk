@@ -34,7 +34,7 @@ CMAKE_NM:=$(call cmake_tool,$(TARGET_NM))
 CMAKE_RANLIB:=$(call cmake_tool,$(TARGET_RANLIB))
 
 CMAKE_FIND_ROOT_PATH:=$(STAGING_DIR)/usr;$(TOOLCHAIN_DIR)$(if $(CONFIG_EXTERNAL_TOOLCHAIN),;$(CONFIG_TOOLCHAIN_ROOT))
-CMAKE_HOST_FIND_ROOT_PATH:=$(STAGING_DIR)/host;$(STAGING_DIR_HOST)
+CMAKE_HOST_FIND_ROOT_PATH:=$(STAGING_DIR)/host;$(STAGING_DIR_HOSTPKG);$(STAGING_DIR_HOST)
 CMAKE_SHARED_LDFLAGS:=-Wl,-Bsymbolic-functions
 
 define Build/Configure/Default
@@ -107,3 +107,7 @@ define Host/Configure/Default
 		$(HOST_CMAKE_SOURCE_DIR) \
 	)
 endef
+
+MAKE_FLAGS += \
+	CMAKE_COMMAND='$$(if $$(CMAKE_DISABLE_$$@),:,$(STAGING_DIR_HOST)/bin/cmake)' \
+	CMAKE_DISABLE_cmake_check_build_system=1

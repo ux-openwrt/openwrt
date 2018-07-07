@@ -2,8 +2,11 @@
 
 #include "mt7628an.dtsi"
 
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
 / {
-	compatible = "mercury,mac1200rv2", "mediatek,mt7628an-soc";
+	compatible = "mercury,mac1200r-v2", "mediatek,mt7628an-soc";
 	model = "Mercury MAC1200R v2";
 
 	chosen {
@@ -19,7 +22,7 @@
 		compatible = "gpio-leds";
 		status {
 			label = "mac1200rv2:green:status";
-			gpios = <&gpio0 11 1>;
+			gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
 		};
 	};
 };
@@ -30,9 +33,8 @@
 	m25p80@0 {
 		#address-cells = <1>;
 		#size-cells = <1>;
-		compatible = "w25q128";
+		compatible = "jedec,spi-nor";
 		reg = <0 0>;
-		linux,modalias = "m25p80", "w25q128";
 		spi-max-frequency = <10000000>;
 		m25p,chunked-io = <32>;
 
@@ -73,7 +75,7 @@
 &ethernet {
 	pinctrl-names = "default";
 	mtd-mac-address = <&factory 0xd>;
-	ralink,port-map = "llllw";
+	mediatek,portmap = "llllw";
 };
 
 &wmac {
@@ -88,7 +90,7 @@
 			reg = <0x0000 0 0 0 0>;
 			device_type = "pci";
 			mediatek,mtd-eeprom = <&art 0x1000>;
-			mediatek,2ghz = <0>;
+			ieee80211-freq-limit = <5000000 6000000>;
 		};
 	};
 };

@@ -3,7 +3,10 @@
 #
 
 define Build/gemtek-header
-	mkheader_gemtek $@ $@.new $(1) && mv $@.new $@
+	if [ -f $@ ]; then \
+		mkheader_gemtek $@ $@.new $(1) && \
+		mv $@.new $@; \
+	fi
 endef
 
 define Device/ar670w
@@ -11,7 +14,7 @@ define Device/ar670w
   BLOCKSIZE := 64k
   DEVICE_TITLE := Airlink AR670W
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
-  KERNEL := $(KERNEL_DTB)
+  KERNEL := $(KERNEL_DTB) | pad-to $$(BLOCKSIZE)
   IMAGES += factory.bin
   IMAGE/factory.bin := $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
 	wrg-header wrgn16a_airlink_ar670w
@@ -20,12 +23,28 @@ TARGET_DEVICES += ar670w
 
 define Device/ar725w
   DTS := AR725W
-  DEVICE_TITLE := Gemtek AR725W
+  DEVICE_TITLE := Airlink AR725W
   IMAGES += factory.bin
-  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size $$$$(IMAGE_SIZE) | \
+  IMAGE/factory.bin := $$(sysupgrade_bin) | check-size 3328k | \
 	gemtek-header ar725w
 endef
 TARGET_DEVICES += ar725w
+
+define Device/dlink_dap-1522-a1
+  DTS := DAP-1522-A1
+  BLOCKSIZE := 64k
+  IMAGE_SIZE := 3801088
+  DEVICE_TITLE := D-Link DAP-1522 A1
+  DEVICE_PACKAGES := kmod-switch-rtl8366s
+  KERNEL := $(KERNEL_DTB)
+  IMAGES += factory.bin
+  IMAGE/factory.bin := \
+	append-kernel | pad-offset $$$$(BLOCKSIZE) 96 | \
+	append-rootfs | pad-rootfs -x 96 | \
+	wrg-header wapnd01_dlink_dap1522 | \
+	check-size $$$$(IMAGE_SIZE)
+endef
+TARGET_DEVICES += dlink_dap-1522-a1
 
 define Device/f5d8235-v1
   DTS := F5D8235_V1
@@ -58,6 +77,7 @@ define Device/wli-tx4-ag300n
   BLOCKSIZE := 64k
   IMAGE_SIZE := $(ralink_default_fw_size_4M)
   DEVICE_TITLE := Buffalo WLI-TX4-AG300N
+  DEVICE_PACKAGES := kmod-switch-ip17xx
 endef
 TARGET_DEVICES += wli-tx4-ag300n
 
