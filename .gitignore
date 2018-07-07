@@ -1,0 +1,11 @@
+*.o
+*.orig
+*.rej
+*.swp
+*.log
+.tags
+tags
+/build*/
+/downloads/
+/releases/
+localmirrors
