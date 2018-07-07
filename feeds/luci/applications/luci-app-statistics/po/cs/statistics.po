@@ -26,6 +26,9 @@ msgstr "Přidat více hostů, oddělených mezerou"
 msgid "Add notification command"
 msgstr "Přidat příkaz pro upozornění"
 
+msgid "Aggregate number of connected users"
+msgstr ""
+
 msgid "Base Directory"
 msgstr "Základní adresář"
 
@@ -58,9 +61,6 @@ msgstr "CollectRoutes"
 
 msgid "CollectTopology"
 msgstr "CollectTopology"
-
-msgid "Collectd"
-msgstr "Collectd"
 
 msgid "Collectd Settings"
 msgstr "Nastavení Collectd"
@@ -128,6 +128,12 @@ msgstr "Email"
 msgid "Enable this plugin"
 msgstr "Povolit tento plugin"
 
+msgid "Entropy"
+msgstr ""
+
+msgid "Entropy Plugin Configuration"
+msgstr ""
+
 msgid "Exec"
 msgstr "Exec"
 
@@ -144,6 +150,15 @@ msgid "Flush cache after"
 msgstr "Vyprázdnit cache po"
 
 msgid "Forwarding between listen and server addresses"
+msgstr ""
+
+msgid "Gather compression statistics"
+msgstr ""
+
+msgid "General plugins"
+msgstr ""
+
+msgid "Generate a separate graph for each logged user"
 msgstr ""
 
 msgid "Graphs"
@@ -172,6 +187,9 @@ msgid ""
 msgstr ""
 "Zde můžete definovat různá kritéria, podle kterých budou vybrána sledovaná "
 "pravidla iptables."
+
+msgid "Hold Ctrl to select multiple items or to deselect entries."
+msgstr ""
 
 msgid "Host"
 msgstr "Hostitel"
@@ -237,6 +255,9 @@ msgstr "Sledovat vše kromě vybraných"
 msgid "Monitor all local listen ports"
 msgstr "Monitorovat všechny naslouchající porty"
 
+msgid "Monitor all sensors"
+msgstr ""
+
 msgid "Monitor devices"
 msgstr "Sledovat zařízení"
 
@@ -300,6 +321,15 @@ msgstr "Nastavení pluginu OLSRd"
 msgid "Only create average RRAs"
 msgstr ""
 
+msgid "OpenVPN"
+msgstr ""
+
+msgid "OpenVPN Plugin Configuration"
+msgstr ""
+
+msgid "OpenVPN status files"
+msgstr ""
+
 msgid "Options"
 msgstr "Možnosti"
 
@@ -358,11 +388,23 @@ msgstr "Skript"
 msgid "Seconds"
 msgstr "Sekundy"
 
+msgid "Sensor list"
+msgstr ""
+
+msgid "Sensors"
+msgstr ""
+
+msgid "Sensors Plugin Configuration"
+msgstr ""
+
 msgid "Server host"
 msgstr "Hostitel serveru"
 
 msgid "Server port"
 msgstr "Port serveru"
+
+msgid "Setup"
+msgstr ""
 
 msgid "Shaping class monitoring"
 msgstr ""
@@ -388,6 +430,12 @@ msgstr "Určuje, jaké informace sbírat o cestách"
 msgid "Specifies what information to collect about the global topology."
 msgstr "Určuje, jaké informace sbírat o globální topologii"
 
+msgid "Splash Leases"
+msgstr ""
+
+msgid "Splash Leases Plugin Configuration"
+msgstr ""
+
 msgid "Statistics"
 msgstr "Statistiky"
 
@@ -405,9 +453,6 @@ msgstr ""
 
 msgid "System Load"
 msgstr "Zatížení systému"
-
-msgid "System plugins"
-msgstr "Systémové pluginy"
 
 msgid "TCP Connections"
 msgstr "TCP spojení"
@@ -430,6 +475,11 @@ msgstr ""
 msgid ""
 "The OLSRd plugin reads information about meshed networks from the txtinfo "
 "plugin of OLSRd."
+msgstr ""
+
+msgid ""
+"The OpenVPN plugin gathers information about the current vpn connection "
+"status."
 msgstr ""
 
 msgid ""
@@ -479,6 +529,9 @@ msgstr ""
 "použití ve spojení s Mail::SpamAssasin::Plugin::Collectd, ale stejně dobře "
 "může být využit jinak."
 
+msgid "The entropy plugin collects statistics about the available entropy."
+msgstr ""
+
 msgid ""
 "The exec plugin starts external commands to read values from or to notify "
 "external processes when certain threshold values have been reached."
@@ -526,7 +579,7 @@ msgstr ""
 msgid ""
 "The network plugin provides network based communication between different "
 "collectd instances. Collectd can operate both in client and server mode. In "
-"client mode locally collected date is transferred to a collectd server "
+"client mode locally collected data is transferred to a collectd server "
 "instance, in server mode the local instance receives data from other hosts."
 msgstr ""
 "Plugin Network poskytuje síťovou komunikaci mezi různými instancemi daemonu "
@@ -560,13 +613,20 @@ msgstr ""
 "</strong>"
 
 msgid ""
-"The statistics package is based on <a href=\"http://collectd.org/index.shtml"
-"\">Collectd</a> and uses <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD "
-"Tool</a> to render diagram images from collected data."
+"The sensors plugin uses the Linux Sensors framework to gather environmental "
+"statistics."
 msgstr ""
-"Balíček Statistiky je založen na <a href=\"http://collectd.org/index.shtml"
-"\">Collectd</a> a využívá <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD "
-"Tool</a> pro kreslení diagramů z collectd."
+
+msgid ""
+"The splash leases plugin uses libuci to collect statistics about splash "
+"leases."
+msgstr ""
+
+msgid ""
+"The statistics package uses <a href=\"https://collectd.org/\">Collectd</a> "
+"to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</a> to "
+"render diagram images."
+msgstr ""
 
 msgid ""
 "The tcpconns plugin collects informations about open tcp connections on "
@@ -581,6 +641,9 @@ msgid ""
 msgstr ""
 "Plugin Unixsock vytváří unixový socket, které může být využit pro čtení dat "
 "z běžící instance collectd."
+
+msgid "The uptime plugin collects statistics about the uptime of the system."
+msgstr ""
 
 msgid ""
 "This section defines on which interfaces collectd will wait for incoming "
@@ -611,6 +674,15 @@ msgstr "UnixSock"
 msgid "Unixsock Plugin Configuration"
 msgstr "Konfigurace pluginu Unixsock"
 
+msgid "Uptime"
+msgstr ""
+
+msgid "Uptime Plugin Configuration"
+msgstr ""
+
+msgid "Use improved naming schema"
+msgstr ""
+
 msgid "Used PID file"
 msgstr "Použitý soubor PID (identifikátoru procesu)"
 
@@ -625,6 +697,10 @@ msgstr "Wireless"
 
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr "Nastavení pluginu Wireless Iwinfo"
+
+msgid ""
+"You can install additional collectd-mod-* plugins to enable more statistics."
+msgstr ""
 
 msgid "e.g. br-ff"
 msgstr "např. br-ff"
@@ -647,6 +723,21 @@ msgstr "sekundy, více hodnot oddělených mezerou"
 msgid "server interfaces"
 msgstr "rozhraní serveru"
 
+#~ msgid "Collectd"
+#~ msgstr "Collectd"
+
+#~ msgid "System plugins"
+#~ msgstr "Systémové pluginy"
+
+#~ msgid ""
+#~ "The statistics package is based on <a href=\"http://collectd.org/index."
+#~ "shtml\">Collectd</a> and uses <a href=\"http://oss.oetiker.ch/rrdtool/"
+#~ "\">RRD Tool</a> to render diagram images from collected data."
+#~ msgstr ""
+#~ "Balíček Statistiky je založen na <a href=\"http://collectd.org/index.shtml"
+#~ "\">Collectd</a> a využívá <a href=\"http://oss.oetiker.ch/rrdtool/\">RRD "
+#~ "Tool</a> pro kreslení diagramů z collectd."
+
 #~ msgid "Installed network plugins:"
 #~ msgstr "Instalované síťové pluginy:"
 
@@ -657,8 +748,8 @@ msgstr "rozhraní serveru"
 #~ "Network plugins are used to collect information about open tcp "
 #~ "connections, interface traffic, iptables rules etc."
 #~ msgstr ""
-#~ "Síťové pluginy jsou používány pro shromažďování informací o otevřených tcp "
-#~ "spojeních, provozu na rozhraní, pravidel iptables atd."
+#~ "Síťové pluginy jsou používány pro shromažďování informací o otevřených "
+#~ "tcp spojeních, provozu na rozhraní, pravidel iptables atd."
 
 #~ msgid ""
 #~ "Output plugins provide different possibilities to store collected data. "
@@ -666,9 +757,10 @@ msgstr "rozhraní serveru"
 #~ "collected data in rrd databases and to transmit the data over the network "
 #~ "to other collectd instances."
 #~ msgstr ""
-#~ "Výstupní pluginy poskytují různé možnosti ukládání sesbíraných dat. Plugin "
-#~ "je možné v jeden okamžik povolit vícekrát , například pro ukládání dat do "
-#~ "rrd databází a předávání dat po síti jiným instancím daemonu collectd."
+#~ "Výstupní pluginy poskytují různé možnosti ukládání sesbíraných dat. "
+#~ "Plugin je možné v jeden okamžik povolit vícekrát , například pro ukládání "
+#~ "dat do rrd databází a předávání dat po síti jiným instancím daemonu "
+#~ "collectd."
 
 #~ msgid ""
 #~ "System plugins collecting values about system state and ressource usage "
@@ -681,8 +773,8 @@ msgstr "rozhraní serveru"
 #~ "The wireless plugin collects statistics about wireless signal strength, "
 #~ "noise and quality."
 #~ msgstr ""
-#~ "Plugin Wireless shromažďuje statistiky o síle, šumu a kvalitě bezdrátového "
-#~ "signálu."
+#~ "Plugin Wireless shromažďuje statistiky o síle, šumu a kvalitě "
+#~ "bezdrátového signálu."
 
 #~ msgid "Wireless Plugin Configuration"
 #~ msgstr "Nastavení pluginu Wireless"

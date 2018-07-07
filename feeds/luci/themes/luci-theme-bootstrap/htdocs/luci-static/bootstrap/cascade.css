@@ -137,6 +137,13 @@ input[type="submit"] {
 	-webkit-appearance: button;
 }
 
+button[disabled],
+input[type="button"][disabled],
+input[type="reset"][disabled],
+input[type="submit"][disabled] {
+	opacity: 0.7;
+}
+
 input[type="search"] {
 	-webkit-appearance: textfield;
 	-webkit-box-sizing: content-box;
@@ -420,6 +427,10 @@ fieldset legend {
 	*line-height: 1.5;
 	/* IE6-7 */
 
+}
+form .cbi-tab-descr {
+	line-height: 18px;
+	margin-bottom: 18px;
 }
 
 form .clearfix,
@@ -1097,6 +1108,19 @@ header .dropdown-menu a.hover,
 	margin-bottom: -1px;
 }
 
+.cbi-tabmenu.map {
+	margin: 0;
+}
+
+.cbi-tabmenu.map > li {
+	font-size: 16.5px;
+	font-weight: bold;
+}
+
+.cbi-tabcontainer > fieldset.cbi-section[id] > legend {
+	display: none;
+}
+
 .tabs > li > a,
 .cbi-tabmenu > li > a {
 	padding: 0 15px;
@@ -1768,6 +1792,10 @@ table.cbi-section-table td.cbi-section-table-cell select {
 	width: inherit;
 }
 
+table.valign-middle td {
+	vertical-align: middle;
+}
+
 .cbi-value-description { display: inline; }
 
 .cbi-value-description img { vertical-align: middle; }
@@ -1838,6 +1866,13 @@ table.cbi-section-table td.cbi-section-table-cell select {
 	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	cursor: default;
+}
+
+.ifacebadge img {
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
 }
 
 .ifacebadge-active {
@@ -1929,9 +1964,9 @@ td.cbi-value-field var {
 	float: left;
 }
 
-.uci-change-legend-label>ins,
-.uci-change-legend-label>del,
-.uci-change-legend-label>var {
+.uci-change-legend-label > ins,
+.uci-change-legend-label > del,
+.uci-change-legend-label > var {
 	float: left;
 	margin-right: 4px;
 	width: 10px;
