@@ -190,7 +190,7 @@ if VERSIONOPT
 	config VERSION_REPO
 		string
 		prompt "Release repository"
-		default "http://downloads.lede-project.org/releases/17.01.0-rc2"
+		default "http://downloads.lede-project.org/releases/17.01.0"
 		help
 			This is the repository address embedded in the image, it defaults
 			to the trunk snapshot repo; the url may contain the following placeholders:
@@ -286,7 +286,7 @@ menuconfig PER_FEED_REPO
 
 	config PER_FEED_REPO_ADD_COMMENTED
 		bool "Comment out not enabled feeds"
-		default y
+		default !BUILDBOT
 		depends on PER_FEED_REPO && PER_FEED_REPO_ADD_DISABLED
 		help
 		  Add not enabled feeds as commented out source lines to opkg.conf.
