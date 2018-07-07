@@ -12,6 +12,10 @@ get_status_led() {
 	all0305)
 		status_led="eap7660d:green:ds4"
 		;;
+	antminer-s1|\
+	antminer-s3)
+		status_led="bitmain:green:system"
+		;;
 	ap132)
 		status_led="ap132:green:status"
 		;;
@@ -33,6 +37,9 @@ get_status_led() {
 		;;
 	aw-nr580)
 		status_led="aw-nr580:green:ready"
+		;;
+	bsb)
+		status_led="bsb:red:sys"
 		;;
 	bullet-m | rocket-m | rocket-m-xw | nano-m | nanostation-m | nanostation-m-xw | loco-m-xw)
 		status_led="ubnt:green:link4"
@@ -67,6 +74,12 @@ get_status_led() {
 	dir-835-a1)
 		status_led="d-link:amber:power"
 		;;
+	dlan-pro-500-wp)
+		status_led="devolo:green:wlan-2g"
+		;;
+	dlan-pro-1200-ac)
+		status_led="devolo:status:wlan"
+		;;
 	dragino2)
 		status_led="dragino2:red:system"
 		;;
@@ -88,6 +101,9 @@ get_status_led() {
 		;;
 	gl-inet)
 		status_led="gl-connect:green:lan"
+		;;
+	epg5000)
+		status_led="epg5000:amber:power"
 		;;
 	esr1750)
 		status_led="esr1750:amber:power"
@@ -155,6 +171,9 @@ get_status_led() {
 	om5p | \
 	om5p-an)
 		status_led="om5p:blue:power"
+		;;
+	onion-omega)
+		status_led="onion:amber:system"
 		;;
 	pb44)
 		status_led="pb44:amber:jump1"
@@ -307,6 +326,9 @@ get_status_led() {
 		;;
 	wpj344)
 		status_led="wpj344:green:status"
+		;;
+	wpj531)
+		status_led="wpj531:green:sig3"
 		;;
 	wpj558)
 		status_led="wpj558:green:sig3"
