@@ -1,5 +1,5 @@
 /*
- *  ALFA NETWORKS Hornet-UB board support
+ *  ALFA NETWORK Hornet-UB board support
  *
  *  Copyright (C) 2011-2012 Gabor Juhos <juhosg@openwrt.org>
  *
@@ -101,8 +101,9 @@ static void __init hornet_ub_gpio_setup(void)
 	t |= AR933X_BOOTSTRAP_MDIO_GPIO_EN;
 	ath79_reset_wr(AR933X_RESET_REG_BOOTSTRAP, t);
 
-	ath79_set_usb_power_gpio(HORNET_UB_GPIO_USB_POWER, GPIOF_OUT_INIT_HIGH,
-				"USB power");
+	gpio_request_one(HORNET_UB_GPIO_USB_POWER,
+			 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+			 "USB power");
 }
 
 static void __init hornet_ub_setup(void)
@@ -132,5 +133,5 @@ static void __init hornet_ub_setup(void)
 	ath79_register_usb();
 }
 
-MIPS_MACHINE(ATH79_MACH_HORNET_UB, "HORNET-UB", "ALFA NETWORKS Hornet-UB",
+MIPS_MACHINE(ATH79_MACH_HORNET_UB, "HORNET-UB", "ALFA NETWORK Hornet-UB",
 	     hornet_ub_setup);

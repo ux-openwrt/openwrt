@@ -113,8 +113,8 @@ static int wrt160nl_parse_partitions(struct mtd_info *master,
 		goto free_parts;
 	}
 
-	ret = master->read(master, uboot_len, sizeof(*header),
-			   &retlen, (void *) header);
+	ret = mtd_read(master, uboot_len, sizeof(*header),
+		       &retlen, (void *) header);
 	if (ret)
 		goto free_hdr;
 
@@ -196,7 +196,9 @@ static struct mtd_part_parser wrt160nl_parser = {
 
 static int __init wrt160nl_parser_init(void)
 {
-	return register_mtd_parser(&wrt160nl_parser);
+	register_mtd_parser(&wrt160nl_parser);
+
+	return 0;
 }
 
 module_init(wrt160nl_parser_init);

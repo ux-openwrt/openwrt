@@ -37,6 +37,9 @@
 #define WDR4300_GPIO_BTN_WPS		16
 #define WDR4300_GPIO_BTN_RFKILL		17
 
+#define WDR4300_GPIO_EXTERNAL_LNA0	18
+#define WDR4300_GPIO_EXTERNAL_LNA1	19
+
 #define WDR4300_GPIO_USB1_POWER		22
 #define WDR4300_GPIO_USB2_POWER		21
 
@@ -103,6 +106,14 @@ static struct gpio_keys_button wdr4300_gpio_keys[] __initdata = {
 	},
 };
 
+static const struct ar8327_led_info wdr4300_leds_ar8327[] __initconst = {
+	AR8327_LED_INFO(PHY0_0, HW, "tp-link:blue:wan"),
+	AR8327_LED_INFO(PHY1_0, HW, "tp-link:blue:lan1"),
+	AR8327_LED_INFO(PHY2_0, HW, "tp-link:blue:lan2"),
+	AR8327_LED_INFO(PHY3_0, HW, "tp-link:blue:lan3"),
+	AR8327_LED_INFO(PHY4_0, HW, "tp-link:blue:lan4"),
+};
+
 static struct ar8327_pad_cfg wdr4300_ar8327_pad0_cfg = {
 	.mode = AR8327_PAD_MAC_RGMII,
 	.txclk_delay_en = true,
@@ -121,7 +132,7 @@ static struct ar8327_led_cfg wdr4300_ar8327_led_cfg = {
 
 static struct ar8327_platform_data wdr4300_ar8327_data = {
 	.pad0_cfg = &wdr4300_ar8327_pad0_cfg,
-	.cpuport_cfg = {
+	.port0_cfg = {
 		.force_link = 1,
 		.speed = AR8327_PORT_SPEED_1000,
 		.duplex = 1,
@@ -129,6 +140,8 @@ static struct ar8327_platform_data wdr4300_ar8327_data = {
 		.rxpause = 1,
 	},
 	.led_cfg = &wdr4300_ar8327_led_cfg,
+	.num_leds = ARRAY_SIZE(wdr4300_leds_ar8327),
+	.leds = wdr4300_leds_ar8327,
 };
 
 static struct mdio_board_info wdr4300_mdio0_info[] = {
@@ -138,23 +151,6 @@ static struct mdio_board_info wdr4300_mdio0_info[] = {
 		.platform_data = &wdr4300_ar8327_data,
 	},
 };
-
-static void __init wdr4300_gmac_setup(void)
-{
-	void __iomem *base;
-	u32 t;
-
-	base = ioremap(AR934X_GMAC_BASE, AR934X_GMAC_SIZE);
-
-	t = __raw_readl(base + AR934X_GMAC_REG_ETH_CFG);
-	t &= ~(AR934X_ETH_CFG_RGMII_GMAC0 | AR934X_ETH_CFG_MII_GMAC0 |
-	       AR934X_ETH_CFG_GMII_GMAC0 | AR934X_ETH_CFG_SW_ONLY_MODE);
-	t |= AR934X_ETH_CFG_RGMII_GMAC0;
-
-	__raw_writel(t, base + AR934X_GMAC_REG_ETH_CFG);
-
-	iounmap(base);
-}
 
 static void __init wdr4300_setup(void)
 {
@@ -169,6 +165,9 @@ static void __init wdr4300_setup(void)
 					ARRAY_SIZE(wdr4300_gpio_keys),
 					wdr4300_gpio_keys);
 
+	ath79_wmac_set_ext_lna_gpio(0, WDR4300_GPIO_EXTERNAL_LNA0);
+	ath79_wmac_set_ext_lna_gpio(1, WDR4300_GPIO_EXTERNAL_LNA1);
+
 	ath79_init_mac(tmpmac, mac, -1);
 	ath79_register_wmac(art + WDR4300_WMAC_CALDATA_OFFSET, tmpmac);
 
@@ -176,7 +175,7 @@ static void __init wdr4300_setup(void)
 	ap9x_pci_setup_wmac_led_pin(0, 0);
 	ap91_pci_init(art + WDR4300_PCIE_CALDATA_OFFSET, tmpmac);
 
-	wdr4300_gmac_setup();
+	ath79_setup_ar934x_eth_cfg(AR934X_ETH_CFG_RGMII_GMAC0);
 
 	mdiobus_register_board_info(wdr4300_mdio0_info,
 				    ARRAY_SIZE(wdr4300_mdio0_info));
@@ -192,10 +191,12 @@ static void __init wdr4300_setup(void)
 	ath79_eth0_pll_data.pll_1000 = 0x06000000;
 	ath79_register_eth(0);
 
-	ath79_set_usb_power_gpio(WDR4300_GPIO_USB1_POWER, GPIOF_OUT_INIT_HIGH,
-				"USB1 power");
-	ath79_set_usb_power_gpio(WDR4300_GPIO_USB2_POWER, GPIOF_OUT_INIT_HIGH,
-				"USB2 power");
+	gpio_request_one(WDR4300_GPIO_USB1_POWER,
+			 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+			 "USB1 power");
+	gpio_request_one(WDR4300_GPIO_USB2_POWER,
+			 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
+			 "USB2 power");
 	ath79_register_usb();
 }
 

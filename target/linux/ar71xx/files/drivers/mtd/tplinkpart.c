@@ -60,8 +60,8 @@ tplink_read_header(struct mtd_info *mtd, size_t offset)
 		goto err;
 
 	header_len = sizeof(struct tplink_fw_header);
-	ret = mtd->read(mtd, offset, header_len, &retlen,
-			(unsigned char *) header);
+	ret = mtd_read(mtd, offset, header_len, &retlen,
+		       (unsigned char *) header);
 	if (ret)
 		goto err_free_header;
 
@@ -91,8 +91,8 @@ static int tplink_check_rootfs_magic(struct mtd_info *mtd, size_t offset)
 	size_t retlen;
 	int ret;
 
-	ret = mtd->read(mtd, offset, sizeof(magic), &retlen,
-			(unsigned char *) &magic);
+	ret = mtd_read(mtd, offset, sizeof(magic), &retlen,
+		       (unsigned char *) &magic);
 	if (ret)
 		return ret;
 
@@ -188,7 +188,9 @@ static struct mtd_part_parser tplink_parser = {
 
 static int __init tplink_parser_init(void)
 {
-	return register_mtd_parser(&tplink_parser);
+	register_mtd_parser(&tplink_parser);
+
+	return 0;
 }
 
 module_init(tplink_parser_init);
