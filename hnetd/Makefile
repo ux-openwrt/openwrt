@@ -7,8 +7,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hnetd
-PKG_SOURCE_VERSION:=6a5348ca13ae257c02431df499e78b695049324f
-PKG_VERSION:=2015-04-17-$(PKG_SOURCE_VERSION)
+PKG_SOURCE_VERSION:=ea2bd2bc2d8e617efca4b27fbf1c5c3c8ad09ad9
+PKG_VERSION:=2015-07-10-$(PKG_SOURCE_VERSION)
 PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
@@ -52,7 +52,7 @@ define Package/hnet-full
   URL:=https://github.com/sbyx/hnetd
   DEPENDS:=+hnetd-nossl +luci-app-hnet
   # Routing
-  DEPENDS+=+babels
+  DEPENDS+=+babeld
   # Service discovery
   DEPENDS+=+ohybridproxy
   # Distributed PCP support
@@ -66,7 +66,7 @@ define Package/hnet-full-secure
   URL:=https://github.com/sbyx/hnetd
   DEPENDS:=+hnetd-openssl +luci-app-hnet
   # Routing
-  DEPENDS+=+babels
+  DEPENDS+=+babeld
   # Service discovery
   DEPENDS+=+ohybridproxy
   # Distributed PCP support

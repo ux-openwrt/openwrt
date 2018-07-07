@@ -1,12 +1,28 @@
+#
+# Copyright (C) 2014,2015 Hyperboria.net
+#
+# You may redistribute this program and/or modify it under the terms of
+# the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cjdns
 PKG_VERSION:=0.16
-PKG_RELEASE:=10
+PKG_RELEASE:=14
 
 PKG_SOURCE_URL:=https://github.com/hyperboria/cjdns.git
 PKG_SOURCE_PROTO:=git
-PKG_SOURCE_VERSION:=55803286b9de8a935dbc86111e312c747ef78318
+PKG_SOURCE_VERSION:=a97c189b9181bf83ed44a9ab0ebc817882c60ffa
 PKG_LICENSE:=GPL-3.0
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_SOURCE_VERSION).tar.bz2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_SOURCE_VERSION)
