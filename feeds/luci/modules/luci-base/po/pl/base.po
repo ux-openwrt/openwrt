@@ -14,6 +14,9 @@ msgstr ""
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.0.6\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr "(okno %d minut, interwał %d sekund)"
 
@@ -252,6 +255,14 @@ msgstr ""
 msgid "Alert"
 msgstr "Alarm"
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "Pozwól na logowanie <abbr title=\"Secure Shell\">SSH</abbr>"
 
@@ -345,6 +356,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -495,6 +509,9 @@ msgstr ""
 "Zawiera ona zmienione pliki konfiguracyjne oznaczone przez opkg, podstawowe "
 "pliki systemowe, oraz pliki oznaczone do kopiowania przez użytkownika."
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr "Przepływność"
 
@@ -533,9 +550,6 @@ msgstr "Przyciski"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-
-msgid "CPU"
-msgstr "CPU"
 
 msgid "CPU usage (%)"
 msgstr "Użycie CPU (%)"
@@ -743,6 +757,12 @@ msgid "DNS forwardings"
 msgstr "Przekierowania DNS"
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -1049,6 +1069,9 @@ msgstr "Karta Ethernet"
 msgid "Ethernet Switch"
 msgstr "Switch Ethernet"
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr "Rozwiń hosty"
 
@@ -1069,6 +1092,9 @@ msgstr "Zewnętrzny serwer dla loga systemowego"
 
 msgid "External system log server port"
 msgstr "Port zewnętrznego serwera dla loga systemowego"
+
+msgid "External system log server protocol"
+msgstr ""
 
 msgid "Extra SSH command options"
 msgstr ""
@@ -1516,6 +1542,9 @@ msgstr "Ponowne łączenie interfejsu..."
 msgid "Interface is shutting down..."
 msgstr "Interfejs jest wyłączany..."
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr "Interfejs nie istnieje lub nie jest jeszcze podłączony."
 
@@ -1642,6 +1671,12 @@ msgstr "Legenda:"
 msgid "Limit"
 msgstr "Limit"
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1673,6 +1708,9 @@ msgstr "Lista domen zezwalających na odpowiedzi RFC1918"
 msgid "List of hosts that supply bogus NX domain results"
 msgstr "Lista hostów które dostarczają zafałszowane wyniki NX domain"
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Słuchaj tylko na podanym interfejsie, lub jeśli nie podano na wszystkich"
@@ -1697,6 +1735,9 @@ msgstr "Lokalny adres IPv4"
 
 msgid "Local IPv6 address"
 msgstr "Lokalny adres IPv6"
+
+msgid "Local Service Only"
+msgstr ""
 
 msgid "Local Startup"
 msgstr "Lokalny autostart"
@@ -1773,6 +1814,9 @@ msgstr ""
 
 msgid "MB/s"
 msgstr "MB/s"
+
+msgid "MD5"
+msgstr ""
 
 msgid "MHz"
 msgstr "MHz"
@@ -2007,6 +2051,9 @@ msgstr "Szum:"
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr "Brak"
 
@@ -2122,6 +2169,9 @@ msgstr "Nadpisz adres MAC"
 
 msgid "Override MTU"
 msgstr "Nadpisz MTU"
+
+msgid "Override default interface name"
+msgstr ""
 
 msgid "Override the gateway in DHCP responses"
 msgstr "Nadpisz adres bramy w odpowiedziach DHCP"
@@ -2270,12 +2320,6 @@ msgstr "Zasada"
 msgid "Port"
 msgstr "Port"
 
-msgid "Port %d"
-msgstr "Port %d"
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr "Port %d jest nietagowany w wielu VLAN`ach!"
-
 msgid "Port status:"
 msgstr "Status portu:"
 
@@ -2291,6 +2335,9 @@ msgid ""
 msgstr ""
 "Zakładaj że klient jest martwy po danej ilości błedów odpowiedzi echa LCP, "
 "wpisz 0 aby zignorować błędy"
+
+msgid "Prevent listening on thise interfaces."
+msgstr ""
 
 msgid "Prevents client-to-client communication"
 msgstr "Zapobiegaj komunikacji klientów pomiędzy sobą"
@@ -2501,6 +2548,11 @@ msgstr ""
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "Wymagany dla niektórych dostawców internetu, np. Charter z DOCSIS 3"
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr "Resetuj"
 
@@ -2565,6 +2617,9 @@ msgstr ""
 
 msgid "Run filesystem check"
 msgstr "Sprawdź czy system plików nie zawiera błędów"
+
+msgid "SHA256"
+msgstr ""
 
 msgid ""
 "SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
@@ -2708,6 +2763,9 @@ msgstr "Szczelina czasowa"
 msgid "Software"
 msgstr "Oprogramowanie"
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr "Wartości pewnych pól są niewłaściwe, nie mogę ich zachować!"
 
@@ -2810,6 +2868,12 @@ msgstr "Zachowaj kolejność"
 msgid "Submit"
 msgstr "Wyślij"
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2824,6 +2888,13 @@ msgstr "Przełącznik %q"
 
 msgid "Switch %q (%s)"
 msgstr "Przełącznik %q (%s)"
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
+msgstr ""
 
 msgid "Switch protocol"
 msgstr "Protokół przełącznika"
@@ -3341,9 +3412,6 @@ msgstr "VC-Mux"
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr "Interfejs VLAN"
-
 msgid "VLANs on %q"
 msgstr "Sieci VLAN na %q"
 
@@ -3440,9 +3508,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr "Wifi"
-
 msgid "Wireless"
 msgstr "Sieć bezprzewodowa"
 
@@ -3478,6 +3543,9 @@ msgstr "Wyłączanie sieci bezprzewodowej"
 
 msgid "Write received DNS requests to syslog"
 msgstr "Zapisz otrzymane żądania DNS do syslog'a"
+
+msgid "Write system log to file"
+msgstr ""
 
 msgid "XR Support"
 msgstr "Wsparcie XR"
@@ -3662,132 +3730,14 @@ msgstr "tak"
 msgid "« Back"
 msgstr "« Wróć"
 
-#~ msgid "Delete this interface"
-#~ msgstr "Usuń ten interfejs"
+#~ msgid "CPU"
+#~ msgstr "CPU"
 
-#~ msgid "Flags"
-#~ msgstr "Flagi"
+#~ msgid "Port %d"
+#~ msgstr "Port %d"
 
-#~ msgid "Rule #"
-#~ msgstr "Zasada #"
+#~ msgid "Port %d is untagged in multiple VLANs!"
+#~ msgstr "Port %d jest nietagowany w wielu VLAN`ach!"
 
-#~ msgid "Ignore Hosts files"
-#~ msgstr "Ignoruj pliki Hosts"
-
-#~ msgid "Please wait: Device rebooting..."
-#~ msgstr "Proszę czekać: Ponowne uruchamianie..."
-
-#~ msgid ""
-#~ "Warning: There are unsaved changes that will be lost while rebooting!"
-#~ msgstr ""
-#~ "Ostrzeżenie: Pozostały niezapisane zmian, które zostaną utracone podczas "
-#~ "restartu!"
-
-#~ msgid ""
-#~ "Always use 40MHz channels even if the secondary channel overlaps. Using "
-#~ "this option does not comply with IEEE 802.11n-2009!"
-#~ msgstr ""
-#~ "Zawsze używaj kanał 40MHz nawet jeśli drugi kanał pokrywa się. Użycie tej "
-#~ "opcji nie jest zgodne ze standardem IEEE 802.11n-2009!"
-
-#~ msgid "Cached"
-#~ msgstr "Cache"
-
-#~ msgid "Configures this mount as overlay storage for block-extroot"
-#~ msgstr "Konfiguruje ten zasób jako zasób overlay dla block-extroot"
-
-#~ msgid "Force 40MHz mode"
-#~ msgstr "Wymuś tryb 40MHz"
-
-#~ msgid "Frequency Hopping"
-#~ msgstr "Skakanie po częstotliwościach"
-
-#~ msgid "Locked to channel %d used by %s"
-#~ msgstr "Zablokowano dla kanału %d używanego przez %s"
-
-#~ msgid "Use as root filesystem"
-#~ msgstr "Użyj systemu plików root'a"
-
-#~ msgid "HE.net user ID"
-#~ msgstr "Login (ID) HE.net"
-
-#~ msgid "This is the 32 byte hex encoded user ID, not the login name"
-#~ msgstr ""
-#~ "To jest 32-bajtowy heksadecymalny zakodowany identyfikator użytkownika, a "
-#~ "nie login"
-
-#~ msgid "40MHz 2nd channel above"
-#~ msgstr "40MHz drugi kanał powyżej"
-
-#~ msgid "40MHz 2nd channel below"
-#~ msgstr "40MHz drugi kanał poniżej"
-
-#~ msgid "Accept router advertisements"
-#~ msgstr "Akceptuj rozgłoszenia routera"
-
-# Dosłowne tłumaczenie
-#~ msgid "Advertise IPv6 on network"
-#~ msgstr "Rozgłoś protokół IPv6 w sieci"
-
-#~ msgid "Advertised network ID"
-#~ msgstr "Rozgłoś identyfikator sieci (network ID)"
-
-#~ msgid "Allowed range is 1 to 65535"
-#~ msgstr "Dopuszczalny zakres to 1 do 65535"
-
-#~ msgid "HT capabilities"
-#~ msgstr "Możliwości HT"
-
-#~ msgid "HT mode"
-#~ msgstr "Tryb HT"
-
-#~ msgid "Router Model"
-#~ msgstr "Model routera"
-
-#~ msgid "Router Name"
-#~ msgstr "Nazwa routera"
-
-#~ msgid "Send router solicitations"
-#~ msgstr "Wyślij pakiet wymuszający rozgłoszenia routera"
-
-#~ msgid "Specifies the advertised preferred prefix lifetime in seconds"
-#~ msgstr "Określa czas życia rozgłoszenia preferowanego prefiksu w sekundach"
-
-#~ msgid "Specifies the advertised valid prefix lifetime in seconds"
-#~ msgstr "Określa czas życia rozgłoszenia obowiązującego prefiksu w sekundach"
-
-#~ msgid "Use preferred lifetime"
-#~ msgstr "Użyj preferowanego czasu życia"
-
-#~ msgid "Use valid lifetime"
-#~ msgstr "Użyj prawidłowego czasu życia"
-
-#~ msgid "Waiting for router..."
-#~ msgstr "Czekanie na router..."
-
-#~ msgid "Enable builtin NTP server"
-#~ msgstr "Włącz wbudowany serwer NTP"
-
-#~ msgid "Active Leases"
-#~ msgstr "Aktywne dzierżawy"
-
-#~ msgid "Open"
-#~ msgstr "Otwórz"
-
-#~ msgid "Bit Rate"
-#~ msgstr "Przepływność"
-
-#~ msgid "Configuration / Apply"
-#~ msgstr "Konfiguracja / Zastosuj"
-
-#~ msgid "Configuration / Changes"
-#~ msgstr "Konfiguracja / zmiany"
-
-#~ msgid "Configuration / Revert"
-#~ msgstr "Konfiguracja / cofnięcie zmian"
-
-#~ msgid "MAC"
-#~ msgstr "MAC"
-
-#~ msgid "MAC Address"
-#~ msgstr "Adres MAC"
+#~ msgid "VLAN Interface"
+#~ msgstr "Interfejs VLAN"

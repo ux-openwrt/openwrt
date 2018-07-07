@@ -8,6 +8,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr ""
 
@@ -226,6 +229,14 @@ msgstr ""
 msgid "Alert"
 msgstr ""
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 
@@ -314,6 +325,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -459,6 +473,9 @@ msgid ""
 "defined backup patterns."
 msgstr ""
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr ""
 
@@ -495,9 +512,6 @@ msgid "Buttons"
 msgstr ""
 
 msgid "CA certificate; if empty it will be saved after the first connection."
-msgstr ""
-
-msgid "CPU"
 msgstr ""
 
 msgid "CPU usage (%)"
@@ -690,6 +704,12 @@ msgid "DNS forwardings"
 msgstr ""
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -970,6 +990,9 @@ msgstr ""
 msgid "Ethernet Switch"
 msgstr ""
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr ""
 
@@ -987,6 +1010,9 @@ msgid "External system log server"
 msgstr ""
 
 msgid "External system log server port"
+msgstr ""
+
+msgid "External system log server protocol"
 msgstr ""
 
 msgid "Extra SSH command options"
@@ -1413,6 +1439,9 @@ msgstr ""
 msgid "Interface is shutting down..."
 msgstr ""
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr ""
 
@@ -1535,6 +1564,12 @@ msgstr ""
 msgid "Limit"
 msgstr ""
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1564,6 +1599,9 @@ msgstr ""
 msgid "List of hosts that supply bogus NX domain results"
 msgstr ""
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 
@@ -1586,6 +1624,9 @@ msgid "Local IPv4 address"
 msgstr ""
 
 msgid "Local IPv6 address"
+msgstr ""
+
+msgid "Local Service Only"
 msgstr ""
 
 msgid "Local Startup"
@@ -1656,6 +1697,9 @@ msgid "MAP / LW4over6"
 msgstr ""
 
 msgid "MB/s"
+msgstr ""
+
+msgid "MD5"
 msgstr ""
 
 msgid "MHz"
@@ -1889,6 +1933,9 @@ msgstr ""
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr ""
 
@@ -1998,6 +2045,9 @@ msgid "Override MAC address"
 msgstr ""
 
 msgid "Override MTU"
+msgstr ""
+
+msgid "Override default interface name"
 msgstr ""
 
 msgid "Override the gateway in DHCP responses"
@@ -2143,12 +2193,6 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-msgid "Port %d"
-msgstr ""
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr ""
-
 msgid "Port status:"
 msgstr ""
 
@@ -2161,6 +2205,9 @@ msgstr ""
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
+msgstr ""
+
+msgid "Prevent listening on thise interfaces."
 msgstr ""
 
 msgid "Prevents client-to-client communication"
@@ -2356,6 +2403,11 @@ msgstr ""
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -2416,6 +2468,9 @@ msgid "Run a filesystem check before mounting the device"
 msgstr ""
 
 msgid "Run filesystem check"
+msgstr ""
+
+msgid "SHA256"
 msgstr ""
 
 msgid ""
@@ -2556,6 +2611,9 @@ msgstr ""
 msgid "Software"
 msgstr ""
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr ""
 
@@ -2647,6 +2705,12 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2660,6 +2724,13 @@ msgid "Switch %q"
 msgstr ""
 
 msgid "Switch %q (%s)"
+msgstr ""
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
 msgstr ""
 
 msgid "Switch protocol"
@@ -3106,9 +3177,6 @@ msgstr ""
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr ""
-
 msgid "VLANs on %q"
 msgstr ""
 
@@ -3202,9 +3270,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr ""
-
 msgid "Wireless"
 msgstr ""
 
@@ -3239,6 +3304,9 @@ msgid "Wireless shut down"
 msgstr ""
 
 msgid "Write received DNS requests to syslog"
+msgstr ""
+
+msgid "Write system log to file"
 msgstr ""
 
 msgid "XR Support"

@@ -11,6 +11,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.0.6\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr ""
 
@@ -240,6 +243,14 @@ msgstr ""
 msgid "Alert"
 msgstr "אזעקה"
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 
@@ -331,6 +342,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -481,6 +495,9 @@ msgstr ""
 "המסומנים ב opkg ׁOpen PacKaGe Managementׂ, קבצי בסיס חיוניים ותבניות הגיבוי "
 "המוגדרות ע\"י המשתמש."
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr ""
 
@@ -519,9 +536,6 @@ msgstr "כפתורים"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-
-msgid "CPU"
-msgstr "מעבד"
 
 msgid "CPU usage (%)"
 msgstr "שימוש מעבד (%)"
@@ -715,6 +729,12 @@ msgid "DNS forwardings"
 msgstr ""
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -999,6 +1019,9 @@ msgstr ""
 msgid "Ethernet Switch"
 msgstr ""
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr ""
 
@@ -1016,6 +1039,9 @@ msgid "External system log server"
 msgstr ""
 
 msgid "External system log server port"
+msgstr ""
+
+msgid "External system log server protocol"
 msgstr ""
 
 msgid "Extra SSH command options"
@@ -1442,6 +1468,9 @@ msgstr ""
 msgid "Interface is shutting down..."
 msgstr ""
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr ""
 
@@ -1564,6 +1593,12 @@ msgstr ""
 msgid "Limit"
 msgstr ""
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1593,6 +1628,9 @@ msgstr ""
 msgid "List of hosts that supply bogus NX domain results"
 msgstr ""
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 
@@ -1616,6 +1654,9 @@ msgstr "כתובת IPv4 מקומית"
 
 msgid "Local IPv6 address"
 msgstr "כתובת IPv6 מקומית"
+
+msgid "Local Service Only"
+msgstr ""
 
 msgid "Local Startup"
 msgstr ""
@@ -1685,6 +1726,9 @@ msgid "MAP / LW4over6"
 msgstr ""
 
 msgid "MB/s"
+msgstr ""
+
+msgid "MD5"
 msgstr ""
 
 msgid "MHz"
@@ -1918,6 +1962,9 @@ msgstr ""
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr ""
 
@@ -2027,6 +2074,9 @@ msgid "Override MAC address"
 msgstr ""
 
 msgid "Override MTU"
+msgstr ""
+
+msgid "Override default interface name"
 msgstr ""
 
 msgid "Override the gateway in DHCP responses"
@@ -2172,12 +2222,6 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-msgid "Port %d"
-msgstr ""
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr ""
-
 msgid "Port status:"
 msgstr ""
 
@@ -2190,6 +2234,9 @@ msgstr ""
 msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
+msgstr ""
+
+msgid "Prevent listening on thise interfaces."
 msgstr ""
 
 msgid "Prevents client-to-client communication"
@@ -2388,6 +2435,11 @@ msgstr ""
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr ""
 
@@ -2449,6 +2501,9 @@ msgstr ""
 
 msgid "Run filesystem check"
 msgstr "הרץ בדיקת מערכת קבצים"
+
+msgid "SHA256"
+msgstr ""
 
 msgid ""
 "SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
@@ -2589,6 +2644,9 @@ msgstr ""
 msgid "Software"
 msgstr "תוכנה"
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr "חלק מהשדות אינם תקינים, אין אפשרות לשמור את הערכים!"
 
@@ -2686,6 +2744,12 @@ msgstr ""
 msgid "Submit"
 msgstr "שלח"
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2699,6 +2763,13 @@ msgid "Switch %q"
 msgstr ""
 
 msgid "Switch %q (%s)"
+msgstr ""
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
 msgstr ""
 
 msgid "Switch protocol"
@@ -3147,9 +3218,6 @@ msgstr ""
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr ""
-
 msgid "VLANs on %q"
 msgstr ""
 
@@ -3243,9 +3311,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr "Wifi"
-
 msgid "Wireless"
 msgstr ""
 
@@ -3280,6 +3345,9 @@ msgid "Wireless shut down"
 msgstr ""
 
 msgid "Write received DNS requests to syslog"
+msgstr ""
+
+msgid "Write system log to file"
 msgstr ""
 
 msgid "XR Support"
@@ -3456,44 +3524,5 @@ msgstr "כן"
 msgid "« Back"
 msgstr "<< אחורה"
 
-#~ msgid "Delete this interface"
-#~ msgstr "מחק ממשק זה"
-
-#~ msgid "Please wait: Device rebooting..."
-#~ msgstr "אנא המתן: המכשיר מאותחל מחדש..."
-
-#~ msgid ""
-#~ "Warning: There are unsaved changes that will be lost while rebooting!"
-#~ msgstr "אזהרה: ישנם שינויים שלא נשמרו ויאבדו בעת הפעלה מחדש!"
-
-#~ msgid "Cached"
-#~ msgstr "שמור במטמון"
-
-#~ msgid "40MHz 2nd channel above"
-#~ msgstr "40Mhz, הערוץ הנוסף מעל"
-
-#~ msgid "40MHz 2nd channel below"
-#~ msgstr "40Mhz, הערוץ הנוסף מתחת"
-
-#~ msgid "Accept router advertisements"
-#~ msgstr "אפשר פרסומות נתב"
-
-#~ msgid "Advertise IPv6 on network"
-#~ msgstr "פרסם IPv6 ברשת"
-
-# זהות?
-#, fuzzy
-#~ msgid "Advertised network ID"
-#~ msgstr "פרסם פרטי זהות של הרשת"
-
-#~ msgid "Allowed range is 1 to 65535"
-#~ msgstr "הטווח המורשה הוא 1 עד 65535"
-
-#~ msgid "Freifunk"
-#~ msgstr "אריג"
-
-#~ msgid "Wifi networks in your local environment"
-#~ msgstr "רשתות Wifi בסביבתך"
-
-#~ msgid "static"
-#~ msgstr "סטטי"
+#~ msgid "CPU"
+#~ msgstr "מעבד"

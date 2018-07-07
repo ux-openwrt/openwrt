@@ -11,6 +11,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.0.6\n"
 
+msgid "%s is untagged in multiple VLANs!"
+msgstr ""
+
 msgid "(%d minute window, %d second interval)"
 msgstr "(%d minutové okno, %d sekundový interval)"
 
@@ -243,6 +246,14 @@ msgstr ""
 msgid "Alert"
 msgstr "Upozornění"
 
+msgid ""
+"Allocate IP addresses sequentially, starting from the lowest available "
+"address"
+msgstr ""
+
+msgid "Allocate IP sequentially"
+msgstr ""
+
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "Povolit <abbr title=\"Secure Shell\">SSH</abbr> autentizaci heslem"
 
@@ -333,6 +344,9 @@ msgid "Announced DNS domains"
 msgstr ""
 
 msgid "Announced DNS servers"
+msgstr ""
+
+msgid "Anonymous Identity"
 msgstr ""
 
 msgid "Anonymous Mount"
@@ -481,6 +495,9 @@ msgstr ""
 "souborů označených opkg, nezbyných systémových souborů a souborů "
 "vyhovujících uživatelem určeným vzorům."
 
+msgid "Bind only to specific interfaces rather than wildcard address."
+msgstr ""
+
 msgid "Bitrate"
 msgstr "Přenosová rychlost"
 
@@ -518,9 +535,6 @@ msgstr "Tlačítka"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
-
-msgid "CPU"
-msgstr "CPU"
 
 msgid "CPU usage (%)"
 msgstr "Vytížení CPU (%)"
@@ -725,6 +739,12 @@ msgid "DNS forwardings"
 msgstr "Přeposílání DNS"
 
 msgid "DNS-Label / FQDN"
+msgstr ""
+
+msgid "DNSSEC"
+msgstr ""
+
+msgid "DNSSEC check unsigned"
 msgstr ""
 
 msgid "DPD Idle Timeout"
@@ -1022,6 +1042,9 @@ msgstr "Ethernetový adaptér"
 msgid "Ethernet Switch"
 msgstr "Ethernetový switch"
 
+msgid "Exclude interfaces"
+msgstr ""
+
 msgid "Expand hosts"
 msgstr "Rozšířit hostitele"
 
@@ -1042,6 +1065,9 @@ msgstr "Externí protokolovací server"
 
 msgid "External system log server port"
 msgstr "Port externího protokolovacího serveru"
+
+msgid "External system log server protocol"
+msgstr ""
 
 msgid "Extra SSH command options"
 msgstr ""
@@ -1477,6 +1503,9 @@ msgstr "Rozhraní se znovu připojuje..."
 msgid "Interface is shutting down..."
 msgstr "Rozhraní se vypíná..."
 
+msgid "Interface name"
+msgstr ""
+
 msgid "Interface not present or not connected yet."
 msgstr "Rozhraní není přítomné nebo je dosud nepřipojeno."
 
@@ -1604,6 +1633,12 @@ msgstr "Legenda:"
 msgid "Limit"
 msgstr "Limit"
 
+msgid "Limit DNS service to subnets interfaces on which we are serving DNS."
+msgstr ""
+
+msgid "Limit listening to these interfaces, and loopback."
+msgstr ""
+
 msgid "Line Attenuation (LATN)"
 msgstr ""
 
@@ -1635,6 +1670,9 @@ msgstr "Seznam domén, pro které povolit odpovědi podle RFC1918"
 msgid "List of hosts that supply bogus NX domain results"
 msgstr "Seznam hostitelů, kteří udávají falešné hodnoty NX domén"
 
+msgid "Listen Interfaces"
+msgstr ""
+
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Poslouchat pouze na daném rozhraní, nebo pokud není specifikováno, na všech"
@@ -1659,6 +1697,9 @@ msgstr "Místní IPv4 adresa"
 
 msgid "Local IPv6 address"
 msgstr "Místní IPv6 adresa"
+
+msgid "Local Service Only"
+msgstr ""
 
 msgid "Local Startup"
 msgstr "Místní startup"
@@ -1735,6 +1776,9 @@ msgstr ""
 
 msgid "MB/s"
 msgstr "MB/s"
+
+msgid "MD5"
+msgstr ""
 
 msgid "MHz"
 msgstr "MHz"
@@ -1969,6 +2013,9 @@ msgstr "Šum:"
 msgid "Non Pre-emtive CRC errors (CRC_P)"
 msgstr ""
 
+msgid "Non-wildcard"
+msgstr ""
+
 msgid "None"
 msgstr "Žádný"
 
@@ -2084,6 +2131,9 @@ msgstr "Přepsat MAC adresu"
 
 msgid "Override MTU"
 msgstr "Přepsat MTU"
+
+msgid "Override default interface name"
+msgstr ""
 
 msgid "Override the gateway in DHCP responses"
 msgstr "Přepsat bránu v DHCP odpovědích"
@@ -2230,12 +2280,6 @@ msgstr "Politika"
 msgid "Port"
 msgstr "Port"
 
-msgid "Port %d"
-msgstr "Port %d"
-
-msgid "Port %d is untagged in multiple VLANs!"
-msgstr "Port %d je neoznačený ve více VLAN!"
-
 msgid "Port status:"
 msgstr "Stav portu:"
 
@@ -2251,6 +2295,9 @@ msgid ""
 msgstr ""
 "Po takovém množství LCP echo selhání předpokládám, že peer je mrtvý. "
 "Použijte 0 pro ignorování chyb"
+
+msgid "Prevent listening on thise interfaces."
+msgstr ""
 
 msgid "Prevents client-to-client communication"
 msgstr "Zabraňuje komunikaci klient-klient"
@@ -2461,6 +2508,11 @@ msgstr ""
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "Vyžadováno u některých ISP, např. Charter s DocSIS 3"
 
+msgid ""
+"Requires upstream supports DNSSEC; verify unsigned domain responses really "
+"come from unsigned domains"
+msgstr ""
+
 msgid "Reset"
 msgstr "Reset"
 
@@ -2523,6 +2575,9 @@ msgstr "Spustit kontrolu souborového systému před připojením zařízení"
 
 msgid "Run filesystem check"
 msgstr "Spustit kontrolu souborového systému"
+
+msgid "SHA256"
+msgstr ""
 
 msgid ""
 "SIXXS supports TIC only, for static tunnels using IP protocol 41 (RFC4213) "
@@ -2665,6 +2720,9 @@ msgstr "Time sloty"
 msgid "Software"
 msgstr "Software"
 
+msgid "Software VLAN"
+msgstr ""
+
 msgid "Some fields are invalid, cannot save values!"
 msgstr "Některá pole obsahují neplatné hodnoty, nelze uložit!"
 
@@ -2765,6 +2823,12 @@ msgstr "Striktní výběr"
 msgid "Submit"
 msgstr "Odeslat"
 
+msgid "Suppress logging"
+msgstr ""
+
+msgid "Suppress logging of the routine operation of these protocols"
+msgstr ""
+
 msgid "Swap"
 msgstr ""
 
@@ -2779,6 +2843,13 @@ msgstr "Směrovač číslo %q"
 
 msgid "Switch %q (%s)"
 msgstr "Směrovač číslo %q (%s)"
+
+msgid ""
+"Switch %q has an unknown topology - the VLAN settings might not be accurate."
+msgstr ""
+
+msgid "Switch VLAN"
+msgstr ""
 
 msgid "Switch protocol"
 msgstr "Směrovací protokol"
@@ -3278,9 +3349,6 @@ msgstr "VC-Mux"
 msgid "VDSL"
 msgstr ""
 
-msgid "VLAN Interface"
-msgstr "Rozhraní VLAN"
-
 msgid "VLANs on %q"
 msgstr "VLANy na %q"
 
@@ -3376,9 +3444,6 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-msgid "Wifi"
-msgstr "Wifi"
-
 msgid "Wireless"
 msgstr "Bezdrátová síť"
 
@@ -3414,6 +3479,9 @@ msgstr "Bezdrátová síť vypnuta"
 
 msgid "Write received DNS requests to syslog"
 msgstr "Zapisovat přijaté požadavky DNS do systemového logu"
+
+msgid "Write system log to file"
+msgstr ""
 
 msgid "XR Support"
 msgstr "Podpora XR"
@@ -3595,205 +3663,14 @@ msgstr "ano"
 msgid "« Back"
 msgstr "« Zpět"
 
-#~ msgid "Delete this interface"
-#~ msgstr "Odstranit toto rozhraní"
+#~ msgid "CPU"
+#~ msgstr "CPU"
 
-#~ msgid "Flags"
-#~ msgstr "Příznaky"
+#~ msgid "Port %d"
+#~ msgstr "Port %d"
 
-#~ msgid "Rule #"
-#~ msgstr "Pravidlo #"
+#~ msgid "Port %d is untagged in multiple VLANs!"
+#~ msgstr "Port %d je neoznačený ve více VLAN!"
 
-#~ msgid "Ignore Hosts files"
-#~ msgstr "Ignorovat soubory Hosts"
-
-#~ msgid "Please wait: Device rebooting..."
-#~ msgstr "Prosím počkejte: Provádím reboot..."
-
-#~ msgid ""
-#~ "Warning: There are unsaved changes that will be lost while rebooting!"
-#~ msgstr "Varování: Existují neuložené změny, které budou rebootem ztraceny!"
-
-#~ msgid ""
-#~ "Always use 40MHz channels even if the secondary channel overlaps. Using "
-#~ "this option does not comply with IEEE 802.11n-2009!"
-#~ msgstr ""
-#~ "Vždy použije kanál 40 MHz , i když překrývá sekundární kanál . Tato volba "
-#~ "není v souladu s IEEE 802.11n-2009!"
-
-#~ msgid "Cached"
-#~ msgstr "V cache"
-
-#~ msgid "Configures this mount as overlay storage for block-extroot"
-#~ msgstr "Použít tento přípojný bod jako překryvné úložiště pro block-extroot"
-
-#~ msgid "Force 40MHz mode"
-#~ msgstr "Vynutit 40MHz mód"
-
-#~ msgid "Frequency Hopping"
-#~ msgstr "Kmitočtové skákání"
-
-#~ msgid "Locked to channel %d used by %s"
-#~ msgstr "Uzamknout kanál %d používaný %s"
-
-#~ msgid "Use as root filesystem"
-#~ msgstr "Použít jako kořenový souborový systém"
-
-#~ msgid "HE.net user ID"
-#~ msgstr "Uživatelské ID HE.net"
-
-#~ msgid "This is the 32 byte hex encoded user ID, not the login name"
-#~ msgstr ""
-#~ "Toto je 32 bajtové uživatelské ID, zapsané v hex tvaru, ne přihlašovací "
-#~ "jméno"
-
-#~ msgid "40MHz 2nd channel above"
-#~ msgstr "40MHz druhý kanál nad hlavním"
-
-#~ msgid "40MHz 2nd channel below"
-#~ msgstr "40MHz druhý kanál pod hlavním"
-
-#~ msgid "Accept router advertisements"
-#~ msgstr "Přijímat oznámení směrovačů"
-
-#~ msgid "Advertise IPv6 on network"
-#~ msgstr "Na síti oznamovat IPv6"
-
-#~ msgid "Advertised network ID"
-#~ msgstr "Oznamované ID sítě"
-
-#~ msgid "Allowed range is 1 to 65535"
-#~ msgstr "Hodnota musí ležet v intervalu 1 až 65535"
-
-#~ msgid "HT capabilities"
-#~ msgstr "Možnosti HT"
-
-#~ msgid "HT mode"
-#~ msgstr "Režim HT"
-
-#~ msgid "Router Model"
-#~ msgstr "Model routeru"
-
-#~ msgid "Router Name"
-#~ msgstr "Název routeru"
-
-#~ msgid "Send router solicitations"
-#~ msgstr "Posílat žádosti o informace o směrování"
-
-#~ msgid "Specifies the advertised preferred prefix lifetime in seconds"
-#~ msgstr ""
-#~ "Určuje dobu za kterou interface požádá o prodloužení životnosti prefixu v "
-#~ "sekundách"
-
-#~ msgid "Specifies the advertised valid prefix lifetime in seconds"
-#~ msgstr "Určuje dobu životnosti prefixu v sekundách"
-
-#~ msgid "Use preferred lifetime"
-#~ msgstr "Použít preferovanou životnost"
-
-#~ msgid "Use valid lifetime"
-#~ msgstr "Použít platnou životnost"
-
-#~ msgid "Waiting for router..."
-#~ msgstr "Čekám na router.."
-
-#~ msgid "Enable builtin NTP server"
-#~ msgstr "Povolit zabudovaný NTP server"
-
-#~ msgid "Active Leases"
-#~ msgstr "Aktivní výpůjčky"
-
-#~ msgid "Open"
-#~ msgstr "Otevřít"
-
-#~ msgid "Bit Rate"
-#~ msgstr "Přenosová rychlost"
-
-#~ msgid "Configuration / Apply"
-#~ msgstr "Nastavení / Použít"
-
-#~ msgid "Configuration / Changes"
-#~ msgstr "Nastavení / Změny"
-
-#~ msgid "Configuration / Revert"
-#~ msgstr "Nastavení / Zrušit změny"
-
-#~ msgid "MAC"
-#~ msgstr "MAC"
-
-#~ msgid "MAC Address"
-#~ msgstr "MAC adresa"
-
-#~ msgid "<abbr title=\"Encrypted\">Encr.</abbr>"
-#~ msgstr "<abbr title=\"Šifrováno\">Šifr.</abbr>"
-
-#~ msgid "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scan"
-#~ msgstr "<abbr title=\"Wireless Local Area Network\">WLAN</abbr>-Scanování"
-
-#~ msgid ""
-#~ "Choose the network you want to attach to this wireless interface. Select "
-#~ "<em>unspecified</em> to not attach any network or fill out the "
-#~ "<em>create</em> field to define a new network."
-#~ msgstr ""
-#~ "Síť přiřazená k tomuto bezdrátovému rozhraní. Pro nepřiřazování rozhraní "
-#~ "k žádné síti vyberte volbu \"<em>nespecifikovaná</em>\". Pro vytvoření "
-#~ "nové sítě vyplňte pole \"<em>vytvořit</em>\"."
-
-#~ msgid "Create Network"
-#~ msgstr "Vytvořit síť"
-
-#~ msgid "Networks"
-#~ msgstr "Sítě"
-
-#~ msgid "Power"
-#~ msgstr "Výkon"
-
-#~ msgid "Wifi networks in your local environment"
-#~ msgstr "Wifi sítě v místním prostředí"
-
-#~ msgid ""
-#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: "
-#~ "address/prefix"
-#~ msgstr ""
-#~ "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-notace : "
-#~ "adresa/prefix"
-
-#~ msgid "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
-#~ msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-Server"
-
-#~ msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Broadcast"
-#~ msgstr ""
-#~ "<abbr title=\"Internet Protokol Verze 4\">IPv4</abbr>-Všesměrové vysílání"
-
-#~ msgid "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Address"
-#~ msgstr "<abbr title=\"Internet Protokol Verze 6\">IPv6</abbr>-Adresa"
-
-#~ msgid "IPv6 Setup"
-#~ msgstr "Nastavení IPv6"
-
-#~ msgid ""
-#~ "Note: If you choose an interface here which is part of another network, "
-#~ "it will be moved into this network."
-#~ msgstr ""
-#~ "Pozn: Pokud zde zvolíte rozhraní, které již je součástí jiné sítě, bude "
-#~ "přesunuto do této sítě."
-
-#~ msgid ""
-#~ "The network ports on your router can be combined to several <abbr title="
-#~ "\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
-#~ "communicate directly with each other. <abbr title=\"Virtual Local Area "
-#~ "Network\">VLAN</abbr>s are often used to separate different network "
-#~ "segments. Often there is by default one Uplink port for a connection to "
-#~ "the next greater network like the internet and other ports for a local "
-#~ "network."
-#~ msgstr ""
-#~ "Síťové porty na vašem routeru mohou být kombinovány do několika <abbr "
-#~ "title=\"Virtual Local Area Network\">VLAN</abbr>, ve kterých mohou "
-#~ "počítače navzájem komunikovat přímo. <abbr title=\"Virtual Local Area "
-#~ "Network\">VLAN</abbr> jsou často používány za účelem oddělení různých "
-#~ "síťových segmentů. Často je zde jeden Uplink port, sloužící pro připojení "
-#~ "do větší sítě (třeba Internetu) a ostatní porty jsou využity pro místní "
-#~ "síť."
-
-#~ msgid "Enable buffering"
-#~ msgstr "Povolit bufferování"
+#~ msgid "VLAN Interface"
+#~ msgstr "Rozhraní VLAN"
