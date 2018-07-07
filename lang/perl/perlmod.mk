@@ -9,8 +9,47 @@ ifneq ($(CONFIG_USE_EGLIBC),)
 endif
 PERL_CMD:=$(STAGING_DIR_HOST)/usr/bin/perl5.20.0
 
+MOD_CFLAGS_PERL:=$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)
+ifdef CONFIG_PERL_THREADS
+	MOD_CFLAGS_PERL+= -D_REENTRANT -D_GNU_SOURCE
+endif
+
 # Module install prefix
 PERL_SITELIB:=/usr/lib/perl5/5.20
+PERL_TESTSDIR:=/usr/share/perl/perl-tests
+PERLBASE_TESTSDIR:=/usr/share/perl/perlbase-tests
+PERLMOD_TESTSDIR:=/usr/share/perl/perlmod-tests
+
+define perlmod/host/relink
+	rm -f $(1)/Makefile.aperl
+	$(MAKE) -C $(1) perl
+	$(CP) $(1)/perl $(PERL_CMD)
+	$(CP) $(1)/perl $(STAGING_DIR_HOST)/usr/bin/perl
+endef
+
+define perlmod/host/Configure
+	(cd $(HOST_BUILD_DIR); \
+	PERL_MM_USE_DEFAULT=1 \
+	$(2) \
+	$(PERL_CMD) Makefile.PL \
+		$(1) \
+	);
+endef
+
+define perlmod/host/Compile
+	$(2) \
+	$(MAKE) -C $(HOST_BUILD_DIR) \
+		$(1) \
+		install
+endef
+
+define perlmod/host/Install
+	$(2) \
+	$(MAKE) -C $(HOST_BUILD_DIR) \
+		$(1) \
+		install
+	$(call perlmod/host/relink,$(HOST_BUILD_DIR))
+endef
 
 define perlmod/Configure
 	(cd $(PKG_BUILD_DIR); \
@@ -20,7 +59,7 @@ define perlmod/Configure
 		$(1) \
 		AR=ar \
 		CC=$(GNU_TARGET_NAME)-gcc \
-		CCFLAGS="$(TARGET_CFLAGS) $(TARGET_CPPFLAGS)" \
+		CCFLAGS="$(MOD_CFLAGS_PERL)" \
 		CCCDLFLAGS=-fPIC \
 		CCDLFLAGS=-Wl,-E \
 		DLEXT=so \
@@ -74,7 +113,7 @@ define perlmod/Compile
 		install
 endef
 
-define perlmod/Install
+define perlmod/Install/NoStrip
 	$(INSTALL_DIR) $(strip $(1))$(PERL_SITELIB)
 	(cd $(PKG_INSTALL_DIR)$(PERL_SITELIB) && \
 	rsync --relative -rlHp --itemize-changes \
@@ -85,12 +124,37 @@ define perlmod/Install
 		$(strip $(2)) $(strip $(1))$(PERL_SITELIB))
 
 	chmod -R u+w $(strip $(1))$(PERL_SITELIB)
+endef
+
+
+define perlmod/Install
+	$(call perlmod/Install/NoStrip,$(1),$(2),$(3))
 
 	@echo "---> Stripping modules in: $(strip $(1))$(PERL_SITELIB)"
 	find $(strip $(1))$(PERL_SITELIB) -name \*.pm -or -name \*.pl | \
 	xargs -r sed -i \
-		-e '/^=\(head\|pod\|item\|over\|back\|encoding\)/,/^=cut/d' \
-		-e '/^=\(head\|pod\|item\|over\|back\|encoding\)/,$$$$d' \
+		-e '/^=\(head\|pod\|item\|over\|back\|encoding\|begin\|end\|for\)/,/^=cut/d' \
+		-e '/^=\(head\|pod\|item\|over\|back\|encoding\|begin\|end\|for\)/,$$$$d' \
 		-e '/^#$$$$/d' \
 		-e '/^#[^!"'"'"']/d'
+endef
+
+# You probably don't want to use this directly. Look at perlmod/InstallTests
+define perlmod/_InstallTests
+	$(INSTALL_DIR) $(strip $(1))
+	(cd $(PKG_BUILD_DIR)/$(2) && \
+	rsync --relative -rlHp --itemize-changes \
+		--exclude=.packlist \
+		--prune-empty-dirs \
+		$(strip $(3)) $(strip $(1)))
+
+	chmod -R u+w $(strip $(1))
+endef
+
+define perlmod/InstallBaseTests
+	$(if $(CONFIG_PERL_TESTS),$(call perlmod/_InstallTests,$(1)$(PERL_TESTSDIR),,$(2)))
+endef
+
+define perlmod/InstallTests
+	$(if $(CONFIG_PERL_TESTS),$(call perlmod/_InstallTests,$(1)$(PERL_TESTSDIR),$(2),$(3)))
 endef

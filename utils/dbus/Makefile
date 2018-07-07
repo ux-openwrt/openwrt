@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2011 OpenWrt.org
+# Copyright (C) 2007-2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -9,22 +9,23 @@ include $(TOPDIR)/rules.mk
 
 # Make sure to also update the dbus-x package
 PKG_NAME:=dbus
-PKG_VERSION:=1.8.6
+PKG_VERSION:=1.9.10
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://dbus.freedesktop.org/releases/dbus/
-PKG_MD5SUM:=6a08ba555d340e9dfe2d623b83c0eea8
+PKG_MD5SUM:=72390a741009017258c00a3268daa728
 PKG_MAINTAINER:=Steven Barth <cyrus@openwrt.org>
+PKG_LICENSE:=AFL-2.1
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
+include $(INCLUDE_DIR)/host-build.mk
 include $(INCLUDE_DIR)/package.mk
 
 TARGET_LDFLAGS+= \
 	-Wl,-rpath-link=$(STAGING_DIR)/usr/lib \
-	-Wl,-rpath=/usr/lib/
 
 define Package/dbus/Default
   SECTION:=utils
@@ -45,7 +46,7 @@ define Package/libdbus
 $(call Package/dbus/Default)
   CATEGORY:=Libraries
   TITLE+= (library)
-  DEPENDS:= +librt
+  DEPENDS:= +libpthread
 endef
 
 define Package/libdbus/Description
@@ -106,6 +107,29 @@ CONFIGURE_VARS+= \
 	ac_cv_have_abstract_sockets="yes" \
 	ac_cv_lib_expat_XML_ParserCreate_MM="yes" \
 
+HOST_CONFIGURE_ARGS+= \
+	--enable-shared \
+	--enable-static \
+	--disable-abstract-sockets \
+	--disable-ansi \
+	--disable-asserts \
+	--disable-console-owner-file \
+	--disable-docygen-docs \
+	--disable-compiler_coverage \
+	--disable-selinux \
+	--disable-tests \
+	--disable-verbose-mode \
+	--disable-xml-docs \
+	--with-dbus-user=root \
+	--with-dbus-daemondir="$(STAGIND_DIR_HOST)/bin" \
+	--with-system-socket="$(STAGING_DIR_HOST)/var/run/dbus/system_bus_socket" \
+	--with-system-pid-file="$(STAGING_DIR_HOST)/var/run/dbus.pid" \
+	--without-x \
+	--libexecdir="$(STAGING_DIR_HOST)/lib/dbus-1"
+
+HOST_CONFIGURE_VARS+= \
+	ac_cv_have_abstract_sockets="yes" \
+	ac_cv_lib_expat_XML_ParserCreate_MM="yes" \
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)/usr/include
@@ -183,6 +207,7 @@ define Package/dbus-utils/install
 		$(1)/usr/bin/
 endef
 
+$(eval $(call HostBuild))
 $(eval $(call BuildPackage,libdbus))
 $(eval $(call BuildPackage,dbus))
 $(eval $(call BuildPackage,dbus-utils))

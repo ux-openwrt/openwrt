@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2014 CZ.NIC, z.s.p.o. <knot-dns@labs.nic.cz>
+# Copyright (C) 2014-2015 CZ.NIC, z.s.p.o. <knot-dns@labs.nic.cz>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -8,15 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=knot
-PKG_VERSION:=1.5.0
+PKG_VERSION:=1.6.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_URL:=https://secure.nic.cz/files/knot-dns/
-PKG_MD5SUM:=d677de99c19afea3b1e8ef075a9d5a8b
+PKG_MD5SUM:=ad0a2d641556ad30d17d45200a2c45df
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_MAINTAINER:=Daniel Salzman <daniel.salzman@nic.cz>
+PKG_LICENSE:=GPL-2.0+
+
 PKG_BUILD_PARALLEL:=1
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
@@ -28,7 +30,6 @@ define Package/knot/Default
 	CATEGORY:=Network
 	TITLE:=Knot DNS
 	URL:=https://www.knot-dns.cz
-	MAINTAINER:=daniel.salzman@nic.cz
 	SUBMENU:=IP Addresses and Names
 	DEPENDS:=+libopenssl +liburcu
 endef
@@ -44,9 +45,27 @@ define Package/knot
 	DEPENDS+=+knot-libknot
 endef
 
-define Package/knot-utils
+define Package/knot-dig
 	$(call Package/knot/Default)
-	TITLE+= (utils)
+	TITLE+= lookup utility
+	DEPENDS+=+knot-libknot
+endef
+
+define Package/knot-host
+	$(call Package/knot/Default)
+	TITLE+= simple DNS lookup utility
+	DEPENDS+=+knot-libknot
+endef
+
+define Package/knot-nsec3hash
+	$(call Package/knot/Default)
+	TITLE+= simple NSEC3 hash utility
+	DEPENDS+=+knot-libknot
+endef
+
+define Package/knot-nsupdate
+	$(call Package/knot/Default)
+	TITLE+= dynamic DNS update utility
 	DEPENDS+=+knot-libknot
 endef
 
@@ -64,8 +83,20 @@ define Package/knot/description
 	High-performance authoritative-only DNS server.
 endef
 
-define Package/knot-utils/description
-	DNS utilities: kdig, khost, knsupdate and knsec3hash.
+define Package/knot-dig/description
+	Knot DNS lookup utility.
+endef
+
+define Package/knot-host/description
+	Knot DNS simple DNS lookup utility.
+endef
+
+define Package/knot-nsec3hash/description
+	Knot DNS simple utility to compute NSEC3 hash.
+endef
+
+define Package/knot-nsupdate/description
+	Knot DNS dynamic DNS update utility.
 endef
 
 define Package/knot-tests/description
@@ -112,12 +143,24 @@ define Package/knot/install
 	$(INSTALL_BIN) ./files/knotd.init	$(1)/etc/init.d/knotd
 endef
 
-define Package/knot-utils/install
+define Package/knot-dig/install
 	$(INSTALL_DIR)						$(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/kdig		$(1)/usr/bin/
+endef
+
+define Package/knot-host/install
+	$(INSTALL_DIR)						$(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/khost		$(1)/usr/bin/
-	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/knsupdate	$(1)/usr/bin/
+endef
+
+define Package/knot-nsec3hash/install
+	$(INSTALL_DIR)						$(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/knsec3hash	$(1)/usr/bin/
+endef
+
+define Package/knot-nsupdate/install
+	$(INSTALL_DIR)						$(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/bin/knsupdate	$(1)/usr/bin/
 endef
 
 define Package/knot-tests/install
@@ -144,5 +187,8 @@ endef
 
 $(eval $(call BuildPackage,knot-libknot))
 $(eval $(call BuildPackage,knot))
-$(eval $(call BuildPackage,knot-utils))
+$(eval $(call BuildPackage,knot-dig))
+$(eval $(call BuildPackage,knot-host))
+$(eval $(call BuildPackage,knot-nsec3hash))
+$(eval $(call BuildPackage,knot-nsupdate))
 $(eval $(call BuildPackage,knot-tests))

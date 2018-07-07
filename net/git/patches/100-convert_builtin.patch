@@ -1,6 +1,6 @@
 --- a/Makefile
 +++ b/Makefile
-@@ -532,16 +532,7 @@ EXTRA_PROGRAMS =
+@@ -538,16 +538,7 @@ EXTRA_PROGRAMS =
  # ... and all the rest that could be moved out of bindir to gitexecdir
  PROGRAMS += $(EXTRA_PROGRAMS)
  
@@ -18,7 +18,7 @@
  
  # Binary suffix, set to .exe for Windows builds
  X =
-@@ -1002,6 +993,12 @@ BUILTIN_OBJS += builtin/var.o
+@@ -896,6 +887,12 @@ BUILTIN_OBJS += builtin/verify-commit.o
  BUILTIN_OBJS += builtin/verify-pack.o
  BUILTIN_OBJS += builtin/verify-tag.o
  BUILTIN_OBJS += builtin/write-tree.o
@@ -31,7 +31,7 @@
  
  GITLIBS = $(LIB_FILE) $(XDIFF_LIB)
  EXTLIBS =
-@@ -1165,7 +1162,7 @@ endif
+@@ -1070,7 +1067,7 @@ endif
  EXTLIBS += -lz
  
  ifndef NO_OPENSSL
@@ -40,18 +40,18 @@
  	ifdef OPENSSLDIR
  		BASIC_CFLAGS += -I$(OPENSSLDIR)/include
  		OPENSSL_LINK = -L$(OPENSSLDIR)/$(lib) $(CC_LD_DYNPATH)$(OPENSSLDIR)/$(lib)
-@@ -2049,10 +2046,6 @@ endif
+@@ -1933,10 +1930,6 @@ endif
  git-%$X: %.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) $(LIBS)
  
--git-imap-send$X: imap-send.o GIT-LDFLAGS $(GITLIBS)
+-git-imap-send$X: imap-send.o $(IMAP_SEND_BUILDDEPS) GIT-LDFLAGS $(GITLIBS)
 -	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
--		$(LIBS) $(OPENSSL_LINK) $(OPENSSL_LIBSSL) $(LIB_4_CRYPTO)
+-		$(LIBS) $(IMAP_SEND_LDFLAGS)
 -
  git-http-fetch$X: http.o http-walker.o http-fetch.o GIT-LDFLAGS $(GITLIBS)
  	$(QUIET_LINK)$(CC) $(ALL_CFLAGS) -o $@ $(ALL_LDFLAGS) $(filter %.o,$^) \
  		$(LIBS) $(CURL_LIBCURL)
-@@ -2364,24 +2357,22 @@ endif
+@@ -2254,24 +2247,22 @@ endif
  	bindir=$$(cd '$(DESTDIR_SQ)$(bindir_SQ)' && pwd) && \
  	execdir=$$(cd '$(DESTDIR_SQ)$(gitexec_instdir_SQ)' && pwd) && \
  	{ test "$$bindir/" = "$$execdir/" || \
@@ -80,7 +80,7 @@
  	done && \
 --- a/builtin.h
 +++ b/builtin.h
-@@ -136,5 +136,11 @@ extern int cmd_verify_pack(int argc, con
+@@ -138,5 +138,11 @@ extern int cmd_verify_pack(int argc, con
  extern int cmd_show_ref(int argc, const char **argv, const char *prefix);
  extern int cmd_pack_refs(int argc, const char **argv, const char *prefix);
  extern int cmd_replace(int argc, const char **argv, const char *prefix);
@@ -118,7 +118,7 @@
 +#include "../upload-pack.c"
 --- a/daemon.c
 +++ b/daemon.c
-@@ -1125,7 +1125,7 @@ static int serve(struct string_list *lis
+@@ -1096,7 +1096,7 @@ static int serve(struct string_list *lis
  	return service_loop(&socklist);
  }
  
@@ -127,9 +127,28 @@
  {
  	int listen_port = 0;
  	struct string_list listen_addr = STRING_LIST_INIT_NODUP;
+@@ -1292,12 +1292,13 @@ int main(int argc, char **argv)
+ 		store_pid(pid_file);
+ 
+ 	/* prepare argv for serving-processes */
+-	cld_argv = xmalloc(sizeof (char *) * (argc + 2));
+-	cld_argv[0] = argv[0];	/* git-daemon */
+-	cld_argv[1] = "--serve";
++	cld_argv = xmalloc(sizeof (char *) * (argc + 3));
++	cld_argv[0] = "git";
++	cld_argv[1] = argv[0];	/* daemon */
++	cld_argv[2] = "--serve";
+ 	for (i = 1; i < argc; ++i)
+-		cld_argv[i+1] = argv[i];
+-	cld_argv[argc+1] = NULL;
++		cld_argv[i+2] = argv[i];
++	cld_argv[argc+2] = NULL;
+ 
+ 	return serve(&listen_addr, listen_port, cred);
+ }
 --- a/fast-import.c
 +++ b/fast-import.c
-@@ -3356,7 +3356,7 @@ static void parse_argv(void)
+@@ -3350,7 +3350,7 @@ static void parse_argv(void)
  		read_marks();
  }
  
@@ -140,7 +159,7 @@
  
 --- a/git.c
 +++ b/git.c
-@@ -275,11 +275,11 @@ static int handle_alias(int *argcp, cons
+@@ -309,11 +309,11 @@ static int handle_alias(int *argcp, cons
  
  struct cmd_struct {
  	const char *cmd;
@@ -154,7 +173,7 @@
  {
  	int status, help;
  	struct stat st;
-@@ -359,6 +359,7 @@ static struct cmd_struct commands[] = {
+@@ -393,6 +393,7 @@ static struct cmd_struct commands[] = {
  	{ "config", cmd_config, RUN_SETUP_GENTLY },
  	{ "count-objects", cmd_count_objects, RUN_SETUP },
  	{ "credential", cmd_credential, RUN_SETUP_GENTLY },
@@ -162,16 +181,16 @@
  	{ "describe", cmd_describe, RUN_SETUP },
  	{ "diff", cmd_diff },
  	{ "diff-files", cmd_diff_files, RUN_SETUP | NEED_WORK_TREE },
-@@ -377,6 +378,8 @@ static struct cmd_struct commands[] = {
+@@ -411,6 +412,8 @@ static struct cmd_struct commands[] = {
  	{ "grep", cmd_grep, RUN_SETUP_GENTLY },
  	{ "hash-object", cmd_hash_object },
  	{ "help", cmd_help },
 +	{ "http-backend", cmd_http_backend },
 +	{ "imap-send", cmd_imap_send },
  	{ "index-pack", cmd_index_pack, RUN_SETUP_GENTLY },
- 	{ "init", cmd_init_db },
- 	{ "init-db", cmd_init_db },
-@@ -424,6 +427,7 @@ static struct cmd_struct commands[] = {
+ 	{ "init", cmd_init_db, NO_SETUP },
+ 	{ "init-db", cmd_init_db, NO_SETUP },
+@@ -459,6 +462,7 @@ static struct cmd_struct commands[] = {
  	{ "revert", cmd_revert, RUN_SETUP | NEED_WORK_TREE },
  	{ "rm", cmd_rm, RUN_SETUP },
  	{ "send-pack", cmd_send_pack, RUN_SETUP },
@@ -179,17 +198,17 @@
  	{ "shortlog", cmd_shortlog, RUN_SETUP_GENTLY | USE_PAGER },
  	{ "show", cmd_show, RUN_SETUP },
  	{ "show-branch", cmd_show_branch, RUN_SETUP },
-@@ -440,6 +444,7 @@ static struct cmd_struct commands[] = {
+@@ -475,6 +479,7 @@ static struct cmd_struct commands[] = {
  	{ "update-server-info", cmd_update_server_info, RUN_SETUP },
  	{ "upload-archive", cmd_upload_archive },
  	{ "upload-archive--writer", cmd_upload_archive_writer },
 +	{ "upload-pack", cmd_upload_pack },
  	{ "var", cmd_var, RUN_SETUP_GENTLY },
+ 	{ "verify-commit", cmd_verify_commit, RUN_SETUP },
  	{ "verify-pack", cmd_verify_pack },
- 	{ "verify-tag", cmd_verify_tag, RUN_SETUP },
 --- a/http-backend.c
 +++ b/http-backend.c
-@@ -563,7 +563,7 @@ static struct service_cmd {
+@@ -557,7 +557,7 @@ static struct service_cmd {
  	{"POST", "/git-receive-pack$", service_rpc}
  };
  
@@ -200,18 +219,18 @@
  	char *dir;
 --- a/imap-send.c
 +++ b/imap-send.c
-@@ -1362,7 +1362,7 @@ static int git_imap_config(const char *k
- 	return 0;
+@@ -1484,7 +1484,7 @@ static int curl_append_msgs_to_imap(stru
  }
+ #endif
  
 -int main(int argc, char **argv)
 +int cmd_imap_send(int argc, char **argv, const char *prefix)
  {
  	struct strbuf all_msgs = STRBUF_INIT;
- 	struct strbuf msg = STRBUF_INIT;
+ 	int total;
 --- a/shell.c
 +++ b/shell.c
-@@ -142,7 +142,7 @@ static struct commands {
+@@ -138,7 +138,7 @@ static struct commands {
  	{ NULL },
  };
  
@@ -222,7 +241,7 @@
  	const char **user_argv;
 --- a/upload-pack.c
 +++ b/upload-pack.c
-@@ -790,7 +790,7 @@ static int upload_pack_config(const char
+@@ -793,7 +793,7 @@ static int upload_pack_config(const char
  	return parse_hide_refs_config(var, value, "uploadpack");
  }
  
