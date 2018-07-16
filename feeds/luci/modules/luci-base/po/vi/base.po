@@ -642,6 +642,13 @@ msgstr "Lệnh"
 msgid "Common Configuration"
 msgstr ""
 
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
+
 msgid "Compression"
 msgstr "Sức nén"
 
@@ -1896,6 +1903,9 @@ msgstr "Bộ nhớ"
 
 msgid "Memory usage (%)"
 msgstr "Memory usage (%)"
+
+msgid "Mesh Id"
+msgstr ""
 
 msgid "Metric"
 msgstr "Metric"
@@ -3618,13 +3628,6 @@ msgstr ""
 msgid "Wireless shut down"
 msgstr ""
 
-msgid ""
-"Complicates key reinstallation attacks on the client side by disabling "
-"retransmission of EAPOL-Key frames that are used to install keys. This "
-"workaround might cause interoperability issues and reduced robustness of key "
-"negotiation especially in environments with heavy traffic load."
-msgstr ""
-
 msgid "Write received DNS requests to syslog"
 msgstr ""
 
@@ -3720,6 +3723,9 @@ msgid "if target is a network"
 msgstr "Nếu mục tiêu là một network"
 
 msgid "input"
+msgstr ""
+
+msgid "internal forwarding of Mesh-peers"
 msgstr ""
 
 msgid "kB"

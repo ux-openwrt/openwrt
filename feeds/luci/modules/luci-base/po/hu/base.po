@@ -675,6 +675,13 @@ msgstr "Parancs"
 msgid "Common Configuration"
 msgstr "Álatános beállítás"
 
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
+
 msgid "Compression"
 msgstr "Tömörítés"
 
@@ -1963,6 +1970,9 @@ msgstr "Memória"
 
 msgid "Memory usage (%)"
 msgstr "Memória használat (%)"
+
+msgid "Mesh Id"
+msgstr ""
 
 msgid "Metric"
 msgstr "Metrika"
@@ -3768,13 +3778,6 @@ msgstr "Vezetéknélküli rész újraindítva"
 msgid "Wireless shut down"
 msgstr "Vezetéknélküli rész leállítása"
 
-msgid ""
-"Complicates key reinstallation attacks on the client side by disabling "
-"retransmission of EAPOL-Key frames that are used to install keys. This "
-"workaround might cause interoperability issues and reduced robustness of key "
-"negotiation especially in environments with heavy traffic load."
-msgstr ""
-
 msgid "Write received DNS requests to syslog"
 msgstr "A kapott DNS kéréseket írja a rendszernaplóba"
 
@@ -3873,6 +3876,9 @@ msgstr "ha a cél hálózat"
 
 msgid "input"
 msgstr "bemenet"
+
+msgid "internal forwarding of Mesh-peers"
+msgstr ""
 
 msgid "kB"
 msgstr "kB"

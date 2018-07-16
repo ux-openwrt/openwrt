@@ -680,6 +680,13 @@ msgstr "Commande"
 msgid "Common Configuration"
 msgstr "Configuration commune"
 
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
+
 msgid "Compression"
 msgstr "Compression"
 
@@ -1974,6 +1981,9 @@ msgstr "Mémoire"
 
 msgid "Memory usage (%)"
 msgstr "Utilisation Mémoire (%)"
+
+msgid "Mesh Id"
+msgstr ""
 
 msgid "Metric"
 msgstr "Metrique"
@@ -3781,13 +3791,6 @@ msgstr "Wi-Fi ré-initialisé"
 msgid "Wireless shut down"
 msgstr "Wi-Fi arrêté"
 
-msgid ""
-"Complicates key reinstallation attacks on the client side by disabling "
-"retransmission of EAPOL-Key frames that are used to install keys. This "
-"workaround might cause interoperability issues and reduced robustness of key "
-"negotiation especially in environments with heavy traffic load."
-msgstr ""
-
 msgid "Write received DNS requests to syslog"
 msgstr "Écrire les requêtes DNS reçues dans syslog"
 
@@ -3884,6 +3887,9 @@ msgstr "si la destination est un réseau"
 
 msgid "input"
 msgstr "entrée"
+
+msgid "internal forwarding of Mesh-peers"
+msgstr ""
 
 msgid "kB"
 msgstr "kB"

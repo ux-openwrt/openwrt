@@ -664,6 +664,13 @@ msgstr "Ordre"
 msgid "Common Configuration"
 msgstr "Configuració comuna"
 
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
+
 msgid "Compression"
 msgstr "Compressió"
 
@@ -1924,6 +1931,9 @@ msgstr "Memòria"
 
 msgid "Memory usage (%)"
 msgstr "Ús de Memòria (%)"
+
+msgid "Mesh Id"
+msgstr ""
 
 msgid "Metric"
 msgstr "Mètric"
@@ -3664,13 +3674,6 @@ msgstr "Sense fils reinciat"
 msgid "Wireless shut down"
 msgstr "Sense fils aturat"
 
-msgid ""
-"Complicates key reinstallation attacks on the client side by disabling "
-"retransmission of EAPOL-Key frames that are used to install keys. This "
-"workaround might cause interoperability issues and reduced robustness of key "
-"negotiation especially in environments with heavy traffic load."
-msgstr ""
-
 msgid "Write received DNS requests to syslog"
 msgstr "Escriure les peticions DNS rebudes al syslog"
 
@@ -3769,6 +3772,9 @@ msgstr "si el destí és una xarxa"
 
 msgid "input"
 msgstr "entrada"
+
+msgid "internal forwarding of Mesh-peers"
+msgstr ""
 
 msgid "kB"
 msgstr "kB"
