@@ -668,6 +668,13 @@ msgstr "Příkaz"
 msgid "Common Configuration"
 msgstr "Společná nastavení"
 
+msgid ""
+"Complicates key reinstallation attacks on the client side by disabling "
+"retransmission of EAPOL-Key frames that are used to install keys. This "
+"workaround might cause interoperability issues and reduced robustness of key "
+"negotiation especially in environments with heavy traffic load."
+msgstr ""
+
 msgid "Compression"
 msgstr "Komprese"
 
@@ -1946,6 +1953,9 @@ msgstr "Paměť"
 
 msgid "Memory usage (%)"
 msgstr "Využití paměti (%)"
+
+msgid "Mesh Id"
+msgstr ""
 
 msgid "Metric"
 msgstr "Metrika"
@@ -3736,13 +3746,6 @@ msgstr "Bezdrátová síť restartována"
 msgid "Wireless shut down"
 msgstr "Bezdrátová síť vypnuta"
 
-msgid ""
-"Complicates key reinstallation attacks on the client side by disabling "
-"retransmission of EAPOL-Key frames that are used to install keys. This "
-"workaround might cause interoperability issues and reduced robustness of key "
-"negotiation especially in environments with heavy traffic load."
-msgstr ""
-
 msgid "Write received DNS requests to syslog"
 msgstr "Zapisovat přijaté požadavky DNS do systemového logu"
 
@@ -3839,6 +3842,9 @@ msgstr "pokud cílem je síť"
 
 msgid "input"
 msgstr "vstup"
+
+msgid "internal forwarding of Mesh-peers"
+msgstr ""
 
 msgid "kB"
 msgstr "kB"

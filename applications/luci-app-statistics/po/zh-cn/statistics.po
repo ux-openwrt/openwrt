@@ -13,6 +13,12 @@ msgstr ""
 "X-Generator: Poedit 2.0.1\n"
 "Language-Team: \n"
 
+msgid "APC UPS"
+msgstr ""
+
+msgid "APCUPS Plugin Configuration"
+msgstr ""
+
 msgid "Action (target)"
 msgstr "动作（目标）"
 
@@ -289,6 +295,9 @@ msgstr "监测磁盘和分区"
 msgid "Monitor filesystem types"
 msgstr "监测文件系统类型"
 
+msgid "Monitor host"
+msgstr ""
+
 msgid "Monitor hosts"
 msgstr "监测主机"
 
@@ -331,6 +340,13 @@ msgstr "Network插件"
 msgid "Network protocol"
 msgstr "Network协议"
 
+msgid ""
+"Note: as pages are rendered by user 'nobody', the *.rrd files, the storage "
+"directory and all its parent directories need to be world readable."
+msgstr ""
+"注意：由于页面是以 'nobody' 身份生成的，因此 *.rrd 文件以及包含此文件的所有父"
+"目录必须全局可读。"
+
 msgid "Number of threads for data collection"
 msgstr "收集程序使用线程数"
 
@@ -369,6 +385,9 @@ msgstr "Ping插件配置"
 
 msgid "Port"
 msgstr "端口"
+
+msgid "Port for apcupsd communication"
+msgstr ""
 
 msgid "Processes"
 msgstr "进程"
@@ -492,6 +511,9 @@ msgstr "ping包TTL"
 
 msgid "Table"
 msgstr "表"
+
+msgid "The APCUPS plugin collects statistics about the APC UPS."
+msgstr ""
 
 msgid "The NUT plugin reads information about Uninterruptible Power Supplies."
 msgstr "NUT插件读取UPS信息。"
@@ -742,14 +764,6 @@ msgstr "秒数；多个使用空格分隔"
 
 msgid "server interfaces"
 msgstr "服务器接口"
-
-#~ msgid ""
-#~ "Note: as pages are rendered by user 'nobody', the *.rrd files, the "
-#~ "storage directory and all its parent directories need to be world "
-#~ "readable."
-#~ msgstr ""
-#~ "注意：由于页面是以 'nobody' 身份生成的，因此 *.rrd 文件以及包含此文件的所"
-#~ "有父目录必须全局可读。"
 
 #~ msgid "Collectd"
 #~ msgstr "Collectd"
