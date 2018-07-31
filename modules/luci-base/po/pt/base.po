@@ -163,9 +163,6 @@ msgstr ""
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"máximo\">Max.</abbr> consultas concorrentes"
 
-msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr "<abbr title='Emparelhada: %s / Grupo: %s'>%s - %s</abbr>"
-
 msgid ""
 "<br/>Note: you need to manually restart the cron service if the crontab file "
 "was empty before editing."
@@ -280,7 +277,13 @@ msgstr ""
 msgid "Alert"
 msgstr "Alerta"
 
-msgid "Alias interface"
+msgid "Alias Interface"
+msgstr ""
+
+msgid "Alias of \"%s\""
+msgstr ""
+
+msgid "All Servers"
 msgstr ""
 
 msgid ""
@@ -294,6 +297,9 @@ msgstr ""
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Permitir autenticação <abbr title=\"Shell Seguro\">SSH</abbr> por senha"
+
+msgid "Allow AP mode to disconnect STAs based on low ACK condition"
+msgstr ""
 
 msgid "Allow all except listed"
 msgstr "Permitir todos, excepto os listados"
@@ -326,6 +332,11 @@ msgid "Allowed IPs"
 msgstr ""
 
 msgid "Always announce default router"
+msgstr ""
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
 msgstr ""
 
 msgid "Annex"
@@ -519,6 +530,9 @@ msgstr "Endereço mal especificado!"
 msgid "Band"
 msgstr ""
 
+msgid "Beacon Interval"
+msgstr ""
+
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
 "configuration files marked by opkg, essential base files and the user "
@@ -709,6 +723,9 @@ msgstr "Ligado"
 msgid "Connection Limit"
 msgstr "Limite de Ligações"
 
+msgid "Connection attempt failed"
+msgstr ""
+
 msgid "Connections"
 msgstr "Ligações"
 
@@ -822,6 +839,9 @@ msgstr ""
 msgid "DSL line mode"
 msgstr ""
 
+msgid "DTIM Interval"
+msgstr ""
+
 msgid "DUID"
 msgstr "DUID"
 
@@ -860,6 +880,9 @@ msgstr "Apagar"
 
 msgid "Delete this network"
 msgstr "Apagar esta rede"
+
+msgid "Delivery Traffic Indication Message Interval"
+msgstr ""
 
 msgid "Description"
 msgstr "Descrição"
@@ -917,6 +940,9 @@ msgid "Disabled"
 msgstr "Desativado"
 
 msgid "Disabled (default)"
+msgstr ""
+
+msgid "Disassociate On Low Acknowledgement"
 msgstr ""
 
 msgid "Discard upstream RFC1918 responses"
@@ -1279,6 +1305,9 @@ msgstr "A programar...."
 
 msgid "Force"
 msgstr "Forçar"
+
+msgid "Force 40MHz mode"
+msgstr ""
 
 msgid "Force CCMP (AES)"
 msgstr "Forçar CCMP (AES)"
@@ -1946,6 +1975,9 @@ msgstr ""
 msgid "Lowest leased address as offset from the network address."
 msgstr ""
 
+msgid "MAC"
+msgstr ""
+
 msgid "MAC-Address"
 msgstr "Endereço-MAC"
 
@@ -2187,6 +2219,9 @@ msgstr "Sem password definida!"
 
 msgid "No rules in this chain"
 msgstr "Sem regras nesta cadeia"
+
+msgid "No scan results available yet..."
+msgstr ""
 
 msgid "No zone assigned"
 msgstr "Sem zona atribuída"
@@ -2612,6 +2647,11 @@ msgstr ""
 msgid "Quality"
 msgstr "Qualidade"
 
+msgid ""
+"Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> "
+"servers"
+msgstr ""
+
 msgid "R0 Key Lifetime"
 msgstr ""
 
@@ -2901,6 +2941,9 @@ msgstr "Salvar & Aplicar"
 msgid "Scan"
 msgstr "Procurar"
 
+msgid "Scan request failed"
+msgstr ""
+
 msgid "Scheduled Tasks"
 msgstr "Tarefas Agendadas"
 
@@ -2955,6 +2998,9 @@ msgid "Severely Errored Seconds (SES)"
 msgstr ""
 
 msgid "Short GI"
+msgstr ""
+
+msgid "Short Preamble"
 msgstr ""
 
 msgid "Show current backup file list"
@@ -3056,6 +3102,9 @@ msgid "Start priority"
 msgstr "Prioridade de inicialização"
 
 msgid "Starting configuration apply…"
+msgstr ""
+
+msgid "Starting wireless scan..."
 msgstr ""
 
 msgid "Startup"
@@ -3882,6 +3931,9 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
+msgid "mixed WPA/WPA2"
+msgstr ""
+
 msgid "no"
 msgstr "não"
 
@@ -3956,6 +4008,9 @@ msgstr "sim"
 
 msgid "« Back"
 msgstr "« Voltar"
+
+#~ msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
+#~ msgstr "<abbr title='Emparelhada: %s / Grupo: %s'>%s - %s</abbr>"
 
 #~ msgid "Activate this network"
 #~ msgstr "Ativar esta rede"
