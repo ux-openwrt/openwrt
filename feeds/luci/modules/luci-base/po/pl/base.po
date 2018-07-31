@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2018-07-14 21:35+0200\n"
+"PO-Revision-Date: 2018-07-21 18:35+0200\n"
 "Last-Translator: Rixerx <krystian.kozak20@gmail.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -49,6 +49,9 @@ msgstr "-- dopasuj po etykiecie --"
 
 msgid "-- match by uuid --"
 msgstr "-- dopasuj po uuid --"
+
+msgid "-- please select --"
+msgstr ""
 
 msgid "1 Minute Load:"
 msgstr "Obciążenie 1 min.:"
@@ -154,9 +157,6 @@ msgstr ""
 
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"Maksymalna ilość\">Maks.</abbr> zapytań równoczesnych"
-
-msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr "<abbr title='Par: %s / Grup: %s'>%s - %s</abbr>"
 
 msgid ""
 "<br/>Note: you need to manually restart the cron service if the crontab file "
@@ -278,8 +278,14 @@ msgstr ""
 msgid "Alert"
 msgstr "Alarm"
 
-msgid "Alias interface"
-msgstr "Alias interfejsu"
+msgid "Alias Interface"
+msgstr "Alias Interfejsu"
+
+msgid "Alias of \"%s\""
+msgstr "Alias \"%s\""
+
+msgid "All Servers"
+msgstr "Wszystkie serwery"
 
 msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
@@ -292,6 +298,9 @@ msgstr "Przydzielaj adresy IP po kolei"
 
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "Pozwól na logowanie <abbr title=\"Secure Shell\">SSH</abbr>"
+
+msgid "Allow AP mode to disconnect STAs based on low ACK condition"
+msgstr "Pozwól aby tryb AP rozłączał stacje STA w oparciu o niski stan ACK"
 
 msgid "Allow all except listed"
 msgstr "Pozwól wszystkim oprócz wymienionych"
@@ -325,6 +334,13 @@ msgstr "Dozwolone adresy IP"
 
 msgid "Always announce default router"
 msgstr "Zawsze rozgłaszaj domyślny router"
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
+msgstr ""
+"Zawsze używaj kanału 40 MHz, nawet jeśli kanał dodatkowy nachodzi na inny. "
+"Używanie tej opcji nie jest zgodne z IEEE 802.11n-2009!"
 
 msgid "Annex"
 msgstr ""
@@ -523,6 +539,9 @@ msgstr "Wprowadzono zły adres"
 msgid "Band"
 msgstr ""
 
+msgid "Beacon Interval"
+msgstr "Interwał Beaconu"
+
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
 "configuration files marked by opkg, essential base files and the user "
@@ -557,7 +576,6 @@ msgstr "Interfejs mostu"
 msgid "Bridge unit number"
 msgstr "Numer Mostu (urządzenia)"
 
-# Podejrzewam że chodzi o interfejs? mam rację?
 msgid "Bring up on boot"
 msgstr "Podnieś przy stracie"
 
@@ -839,6 +857,9 @@ msgstr "Status DSL"
 msgid "DSL line mode"
 msgstr ""
 
+msgid "DTIM Interval"
+msgstr "Interwał DTIM"
+
 msgid "DUID"
 msgstr "DUID"
 
@@ -877,10 +898,12 @@ msgstr "Usuń"
 msgid "Delete this network"
 msgstr "Usuń tą sieć"
 
+msgid "Delivery Traffic Indication Message Interval"
+msgstr "Interwał komunikatu o wskazaniu dostawy ruchu"
+
 msgid "Description"
 msgstr "Opis"
 
-# Ktoś tłumaczył bez zobaczenia tego w gui. Dotyczy zmiany motywu ten opis.
 msgid "Design"
 msgstr "Motyw"
 
@@ -896,8 +919,11 @@ msgstr "Konfiguracja urządzenia"
 msgid "Device is rebooting..."
 msgstr "Urządzenie jest uruchamiane ponownie ..."
 
-msgid "Device unreachable"
-msgstr "Urządzenie nieosiągalne"
+msgid "Device unreachable!"
+msgstr ""
+
+msgid "Device unreachable! Still waiting for device..."
+msgstr ""
 
 msgid "Diagnostics"
 msgstr "Diagnostyka"
@@ -933,6 +959,9 @@ msgstr "Wyłączony"
 msgid "Disabled (default)"
 msgstr "Wyłączone (domyślnie)"
 
+msgid "Disassociate On Low Acknowledgement"
+msgstr "Rozłączaj przy niskim stanie ramek ACK"
+
 msgid "Discard upstream RFC1918 responses"
 msgstr "Odrzuć wychodzące odpowiedzi RFC1918"
 
@@ -958,15 +987,14 @@ msgstr ""
 msgid "Diversity"
 msgstr "Wielorakość"
 
-# Nie wiem czy nie zamotałem ja rozumiem;)
 msgid ""
 "Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol"
 "\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</abbr>-"
 "Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> "
 "firewalls"
 msgstr ""
-"Dnsmasq jest to serwer <abbr title=\"Dynamic Host Configuration Protocol"
-"\">DHCP</abbr> połączony z serwerem <abbr title=\"Domain Name System\">DNS</"
+"Dnsmasq jest kombajnem serwera <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> połączonym z serwerem <abbr title=\"Domain Name System\">DNS</"
 "abbr>. Jest to serwer przekazujący (Fowarder) dla firewalli <abbr title="
 "\"Network Address Translation\">NAT</abbr>"
 
@@ -1023,7 +1051,6 @@ msgstr ""
 msgid "Dual-Stack Lite (RFC6333)"
 msgstr ""
 
-# "n"  brakowało...
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
 msgstr ""
 "<abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> dynamiczne"
@@ -1300,6 +1327,9 @@ msgstr "Flashowanie..."
 
 msgid "Force"
 msgstr "Wymuś"
+
+msgid "Force 40MHz mode"
+msgstr "Wymuś tryb 40MHz"
 
 msgid "Force CCMP (AES)"
 msgstr "Wymuś CCMP (AES)"
@@ -1698,7 +1728,6 @@ msgstr ""
 msgid "Interface Configuration"
 msgstr "Konfiguracja Interfejsu"
 
-# Tam jest lista interfejsów....
 msgid "Interface Overview"
 msgstr "Przegląd Interfejsów"
 
@@ -1717,7 +1746,6 @@ msgstr "Interfejsy"
 msgid "Internal"
 msgstr ""
 
-# Nadużycie tagu abbr uważam za uzasadnione.
 msgid "Internal Server Error"
 msgstr "Wewnętrzny błąd serwera"
 
@@ -1977,6 +2005,9 @@ msgstr ""
 msgid "Lowest leased address as offset from the network address."
 msgstr "Najniższy wydzierżawiony adres jako offset dla adresu sieci."
 
+msgid "MAC"
+msgstr "MAC"
+
 msgid "MAC-Address"
 msgstr "Adres MAC"
 
@@ -2220,6 +2251,9 @@ msgstr "Nie ustawiono hasła!"
 
 msgid "No rules in this chain"
 msgstr "Brak zasad w tym łańcuchu"
+
+msgid "No scan results available yet..."
+msgstr "Brak wyników skanowania..."
 
 msgid "No zone assigned"
 msgstr "Brak przypisanej strefy"
@@ -2654,6 +2688,12 @@ msgstr "Komórkowy QMI"
 msgid "Quality"
 msgstr "Jakość"
 
+msgid ""
+"Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> "
+"servers"
+msgstr ""
+"Zapytaj o wszystkie dostępne serwery <abbr title=\"Domain Name System\">DNS</abbr> "
+
 msgid "R0 Key Lifetime"
 msgstr ""
 
@@ -2691,8 +2731,9 @@ msgid "Radius-Authentication-Server"
 msgstr "Serwer Radius-Authentication"
 
 msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
-msgstr "Surowe bajty kodowane szesnastkowo. Pozostaw puste, chyba że "
-"wymaga tego dostawca internetowy"
+msgstr ""
+"Surowe bajty kodowane szesnastkowo. Pozostaw puste, chyba że wymaga tego "
+"dostawca internetowy"
 
 msgid ""
 "Read <code>/etc/ethers</code> to configure the <abbr title=\"Dynamic Host "
@@ -2947,9 +2988,11 @@ msgstr "Zapisz i zastosuj"
 msgid "Scan"
 msgstr "Skanuj"
 
-# Raczej nie stosuje się kilku dużych liter w tym samym
+msgid "Scan request failed"
+msgstr "Próba skanowania nie powiodła się"
+
 msgid "Scheduled Tasks"
-msgstr "Zaplanowane zadania"
+msgstr "Zaplanowane Zadania"
 
 msgid "Section added"
 msgstr "Dodano sekcję"
@@ -3007,6 +3050,9 @@ msgstr ""
 
 msgid "Short GI"
 msgstr ""
+
+msgid "Short Preamble"
+msgstr "Krótki Wstęp"
 
 msgid "Show current backup file list"
 msgstr "Pokaż aktualną listę plików do backupu"
@@ -3114,6 +3160,9 @@ msgstr "Priorytet uruchomienia"
 
 msgid "Starting configuration apply…"
 msgstr ""
+
+msgid "Starting wireless scan..."
+msgstr "Rozpoczynanie skanowania..."
 
 msgid "Startup"
 msgstr "Autostart"
@@ -3879,7 +3928,7 @@ msgid ""
 msgstr ""
 "Tutaj można włączyć lub wyłączyć zainstalowane skrypty. Zmiany zostaną "
 "zastosowane po ponownym uruchomieniu urządzenia.<br /><strong>Ostrzeżenie: "
-"Jeśli wyłączysz podstawowe skrypty typu \"networks\", urządzenie może stać "
+"Jeśli wyłączysz podstawowe skrypty typu \"network\", urządzenie może stać "
 "się nieosiągalne!</strong>"
 
 msgid ""
@@ -3893,9 +3942,9 @@ msgid ""
 "upgrade it to at least version 7 or use another browser like Firefox, Opera "
 "or Safari."
 msgstr ""
-"Twój Internet Explorer jest za stary, aby poprawnie wyświetlić tę "
-"stronę zaktualizuj go do wersji co najmniej 7 lub użyj innej przeglądarki, "
-"takiej jak Firefox, Opera czy Safari."
+"Twój Internet Explorer jest za stary, aby poprawnie wyświetlić tę stronę "
+"zaktualizuj go do wersji co najmniej 7 lub użyj innej przeglądarki, takiej "
+"jak Firefox, Opera czy Safari."
 
 msgid "any"
 msgstr "dowolny"
@@ -3908,6 +3957,9 @@ msgstr "baseT"
 
 msgid "bridged"
 msgstr "zmostkowany"
+
+msgid "create"
+msgstr ""
 
 msgid "create:"
 msgstr "utwórz:"
@@ -3972,6 +4024,9 @@ msgstr "lokalny plik <abbr title=\"Domain Name System\">DNS</abbr>"
 
 msgid "minutes"
 msgstr "minuty"
+
+msgid "mixed WPA/WPA2"
+msgstr "mieszany WPA/WPA2"
 
 msgid "no"
 msgstr "nie"
@@ -4049,3 +4104,81 @@ msgstr "tak"
 msgid "« Back"
 msgstr "« Wróć"
 
+#~ msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
+#~ msgstr "<abbr title='Par: %s / Grup: %s'>%s - %s</abbr>"
+
+#~ msgid "Activate this network"
+#~ msgstr "Aktywuj tą sieć"
+
+#~ msgid "Hermes 802.11b Wireless Controller"
+#~ msgstr "Kontroler bezprzewodowy Hermes 802.11b"
+
+#~ msgid "Interface is shutting down..."
+#~ msgstr "Interfejs jest wyłączany..."
+
+#~ msgid "Interface reconnected"
+#~ msgstr "Połączono ponownie interfejs"
+
+#~ msgid "Interface shut down"
+#~ msgstr "Wyłączono interfejs"
+
+#~ msgid "Prism2/2.5/3 802.11b Wireless Controller"
+#~ msgstr "Kontroler bezprzewodowy Prism2/2.5/3 802.11b"
+
+#~ msgid "RaLink 802.11%s Wireless Controller"
+#~ msgstr "Kontroler bezprzewodowy RaLink 802.11%s"
+
+#~ msgid ""
+#~ "Really shutdown interface \"%s\"? You might lose access to this device if "
+#~ "you are connected via this interface."
+#~ msgstr ""
+#~ "Naprawdę wyłączyć interfejs \"%s\"?\n"
+#~ "Możesz stracić dostęp do tego urządzenia jeśli jesteś połączony przez ten "
+#~ "interfejs!"
+
+#~ msgid "Reconnecting interface"
+#~ msgstr "Łączę ponownie interfejs"
+
+#~ msgid "Shutdown this network"
+#~ msgstr "Wyłącz tą sieć"
+
+#~ msgid "Wireless restarted"
+#~ msgstr "Zrestartowano sieć bezprzewodową"
+
+#~ msgid "Wireless shut down"
+#~ msgstr "Wyłączanie sieci bezprzewodowej"
+
+#~ msgid "DHCP Leases"
+#~ msgstr "Dzierżawy DHCP"
+
+#~ msgid "DHCPv6 Leases"
+#~ msgstr "Dzierżawy DHCPv6"
+
+#~ msgid ""
+#~ "Really delete this interface? The deletion cannot be undone! You might "
+#~ "lose access to this device if you are connected via this interface."
+#~ msgstr ""
+#~ "Naprawdę usunąć ten interfejs? Usunięcie nie może zostać cofnięte!\n"
+#~ "Możesz stracić dostęp do tego urządzenia, jeśli jesteś połączony przez "
+#~ "ten interfejs!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Really shut down network? You might lose access to this device if you are "
+#~ "connected via this interface."
+#~ msgstr ""
+#~ "Naprawdę wyłączyć tę sieć?\n"
+#~ "Możesz stracić dostęp do tego urządzenia jeśli jesteś połączony przez ten "
+#~ "interfejs!"
+
+#~ msgid "Sort"
+#~ msgstr "Posortuj"
+
+#~ msgid "help"
+#~ msgstr "pomoc"
+
+#~ msgid "IPv4 WAN Status"
+#~ msgstr "Status IPv4 WAN"
+
+#~ msgid "IPv6 WAN Status"
+#~ msgstr "Status WAN IPv6"

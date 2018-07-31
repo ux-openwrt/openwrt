@@ -153,9 +153,6 @@ msgstr ""
 msgid "<abbr title=\"maximal\">Max.</abbr> concurrent queries"
 msgstr "<abbr title=\"Maksimal\">Maks.</abbr> samtidige spørringer"
 
-msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-msgstr "<abbr title='Parvis: %s / Gruppe: %s'>%s - %s</abbr>"
-
 msgid ""
 "<br/>Note: you need to manually restart the cron service if the crontab file "
 "was empty before editing."
@@ -270,7 +267,13 @@ msgstr ""
 msgid "Alert"
 msgstr "Varsle"
 
-msgid "Alias interface"
+msgid "Alias Interface"
+msgstr ""
+
+msgid "Alias of \"%s\""
+msgstr ""
+
+msgid "All Servers"
 msgstr ""
 
 msgid ""
@@ -283,6 +286,9 @@ msgstr ""
 
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "Tillat <abbr title=\"Secure Shell\">SSH</abbr> passord godkjenning"
+
+msgid "Allow AP mode to disconnect STAs based on low ACK condition"
+msgstr ""
 
 msgid "Allow all except listed"
 msgstr "Tillat alle unntatt oppførte"
@@ -313,6 +319,11 @@ msgid "Allowed IPs"
 msgstr ""
 
 msgid "Always announce default router"
+msgstr ""
+
+msgid ""
+"Always use 40MHz channels even if the secondary channel overlaps. Using this "
+"option does not comply with IEEE 802.11n-2009!"
 msgstr ""
 
 msgid "Annex"
@@ -506,6 +517,9 @@ msgstr "Ugyldig adresse oppgitt!"
 msgid "Band"
 msgstr ""
 
+msgid "Beacon Interval"
+msgstr ""
+
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
 "configuration files marked by opkg, essential base files and the user "
@@ -696,6 +710,9 @@ msgstr "Tilkoblet"
 msgid "Connection Limit"
 msgstr "Tilkoblingsgrense (antall)"
 
+msgid "Connection attempt failed"
+msgstr ""
+
 msgid "Connections"
 msgstr "Tilkoblinger"
 
@@ -809,6 +826,9 @@ msgstr ""
 msgid "DSL line mode"
 msgstr ""
 
+msgid "DTIM Interval"
+msgstr ""
+
 msgid "DUID"
 msgstr "DUID"
 
@@ -846,6 +866,9 @@ msgstr "Fjern"
 
 msgid "Delete this network"
 msgstr "Fjern dette nettverket"
+
+msgid "Delivery Traffic Indication Message Interval"
+msgstr ""
 
 msgid "Description"
 msgstr "Beskrivelse"
@@ -903,6 +926,9 @@ msgid "Disabled"
 msgstr "Deaktivert"
 
 msgid "Disabled (default)"
+msgstr ""
+
+msgid "Disassociate On Low Acknowledgement"
 msgstr ""
 
 msgid "Discard upstream RFC1918 responses"
@@ -1261,6 +1287,9 @@ msgstr "Flasher..."
 
 msgid "Force"
 msgstr "Bruk"
+
+msgid "Force 40MHz mode"
+msgstr ""
 
 msgid "Force CCMP (AES)"
 msgstr "Bruk CCMP (AES)"
@@ -1922,6 +1951,9 @@ msgstr ""
 msgid "Lowest leased address as offset from the network address."
 msgstr "Laveste leide adresse, forskjøvet fra nettverks adressen."
 
+msgid "MAC"
+msgstr ""
+
 msgid "MAC-Address"
 msgstr "MAC-Adresse"
 
@@ -2163,6 +2195,9 @@ msgstr "Ruteren er ikke passordbeskyttet!"
 
 msgid "No rules in this chain"
 msgstr "Ingen regler i denne tabellen"
+
+msgid "No scan results available yet..."
+msgstr ""
 
 msgid "No zone assigned"
 msgstr "Ingen sone tilknyttet"
@@ -2592,6 +2627,11 @@ msgstr ""
 msgid "Quality"
 msgstr "Kvalitet"
 
+msgid ""
+"Query all available upstream <abbr title=\"Domain Name System\">DNS</abbr> "
+"servers"
+msgstr ""
+
 msgid "R0 Key Lifetime"
 msgstr ""
 
@@ -2880,6 +2920,9 @@ msgstr "Lagre & Aktiver"
 msgid "Scan"
 msgstr "Skann"
 
+msgid "Scan request failed"
+msgstr ""
+
 msgid "Scheduled Tasks"
 msgstr "Planlagte Oppgaver"
 
@@ -2936,6 +2979,9 @@ msgid "Severely Errored Seconds (SES)"
 msgstr ""
 
 msgid "Short GI"
+msgstr ""
+
+msgid "Short Preamble"
 msgstr ""
 
 msgid "Show current backup file list"
@@ -3041,6 +3087,9 @@ msgid "Start priority"
 msgstr "Start prioritet"
 
 msgid "Starting configuration apply…"
+msgstr ""
+
+msgid "Starting wireless scan..."
 msgstr ""
 
 msgid "Startup"
@@ -3886,6 +3935,9 @@ msgstr "lokal <abbr title=\"Domain Navn System\">DNS</abbr>-fil"
 msgid "minutes"
 msgstr ""
 
+msgid "mixed WPA/WPA2"
+msgstr ""
+
 msgid "no"
 msgstr "nei"
 
@@ -3960,6 +4012,9 @@ msgstr "ja"
 
 msgid "« Back"
 msgstr "« Tilbake"
+
+#~ msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
+#~ msgstr "<abbr title='Parvis: %s / Gruppe: %s'>%s - %s</abbr>"
 
 #~ msgid "Activate this network"
 #~ msgstr "Aktiver dette nettverket"

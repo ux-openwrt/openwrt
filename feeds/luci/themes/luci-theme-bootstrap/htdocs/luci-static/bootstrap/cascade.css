@@ -39,6 +39,7 @@ form, label, legend, button, table, caption, tbody, tfoot, thead, tr, th, td,
 
 abbr[title], acronym[title] {
 	border-bottom: 1px dotted;
+	font-weight: inherit;
 	cursor: help;
 }
 
@@ -644,6 +645,7 @@ textarea[readonly] {
 
 .cbi-page-actions > form {
 	display: inline;
+	margin: 0;
 }
 
 .help-inline, .help-block {
@@ -693,13 +695,13 @@ textarea[readonly] {
 	text-align: left;
 }
 
-.table .th {
+.table .tr:first-child .th {
 	padding-top: 9px;
 	font-weight: bold;
-	vertical-align: middle;
+	vertical-align: top;
 }
 
-.table .td, .table .tbody .th {
+.table .td, .table .th {
 	border-top: 1px solid #ddd;
 }
 
@@ -1257,9 +1259,15 @@ footer {
 	color: #c44;
 }
 
-.cbi-page-actions .cbi-button-link,
-.cbi-page-actions form[method="get"]:first-child {
+.cbi-page-actions::after {
+	display: table;
+	content: "";
+	clear: both;
+}
+
+.cbi-page-actions > :not([method="post"]):not(.cbi-button-apply):not(.cbi-button-save):not(.cbi-button-reset) {
 	float: left;
+	margin-right: .4em;
 }
 
 .btn.primary,
@@ -1441,6 +1449,32 @@ footer {
 .cbi-dropdown[disabled] {
 	pointer-events: none;
 	opacity: .6;
+}
+
+input[type="text"] + .cbi-button,
+input[type="password"] + .cbi-button,
+select + .cbi-button {
+	border-radius: 0 3px 3px 0;
+	border-color: #ccc;
+	margin: 0 0 1px -2px;
+	padding: 0 6px;
+	vertical-align: top;
+	height: 28px;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 28px;
+}
+
+select + .cbi-button {
+	border-left-color: transparent;
+}
+
+.cbi-title-ref {
+	color: #37c;
+}
+
+.cbi-title-ref::after {
+	content: "➙";
 }
 
 .cbi-tooltip-container {
@@ -1649,7 +1683,7 @@ a.label:hover {
 	  cursor: pointer;
 }
 
-form.inline { display: inline }
+form.inline { display: inline; margin-bottom: 0; }
 
 header .pull-right { padding-top: 8px; }
 
@@ -1657,15 +1691,13 @@ header .pull-right { padding-top: 8px; }
 
 #syslog {  width: 100%; }
 
-.cbi-section-table tbody tr:nth-child(odd) td, .cbi-section-table tbody tr:nth-child(odd) th {
-	background-color: #f9f9f9;
-}
-
-.cbi-section-table tbody tr:hover td, .cbi-section-table tbody tr:hover th  {
+.cbi-section-table .tr:hover .td,
+.cbi-section-table .tr:hover .th,
+.cbi-section-table .tr:hover::before {
 	background-color: #f5f5f5;
 }
 
-.cbi-section-table tr.cbi-section-table-descr th {
+.cbi-section-table .tr.cbi-section-table-descr .th {
 	font-weight: normal;
 }
 
@@ -1680,6 +1712,8 @@ header .pull-right { padding-top: 8px; }
 	vertical-align: middle;
 }
 
+.cbi-section-table-titles.named::before,
+.cbi-section-table-descr.named::before,
 .cbi-section-table-row[data-title]::before {
 	border-top: 1px solid #ddd;
 }
@@ -1744,7 +1778,9 @@ table table td,
 	vertical-align: middle;
 }
 
-.cbi-rowstyle-2 {
+.cbi-rowstyle-2,
+.tr.table-titles,
+.tr.cbi-section-table-titles {
 	background: #f9f9f9;
 }
 
@@ -1856,6 +1892,11 @@ table table td,
 	display: flex;
 	flex-wrap: wrap;
 	margin: -.125em;
+}
+
+#dsl_status_table .ifacebox-body > span > strong {
+	display: inline-block;
+	min-width: 35%;
 }
 
 .ifacebadge.large,
