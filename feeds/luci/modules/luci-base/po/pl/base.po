@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2018-07-21 18:35+0200\n"
+"PO-Revision-Date: 2018-08-05 13:45+0200\n"
 "Last-Translator: Rixerx <krystian.kozak20@gmail.com>\n"
 "Language-Team: Polish\n"
 "Language: pl\n"
@@ -210,11 +210,11 @@ msgid "ATM device number"
 msgstr "Numer urządzenia ATM"
 
 msgid "ATU-C System Vendor ID"
-msgstr ""
+msgstr "ID dostawcy systemu ATU-C"
 
 # co to takiego?
 msgid "Access Concentrator"
-msgstr "Koncentrator dostępowy ATM"
+msgstr "Koncentrator dostępowy (ATM)"
 
 msgid "Access Point"
 msgstr "Punkt dostępowy"
@@ -273,7 +273,7 @@ msgid "Advanced Settings"
 msgstr "Ustawienia zaawansowane"
 
 msgid "Aggregate Transmit Power(ACTATP)"
-msgstr ""
+msgstr "Agregacja siły transmisji (ACTATP)"
 
 msgid "Alert"
 msgstr "Alarm"
@@ -592,6 +592,8 @@ msgid ""
 "Build/distribution specific feed definitions. This file will NOT be "
 "preserved in any sysupgrade."
 msgstr ""
+"Kompiluj/rozpowszechniaj określone definicje źródeł. Ten plik NIE "
+"zostanie zachowany w procesie sysupgrade"
 
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
@@ -684,7 +686,7 @@ msgid ""
 "Close inactive connection after the given amount of seconds, use 0 to "
 "persist connection"
 msgstr ""
-"Zamykaj nieaktywne połączenia po określonym czasie podanym w sekundach, "
+"Zamknij nieaktywne połączenia po określonym czasie podanym w sekundach, "
 "wpisz 0 aby uzyskać stałe połączenie."
 
 msgid "Close list..."
@@ -782,15 +784,17 @@ msgid "Custom Interface"
 msgstr "Interfejs niestandardowy"
 
 msgid "Custom delegated IPv6-prefix"
-msgstr ""
+msgstr "Delegowany niestandardowy prefiks IPv6"
 
 msgid ""
 "Custom feed definitions, e.g. private feeds. This file can be preserved in a "
 "sysupgrade."
 msgstr ""
+"Niestandardowe definicje plików danych, np. prywatne źródła. Ten plik może być "
+"zachowany podczas sysupgrade. "
 
 msgid "Custom feeds"
-msgstr ""
+msgstr "Niestandardowe źródła"
 
 msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
@@ -864,7 +868,7 @@ msgid "DUID"
 msgstr "DUID"
 
 msgid "Data Rate"
-msgstr ""
+msgstr "Szybkość przesyłania danych"
 
 msgid "Debug"
 msgstr "Debug"
@@ -981,7 +985,7 @@ msgid "Distance to farthest network member in meters."
 msgstr "Odległość do najdalej oddalonego członka sieci w metrach."
 
 msgid "Distribution feeds"
-msgstr ""
+msgstr "Dystrybucja źródeł"
 
 # Jak poprzednio trzymam się konwencji
 msgid "Diversity"
@@ -1198,7 +1202,7 @@ msgid "Error"
 msgstr "Błąd"
 
 msgid "Errored seconds (ES)"
-msgstr ""
+msgstr "Ilość błędów (ES)"
 
 msgid "Ethernet Adapter"
 msgstr "Karta Ethernet"
@@ -1302,7 +1306,7 @@ msgid "Firewall Status"
 msgstr "Stan firewalla"
 
 msgid "Firmware File"
-msgstr ""
+msgstr "Plik firmware"
 
 msgid "Firmware Version"
 msgstr "Wersja firmware"
@@ -1357,7 +1361,7 @@ msgid "Forward DHCP traffic"
 msgstr "Przekazuj ruch DHCP"
 
 msgid "Forward Error Correction Seconds (FECS)"
-msgstr ""
+msgstr "Próby korekcji błędów (FECS)"
 
 msgid "Forward broadcast traffic"
 msgstr "Przekazuj broadcast`y"
@@ -1407,7 +1411,7 @@ msgid "General Setup"
 msgstr "Ustawienia podstawowe"
 
 msgid "General options for opkg"
-msgstr ""
+msgstr "Ogólne opcje dla opkg"
 
 msgid "Generate Config"
 msgstr "Wygeneruj konfigurację"
@@ -1457,7 +1461,7 @@ msgid "Hang Up"
 msgstr "Rozłącz"
 
 msgid "Header Error Code Errors (HEC)"
-msgstr ""
+msgstr "Błędy kodu nagłówka (HEC)"
 
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
@@ -1812,7 +1816,7 @@ msgid "LCP echo failure threshold"
 msgstr "Próg błędu echa LCP"
 
 msgid "LCP echo interval"
-msgstr "Częstotliwość echa LCP"
+msgstr "Interwał echa LCP"
 
 msgid "LLC"
 msgstr "LLC"
@@ -1845,10 +1849,10 @@ msgid "Leasetime remaining"
 msgstr "Pozostały czas dzierżawy"
 
 msgid "Leave empty to autodetect"
-msgstr "Pozostaw niewypełnione dla autodetekcji"
+msgstr "Pozostaw puste, aby automatycznie wykryć"
 
 msgid "Leave empty to use the current WAN address"
-msgstr "Pozostaw niewypełnione aby użyć bieżącego adresu WAN"
+msgstr "Pozostaw puste, aby użyć bieżącego adresu WAN"
 
 msgid "Legend:"
 msgstr "Legenda:"
@@ -1864,16 +1868,16 @@ msgid "Limit listening to these interfaces, and loopback."
 msgstr "Ogranicz nasłuchiwanie do tych interfesjów, oraz loopbacku."
 
 msgid "Line Attenuation (LATN)"
-msgstr ""
+msgstr "Tłumienie linii (LATN)"
 
 msgid "Line Mode"
-msgstr ""
+msgstr "Tryb linii"
 
 msgid "Line State"
-msgstr ""
+msgstr "Stan linii"
 
 msgid "Line Uptime"
-msgstr ""
+msgstr "Czas działania linii"
 
 msgid "Link On"
 msgstr "Połączenie aktywne"
@@ -2000,7 +2004,7 @@ msgid "Logout"
 msgstr "Wyloguj"
 
 msgid "Loss of Signal Seconds (LOSS)"
-msgstr ""
+msgstr "Utrata sygnału (LOSS)"
 
 msgid "Lowest leased address as offset from the network address."
 msgstr "Najniższy wydzierżawiony adres jako offset dla adresu sieci."
@@ -2049,7 +2053,7 @@ msgid "Manual"
 msgstr ""
 
 msgid "Max. Attainable Data Rate (ATTNDR)"
-msgstr ""
+msgstr "Max. Osiągalna przepustowość danych (ATTNDR)"
 
 msgid "Maximum allowed number of active DHCP leases"
 msgstr "Maksymalna dozwolona liczba aktywnych dzierżaw DHCP"
@@ -2244,7 +2248,7 @@ msgid "No network name specified"
 msgstr "Nie podano nazwy sieci"
 
 msgid "No package lists available"
-msgstr "Brak dostępu do listy pakietów"
+msgstr "Lista pakietów nie jest dostępna"
 
 msgid "No password set!"
 msgstr "Nie ustawiono hasła!"
@@ -2268,7 +2272,7 @@ msgid "Noise:"
 msgstr "Szum:"
 
 msgid "Non Pre-emtive CRC errors (CRC_P)"
-msgstr ""
+msgstr "Nieprzewidziane błedy CRC (CRC_P)"
 
 msgid "Non-wildcard"
 msgstr "Bez symboli wieloznacznych"
@@ -2318,7 +2322,7 @@ msgid "Obfuscated Password"
 msgstr ""
 
 msgid "Obtain IPv6-Address"
-msgstr ""
+msgstr "Uzyskaj adres IPv6"
 
 msgid "Off-State Delay"
 msgstr "Zwłoka wyłączenia"
@@ -2613,7 +2617,7 @@ msgid "Power Management Mode"
 msgstr "Tryb zarządzania energią"
 
 msgid "Pre-emtive CRC errors (CRCP_P)"
-msgstr ""
+msgstr "Przewidziane błedy CRC (CRCP_P)"
 
 msgid "Prefer LTE"
 msgstr ""
@@ -2631,8 +2635,8 @@ msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
 msgstr ""
-"Zakładaj że klient jest martwy po danej ilości błedów odpowiedzi echa LCP, "
-"wpisz 0 aby zignorować błędy"
+"Przypuszczaj że klient może być martwy po zadanej ilości błedów echa LCP, "
+"wpisz 0 aby zignorować te błędy"
 
 msgid "Prevent listening on these interfaces."
 msgstr "Zapobiegaj nasłuchiwaniu na tych interfejsach."
@@ -2840,7 +2844,7 @@ msgid "Request IPv6-address"
 msgstr "Zażądaj adresu IPv6"
 
 msgid "Request IPv6-prefix of length"
-msgstr ""
+msgstr "Zażądaj długość prefiksu IPv6"
 
 msgid "Required"
 msgstr "Wymagany"
@@ -3007,8 +3011,8 @@ msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
 "conjunction with failure threshold"
 msgstr ""
-"Co podany czas (w sekundach) wyślij zapytania LCP echo, to ustawienie działa "
-"tylko gdy ustawiony jest próg błędu LCP echo"
+"Wysyłaj żądania echa LCP w określonym przedziale czasowym, "
+"efektywne tylko wtedy gdy jest ustawiony próg błedu LCP"
 
 msgid "Separate Clients"
 msgstr "Rozdziel klientów"
@@ -3046,7 +3050,7 @@ msgid "Setup DHCP Server"
 msgstr "Ustawienia serwera DHCP"
 
 msgid "Severely Errored Seconds (SES)"
-msgstr ""
+msgstr "Ilość poważnych błedów (SES)"
 
 msgid "Short GI"
 msgstr ""
@@ -3064,7 +3068,7 @@ msgid "Signal"
 msgstr "Sygnał"
 
 msgid "Signal Attenuation (SATN)"
-msgstr ""
+msgstr "Tłumienie sygnału (SATN)"
 
 msgid "Signal:"
 msgstr "Sygnał:"
@@ -3159,7 +3163,7 @@ msgid "Start priority"
 msgstr "Priorytet uruchomienia"
 
 msgid "Starting configuration apply…"
-msgstr ""
+msgstr "Zatwierdzanie konfiguracji…"
 
 msgid "Starting wireless scan..."
 msgstr "Rozpoczynanie skanowania..."
@@ -3193,7 +3197,7 @@ msgstr ""
 "odpowiednim dzierżawami."
 
 msgid "Status"
-msgstr "Stan"
+msgstr "Status"
 
 msgid "Stop"
 msgstr "Stop"
@@ -3365,10 +3369,9 @@ msgid ""
 "compare them with the original file to ensure data integrity.<br /> Click "
 "\"Proceed\" below to start the flash procedure."
 msgstr ""
-"Obraz flash`a został przesłany. Poniżej znajduje się suma kontrolna i "
-"rozmiar obrazu, porównaj je z sumą kontrolną i rozmiarem oryginału, aby "
-"upewnić się, że został przesłany poprawnie.<br /> Wciśnij \"Wykonaj\" aby "
-"kontynuować aktualizację."
+"Obraz flash został przesłany. Poniżej znajduje się suma kontrolna i "
+"rozmiar pliku, porównaj je z orginałem aby zapewnić integralność "
+"danych.<br /> Wciśnij \"Wykonaj\" aby kontynuować aktualizację."
 
 msgid "The following changes have been reverted"
 msgstr "Następujące zmiany zostały odrzucone"
@@ -3450,7 +3453,7 @@ msgid "There are no active leases."
 msgstr "Brak aktywnych dzierżaw."
 
 msgid "There are no changes to apply."
-msgstr "Nie ma żadnych zmian do zastosowania."
+msgstr "Brak zmian do zastosowania."
 
 msgid "There are no pending changes to revert!"
 msgstr "Brak oczekujących zmian do przywrócenia!"
@@ -3568,7 +3571,7 @@ msgstr ""
 "utworzoną kopię zapasową."
 
 msgid "Tone"
-msgstr ""
+msgstr "Ton"
 
 msgid "Total Available"
 msgstr "Całkowicie dostępna"
@@ -3655,7 +3658,7 @@ msgid "Unable to resolve peer host name"
 msgstr "Nie można rozpoznać nazwy peera"
 
 msgid "Unavailable Seconds (UAS)"
-msgstr ""
+msgstr "Czas niedostępnośći (UAS)"
 
 msgid "Unknown"
 msgstr "Nieznany"
@@ -3860,7 +3863,7 @@ msgstr "Trwa wprowadzenie zmian..."
 msgid "Waiting for command to complete..."
 msgstr "Trwa wykonanie polecenia..."
 
-msgid "Waiting for configuration to get applied… %ds"
+msgid "Waiting for configuration to be applied… %ds"
 msgstr "Oczekiwanie na zastosowanie konfiguracji… %ds"
 
 msgid "Waiting for device..."

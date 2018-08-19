@@ -598,6 +598,12 @@ textarea[readonly] {
 	cursor: default;
 }
 
+select[readonly],
+textarea[readonly] {
+	pointer-events: auto;
+	cursor: auto;
+}
+
 .cbi-optionals,
 .cbi-section-create {
 	padding: 0 0 10px 10px;
@@ -2020,4 +2026,8 @@ div.cbi-value var,
 
 html body.apply-overlay-active {
 	height: calc(100vh - 63px);
+}
+
+#applyreboot-section {
+	line-height: 300%;
 }
